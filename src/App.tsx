@@ -36,7 +36,7 @@ function App() {
 
   const trackPageView = (pagePath: string) => {
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', 'GA_MEASUREMENT_ID', {
+      window.gtag('config', 'G-BRJN71L7VV', {
         page_path: pagePath
       });
     }
