@@ -144,6 +144,85 @@ function App() {
         </div>
       </nav>
 
+      {/* Email Collection Section */}
+      <section className="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-gray-800/50 dark:to-gray-900/50 py-16 px-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              {/* Mail Icon */}
+              <div className="flex-shrink-0">
+                <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  </svg>
+                </div>
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 text-center md:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                  Get Early Access to Cyan AI
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+                  Be the first to experience ultra-low latency AI translation. Join our waitlist and get exclusive updates!
+                </p>
+                
+                {/* Brevo Form Embed */}
+                <div className="max-w-md mx-auto md:mx-0">
+                  <iframe 
+                    src="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+                    frameBorder="0"
+                    scrolling="no"
+                    allowFullScreen
+                    onLoad={() => {
+                      trackEvent('form_load', {
+                        form_name: 'early_access_signup',
+                        location: 'email_collection_section'
+                      });
+                    }}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: '400px',
+                      border: 'none',
+                      borderRadius: '8px'
+                    }}
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+                    Join 500+ waitlist members • No spam, unsubscribe anytime
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Benefits */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Zap className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Early Bird Pricing</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Get exclusive discounts on launch</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Globe className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Beta Access</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Try features before anyone else</p>
+              </div>
+              <div className="text-center">
+                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                </div>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Priority Support</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Get dedicated help from our team</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section
         id="hero"
