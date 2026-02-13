@@ -21,14 +21,50 @@ declare global {
   }
 }
 
+type PlanKey = 'free' | 'basic' | 'standard' | 'pro' | 'team' | 'executive_pro_annual'
+
+interface SubscriptionRecord {
+  id: string
+  planKey: PlanKey
+  status: 'PENDING' | 'ACTIVE' | 'CANCELLED'
+  activatedAt?: string
+}
+
+interface UserSession {
+  id: string
+  email: string
+  name: string
+  picture?: string
+  provider: 'google' | 'email' | 'guest'
+  access_token?: string
+  plan?: PlanKey
+  subscriptions?: SubscriptionRecord[]
+}
+
+const BACKEND_URL = 'https://translator-backend-pi.vercel.app'
+
+const PLAN_PRICE: Record<PlanKey, string> = {
+  free: '$0',
+  basic: '$29/month',
+  standard: '$59/month',
+  pro: '$99/month',
+  team: '$299/month',
+  executive_pro_annual: '$699/year'
+}
+
 function App() {
   const CANONICAL_PROD_ORIGIN = 'https://cyan-os-landingpage.vercel.app';
 
-  const getStoredSession = () => {
+  const getStoredSession = (): UserSession | null => {
     const raw = localStorage.getItem('user_session');
     if (!raw) return null;
     try {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw) as UserSession;
+      return {
+        ...parsed,
+        plan: parsed.plan || 'free',
+        subscriptions: Array.isArray(parsed.subscriptions) ? parsed.subscriptions : []
+      };
     } catch {
       localStorage.removeItem('user_session');
       return null;
@@ -43,8 +79,40 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(Boolean(initialSession));
-  const [userInfo, setUserInfo] = useState<any>(initialSession);
+  const [userInfo, setUserInfo] = useState<UserSession | null>(initialSession);
+  const [checkoutBusy, setCheckoutBusy] = useState(false);
+  const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+
+  const saveSession = (session: UserSession | null) => {
+    if (session) {
+      localStorage.setItem('user_session', JSON.stringify(session));
+      setUserInfo(session);
+      setIsLoggedIn(true);
+      return;
+    }
+
+    localStorage.removeItem('user_session');
+    setUserInfo(null);
+    setIsLoggedIn(false);
+  };
+
+  const ensureSession = () => {
+    if (userInfo) return userInfo;
+
+    const guestSession: UserSession = {
+      id: `guest-${Date.now()}`,
+      email: `guest-${Date.now()}@cyan.local`,
+      name: 'Guest User',
+      picture: '/logoCyan.jpg',
+      provider: 'guest',
+      plan: 'free',
+      subscriptions: []
+    };
+
+    saveSession(guestSession);
+    return guestSession;
+  };
 
   useEffect(() => {
     const { origin, hostname, pathname, search, hash } = window.location;
@@ -69,6 +137,144 @@ function App() {
     }
   };
 
+  // Analytics tracking functions
+  const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', eventName, parameters);
+    }
+  };
+
+  // Track page views (used for analytics)
+  const trackPageView = (path: string) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('config', 'G-BRJN71L7VV', { page_path: path });
+    }
+  };
+
+  const startPlanCheckout = async (planKey: PlanKey) => {
+    if (planKey === 'free') {
+      const session = ensureSession();
+      saveSession({ ...session, plan: 'free' });
+      setCheckoutMessage('Free plan activated. You can start immediately.');
+      return;
+    }
+
+    setCheckoutBusy(true);
+    setCheckoutMessage(null);
+
+    try {
+      const session = ensureSession();
+      const returnUrl = `${window.location.origin}${window.location.pathname}?checkout=success`;
+      const cancelUrl = `${window.location.origin}${window.location.pathname}?checkout=cancel`;
+
+      const response = await fetch(`${BACKEND_URL}/api/payment/subscription/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: session.id,
+          plan_key: planKey,
+          return_url: returnUrl,
+          cancel_url: cancelUrl
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data?.approval_url || !data?.subscription_id) {
+        throw new Error(data?.error || 'Unable to create PayPal subscription.');
+      }
+
+      localStorage.setItem(
+        'pending_checkout',
+        JSON.stringify({
+          userId: session.id,
+          planKey,
+          subscriptionId: data.subscription_id,
+          createdAt: Date.now()
+        })
+      );
+
+      trackEvent('checkout_started', { plan: planKey, price_label: PLAN_PRICE[planKey] });
+      window.location.href = data.approval_url;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Checkout failed.';
+      setCheckoutMessage(message);
+      trackEvent('checkout_failed', { plan: planKey, error: message });
+    } finally {
+      setCheckoutBusy(false);
+    }
+  };
+
+  const activateCheckoutFromUrl = async () => {
+    const query = new URLSearchParams(window.location.search);
+    const checkoutState = query.get('checkout');
+    const subscriptionId = query.get('subscription_id') || query.get('token') || query.get('ba_token');
+    const pendingRaw = localStorage.getItem('pending_checkout');
+
+    if (!checkoutState && !subscriptionId) return;
+
+    if (checkoutState === 'cancel') {
+      setCheckoutMessage('Checkout cancelled. You can try again anytime.');
+      localStorage.removeItem('pending_checkout');
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return;
+    }
+
+    if (!pendingRaw || !subscriptionId) {
+      setCheckoutMessage('Missing checkout session. Please retry from pricing.');
+      window.history.replaceState({}, document.title, window.location.pathname);
+      return;
+    }
+
+    try {
+      const pending = JSON.parse(pendingRaw) as {
+        userId: string
+        planKey: PlanKey
+      };
+
+      const response = await fetch(`${BACKEND_URL}/api/payment/subscription/activate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: pending.userId,
+          plan_key: pending.planKey,
+          subscription_id: subscriptionId
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data?.ok) {
+        throw new Error(data?.error || 'Payment not active yet.');
+      }
+
+      const activeSession = ensureSession();
+      const nextSubscriptions = [
+        ...(activeSession.subscriptions || []).filter((s) => s.id !== subscriptionId),
+        {
+          id: subscriptionId,
+          planKey: pending.planKey,
+          status: 'ACTIVE',
+          activatedAt: new Date().toISOString()
+        }
+      ] as SubscriptionRecord[];
+
+      saveSession({
+        ...activeSession,
+        plan: pending.planKey,
+        subscriptions: nextSubscriptions
+      });
+
+      setCheckoutMessage(`Subscription activated: ${PLAN_PRICE[pending.planKey]}.`);
+      trackEvent('checkout_activated', { plan: pending.planKey, subscription_id: subscriptionId });
+      localStorage.removeItem('pending_checkout');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not activate subscription.';
+      setCheckoutMessage(message);
+      trackEvent('checkout_activation_failed', { error: message });
+    } finally {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  };
+
   const handleEmailAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -80,17 +286,17 @@ function App() {
     if (!email) return;
 
     const displayName = fullName || email.split('@')[0] || 'User';
-    const sessionData = {
+    const sessionData: UserSession = {
       id: `email-${email.toLowerCase()}`,
       email,
       name: displayName,
       picture: '/logoCyan.jpg',
-      provider: 'email'
+      provider: 'email',
+      plan: 'free',
+      subscriptions: []
     };
 
-    localStorage.setItem('user_session', JSON.stringify(sessionData));
-    setIsLoggedIn(true);
-    setUserInfo(sessionData);
+    saveSession(sessionData);
     setShowLoginModal(false);
 
     trackEvent('email_auth_success', {
@@ -112,20 +318,18 @@ function App() {
       const userData = await userResponse.json();
 
       // Create simple session
-      const sessionData = {
+      const sessionData: UserSession = {
         id: userData.id,
         email: userData.email,
         name: userData.name,
         picture: userData.picture,
+        provider: 'google',
+        plan: 'free',
+        subscriptions: [],
         access_token: accessToken
       };
 
-      // Store session
-      localStorage.setItem('user_session', JSON.stringify(sessionData));
-
-      // Update state
-      setIsLoggedIn(true);
-      setUserInfo(sessionData);
+      saveSession(sessionData);
 
       // Close modal
       setShowLoginModal(false);
@@ -145,6 +349,11 @@ function App() {
       });
     }
   };
+
+  // Keep local storage in sync with current auth state
+  useEffect(() => {
+    activateCheckoutFromUrl();
+  }, []);
 
   // Keep local storage in sync with current auth state
   useEffect(() => {
@@ -180,21 +389,8 @@ function App() {
   // Check backend on mount
   useEffect(() => {
     checkBackendConnection();
+    trackPageView(window.location.pathname);
   }, []);
-
-  // Analytics tracking functions
-  const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('event', eventName, parameters);
-    }
-  };
-
-  // Track page views (used for analytics)
-  const trackPageView = (path: string) => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', 'G-BRJN71L7VV', { page_path: path });
-    }
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -354,21 +550,22 @@ function App() {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-2">
                     <img 
-                      src={userInfo.picture} 
+                      src={userInfo.picture || '/logoCyan.jpg'} 
                       alt={userInfo.name}
                       className="w-8 h-8 rounded-full object-cover"
                     />
                     <span className="text-gray-700 dark:text-gray-300 font-medium">
                       {userInfo.name}
                     </span>
+                    <span className="text-xs bg-cyan-600 text-white px-2 py-1 rounded-full uppercase tracking-wide">
+                      {userInfo.plan || 'free'}
+                    </span>
                   </div>
                   <button 
                     onClick={() => {
-                      localStorage.removeItem('user_session');
-                      setIsLoggedIn(false);
-                      setUserInfo(null);
+                      saveSession(null);
                       trackEvent('logout', {
-                        provider: 'google'
+                        provider: userInfo.provider
                       });
                     }}
                     className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
@@ -390,6 +587,24 @@ function App() {
                   Login
                 </button>
               )}
+
+      {(checkoutBusy || checkoutMessage) && (
+        <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-xl border border-cyan-500/40 bg-white/95 dark:bg-slate-900/95 px-4 py-3 shadow-2xl backdrop-blur">
+          {checkoutBusy ? (
+            <p className="text-sm font-medium text-cyan-700 dark:text-cyan-300">Creating checkout session...</p>
+          ) : (
+            <p className="text-sm text-gray-700 dark:text-gray-200">{checkoutMessage}</p>
+          )}
+          {checkoutMessage && (
+            <button
+              onClick={() => setCheckoutMessage(null)}
+              className="mt-2 text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400"
+            >
+              Dismiss
+            </button>
+          )}
+        </div>
+      )}
           </div>
         </div>
       </nav>
@@ -971,7 +1186,13 @@ function App() {
               <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Free</h3>
               <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">$0</div>
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">Start with 20 minutes of Azure/Google WaveNet credits to experience ultra-low latency translation</div>
-              <button className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all">
+              <button
+                onClick={() => {
+                  trackEvent('pricing_click', { plan: 'free', button_name: 'get_started', price: 0 });
+                  startPlanCheckout('free');
+                }}
+                className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+              >
                 Get Started
               </button>
               <ul className="mt-6 space-y-2">
@@ -990,7 +1211,13 @@ function App() {
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">Individual Use</div>
               <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">$29</div>
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">/month</div>
-              <button className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all">
+              <button
+                onClick={() => {
+                  trackEvent('pricing_click', { plan: 'basic', button_name: 'get_started', price: 29 });
+                  startPlanCheckout('basic');
+                }}
+                className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+              >
                 Get Started
               </button>
               <ul className="mt-6 space-y-2">
@@ -1019,6 +1246,7 @@ function App() {
                     button_name: 'get_started',
                     price: 59
                   });
+                  startPlanCheckout('standard');
                 }}
                 className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105"
               >
@@ -1042,7 +1270,13 @@ function App() {
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">Small Business B2B</div>
               <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">$99</div>
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">/month</div>
-              <button className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all">
+              <button
+                onClick={() => {
+                  trackEvent('pricing_click', { plan: 'pro', button_name: 'get_started', price: 99 });
+                  startPlanCheckout('pro');
+                }}
+                className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+              >
                 Get Started
               </button>
               <ul className="mt-6 space-y-2">
@@ -1065,14 +1299,21 @@ function App() {
                 onClick={() => {
                   trackEvent('pricing_click', {
                     plan: 'team',
-                    button_name: 'contact_sales',
+                    button_name: 'get_started',
                     price: 299
                   });
-                  setShowTeamContactForm(!showTeamContactForm);
+                  startPlanCheckout('team');
                 }}
                 className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
               >
-                Contact Sales
+                Get Started
+              </button>
+
+              <button
+                onClick={() => setShowTeamContactForm(!showTeamContactForm)}
+                className="mt-2 w-full text-xs text-cyan-600 dark:text-cyan-300 underline"
+              >
+                Need invoice / custom terms? Contact Sales
               </button>
               
               {/* Team Contact Form */}
@@ -1150,6 +1391,7 @@ function App() {
                     button_name: 'claim_spot',
                     price: 699
                   });
+                  startPlanCheckout('executive_pro_annual');
                 }}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-purple-600/50"
               >
