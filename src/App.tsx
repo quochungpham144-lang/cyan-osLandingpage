@@ -22,6 +22,8 @@ declare global {
 }
 
 function App() {
+  const CANONICAL_PROD_ORIGIN = 'https://cyan-os-landingpage.vercel.app';
+
   const getStoredSession = () => {
     const raw = localStorage.getItem('user_session');
     if (!raw) return null;
@@ -43,6 +45,16 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(Boolean(initialSession));
   const [userInfo, setUserInfo] = useState<any>(initialSession);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+
+  useEffect(() => {
+    const { origin, hostname, pathname, search, hash } = window.location;
+    const isVercelHost = hostname.endsWith('.vercel.app');
+    const isCanonicalHost = origin === CANONICAL_PROD_ORIGIN;
+
+    if (isVercelHost && !isCanonicalHost) {
+      window.location.replace(`${CANONICAL_PROD_ORIGIN}${pathname}${search}${hash}`);
+    }
+  }, []);
 
   // API connection functions
   const checkBackendConnection = async () => {
