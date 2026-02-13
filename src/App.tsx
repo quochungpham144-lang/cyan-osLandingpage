@@ -109,7 +109,7 @@ function App() {
         body: new URLSearchParams({
           code: code,
           client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
-          redirect_uri: 'https://cyan-os-landingpage.vercel.app',
+          redirect_uri: window.location.origin,
           grant_type: 'authorization_code',
           code_verifier: codeVerifier
         })
@@ -1242,7 +1242,7 @@ function App() {
                   // Direct Google OAuth for frontend (PKCE) - Production
                   const googleOAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
                     'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
-                    'redirect_uri=' + encodeURIComponent('https://cyan-os-landingpage.vercel.app') + '&' +
+                    'redirect_uri=' + encodeURIComponent(window.location.origin) + '&' +
                     'response_type=code&' +
                     'scope=openid%20email%20profile&' +
                     'code_challenge=' + codeChallenge + '&' +
