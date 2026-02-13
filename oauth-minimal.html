@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal OAuth Test</title>
+</head>
+<body>
+    <h1>Minimal Google OAuth Test</h1>
+    
+    <button onclick="testMinimal()">
+        Test Minimal OAuth (no scope)
+    </button>
+    
+    <script>
+        function testMinimal() {
+            const url = 'https://accounts.google.com/oauth/authorize?' +
+                'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
+                'redirect_uri=https://cyan-os-landingpage.vercel.app&' +
+                'response_type=code&' +
+                'prompt=consent';
+            
+            console.log('Testing minimal OAuth:', url);
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>
