@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Production Test</title>
+</head>
+<body>
+    <h1>Google OAuth Production Test</h1>
+    <p>Testing with production domain: https://cyan-os-landingpage.vercel.app</p>
+    
+    <button onclick="testOAuth()">
+        Test Google OAuth (Production)
+    </button>
+    
+    <script>
+        function testOAuth() {
+            const googleOAuthUrl = 'https://accounts.google.com/oauth/authorize?' +
+                'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
+                'redirect_uri=https://cyan-os-landingpage.vercel.app&' +
+                'response_type=code&' +
+                'scope=openid%20email%20profile&' +
+                'prompt=consent';
+            
+            console.log('Testing OAuth Production:', googleOAuthUrl);
+            window.location.href = googleOAuthUrl;
+        }
+    </script>
+</body>
+</html>

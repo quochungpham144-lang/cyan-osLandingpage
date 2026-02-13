@@ -25,7 +25,155 @@ function App() {
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
+  const [showTeamContactForm, setShowTeamContactForm] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState<any>(null);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+
+  // API connection functions
+  const checkBackendConnection = async () => {
+    try {
+      const response = await fetch('https://translator-backend-pi.vercel.app/api/health');
+      const data = await response.json();
+      console.log('Backend connection:', data);
+      return data.ok;
+    } catch (error) {
+      console.error('Backend connection failed:', error);
+      return false;
+    }
+  };
+
+  // Generate PKCE code verifier
+  const generatePKCE = () => {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    // Convert Uint8Array to regular array for String.fromCharCode
+    const numberArray = Array.from(array);
+    return btoa(String.fromCharCode.apply(null, numberArray))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+  };
+
+  // Handle Google OAuth callback (Frontend Direct - PKCE)
+  const handleGoogleCallback = async (code: string, codeVerifier: string) => {
+    try {
+      // Exchange code for tokens directly from Google (PKCE flow)
+      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          code: code,
+          client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
+          redirect_uri: 'https://cyan-os-landingpage.vercel.app',
+          grant_type: 'authorization_code',
+          code_verifier: codeVerifier
+        })
+      });
+      
+      const tokenData = await tokenResponse.json();
+      
+      if (tokenData.access_token) {
+        // Get user info from Google
+        const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`
+          }
+        });
+        
+        const userData = await userResponse.json();
+        
+        // Create simple session
+        const sessionData = {
+          id: userData.id,
+          email: userData.email,
+          name: userData.name,
+          picture: userData.picture,
+          access_token: tokenData.access_token
+        };
+        
+        // Store session
+        localStorage.setItem('user_session', JSON.stringify(sessionData));
+        
+        // Update state
+        setIsLoggedIn(true);
+        setUserInfo(sessionData);
+        
+        // Close modal
+        setShowLoginModal(false);
+        
+        // Track success
+        trackEvent('oauth_success', {
+          provider: 'google',
+          user_email: userData.email
+        });
+        
+        console.log('Google login successful:', userData);
+      } else {
+        console.error('Token exchange failed:', tokenData);
+      }
+    } catch (error) {
+      console.error('OAuth callback error:', error);
+      trackEvent('oauth_error', {
+        provider: 'google',
+        error: 'Frontend OAuth failed'
+      });
+    }
+  };
+
+  // Check for existing login on mount
+  useEffect(() => {
+    const session = localStorage.getItem('user_session');
+    
+    if (session) {
+      try {
+        const sessionData = JSON.parse(session);
+        setIsLoggedIn(true);
+        setUserInfo(sessionData);
+        console.log('Restored user session:', sessionData);
+      } catch (error) {
+        console.error('Failed to restore user session:', error);
+        localStorage.removeItem('user_session');
+      }
+    }
+  }, []);
+
+  // Check for OAuth callback in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const error = urlParams.get('error');
+    
+    if (code) {
+      // Get PKCE verifier
+      const codeVerifier = sessionStorage.getItem('pkce_code_verifier');
+      
+      if (codeVerifier) {
+        // Handle OAuth callback with PKCE
+        handleGoogleCallback(code, codeVerifier);
+        // Clean up
+        sessionStorage.removeItem('pkce_code_verifier');
+      } else {
+        console.error('PKCE verifier not found');
+      }
+      
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (error) {
+      console.error('OAuth error:', error);
+      trackEvent('oauth_error', {
+        provider: 'google',
+        error: error
+      });
+    }
+  }, []);
+
+  // Check backend on mount
+  useEffect(() => {
+    checkBackendConnection();
+  }, []);
 
   // Analytics tracking functions
   const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
@@ -34,11 +182,10 @@ function App() {
     }
   };
 
-  const trackPageView = (pagePath: string) => {
+  // Track page views (used for analytics)
+  const trackPageView = (path: string) => {
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', 'G-BRJN71L7VV', {
-        page_path: pagePath
-      });
+      window.gtag('config', 'G-BRJN71L7VV', { page_path: path });
     }
   };
 
@@ -92,6 +239,12 @@ function App() {
             button_name: 'floating_get_started',
             location: 'floating_button'
           });
+          const pricingSection = document.getElementById('pricing');
+          if (pricingSection) {
+            pricingSection.classList.remove('hidden');
+            pricingSection.style.display = 'block';
+            setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+          }
         }}
         className="fixed bottom-8 right-8 z-50 bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105"
       >
@@ -110,118 +263,129 @@ function App() {
               <div className="text-xs text-gray-500 dark:text-gray-400">ULTRA-LOW LATENCY AI TRANSLATOR</div>
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300">Solution</a>
+          <div className="flex items-center gap-6">
+            <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
             <div className="relative group">
-              <button className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 flex items-center gap-1">
+              <button className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 flex items-center gap-1 px-2">
                 Developers <ArrowRight className="w-3 h-3 rotate-90" />
               </button>
               <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">API</a>
-                <a href="#developers" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Developer Docs</a>
+                <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Developer Docs</a>
+                <a href="#roi" onClick={(e) => { e.preventDefault(); const roiSection = document.getElementById('roi'); if (roiSection) { roiSection.classList.remove('hidden'); roiSection.style.display = 'block'; setTimeout(() => roiSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">ROI Calculator</a>
               </div>
             </div>
-            <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300">Engine</a>
-            <a href="#pricing" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300">Pricing</a>
+            <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
+            <a href="#pricing" onClick={(e) => { e.preventDefault(); const pricingSection = document.getElementById('pricing'); if (pricingSection) { pricingSection.classList.remove('hidden'); pricingSection.style.display = 'block'; setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
+            
+            {/* Email CTA in Navigation */}
+            <div className="relative group">
+              <button 
+                onClick={() => {
+                  trackEvent('cta_click', {
+                    button_name: 'early_access_nav',
+                    location: 'navigation'
+                  });
+                }}
+                className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all flex items-center gap-2 text-sm"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                Early Access
+              </button>
+              
+              {/* Hover Email Form */}
+              <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="p-4">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Get Early Access</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Join our waitlist for exclusive updates!</p>
+                  
+                  {/* Custom Email Form */}
+                  <form 
+                    action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+                    method="POST"
+                    className="space-y-3"
+                  >
+                    <input
+                      type="text"
+                      name="FIRSTNAME"
+                      placeholder="Your Name"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
+                    />
+                    <input
+                      type="email"
+                      name="EMAIL"
+                      placeholder="Your Email"
+                      required
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
+                    />
+                    <button
+                      type="submit"
+                      className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-2 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all text-sm"
+                    >
+                      Join Waitlist
+                    </button>
+                  </form>
+                  
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
+                    500+ members • No spam
+                  </p>
+                </div>
+              </div>
+            </div>
+            
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
             >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-              <button 
-                onClick={() => {
-                  trackEvent('cta_click', {
-                    button_name: 'login',
-                    location: 'navigation'
-                  });
-                }}
-                className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-5 py-2 rounded-lg font-medium hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
-              >
-                Login
-              </button>
+              {/* Login/User Section */}
+              {isLoggedIn && userInfo ? (
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <img 
+                      src={userInfo.picture} 
+                      alt={userInfo.name}
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">
+                      {userInfo.name}
+                    </span>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      localStorage.removeItem('user_session');
+                      setIsLoggedIn(false);
+                      setUserInfo(null);
+                      trackEvent('logout', {
+                        provider: 'google'
+                      });
+                    }}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => {
+                    trackEvent('cta_click', {
+                      button_name: 'login',
+                      location: 'navigation'
+                    });
+                    setShowLoginModal(true);
+                  }}
+                  className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-4 py-2 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+                >
+                  Login
+                </button>
+              )}
           </div>
         </div>
       </nav>
-
-      {/* Email Collection Section */}
-      <section className="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-gray-800/50 dark:to-gray-900/50 py-16 px-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 md:p-12">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              {/* Mail Icon */}
-              <div className="flex-shrink-0">
-                <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                  </svg>
-                </div>
-              </div>
-              
-              {/* Content */}
-              <div className="flex-1 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-                  Get Early Access to Cyan AI
-                </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-                  Be the first to experience ultra-low latency AI translation. Join our waitlist and get exclusive updates!
-                </p>
-                
-                {/* Brevo Form Embed */}
-                <div className="max-w-md mx-auto md:mx-0">
-                  <iframe 
-                    src="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
-                    frameBorder="0"
-                    scrolling="no"
-                    allowFullScreen
-                    onLoad={() => {
-                      trackEvent('form_load', {
-                        form_name: 'early_access_signup',
-                        location: 'email_collection_section'
-                      });
-                    }}
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      height: '400px',
-                      border: 'none',
-                      borderRadius: '8px'
-                    }}
-                  />
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-                    Join 500+ waitlist members • No spam, unsubscribe anytime
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Benefits */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <Zap className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Early Bird Pricing</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Get exclusive discounts on launch</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <Globe className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Beta Access</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Try features before anyone else</p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-                </div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Priority Support</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Get dedicated help from our team</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Hero Section */}
       <section
@@ -234,7 +398,7 @@ function App() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-block mb-4 px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
             <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-4 h-4 inline mr-2 rounded" />
-            Powered by Cyan AI
+            Powered by Cyan OS
           </div>
           <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent">
             ULTRA-LOW LATENCY AI TRANSLATOR
@@ -610,10 +774,6 @@ function App() {
                   {'\n'}
                   <span className="ml-4 text-gray-400">// Real-Time Proxy</span>{'\n'}
                   <span className="ml-4 text-blue-400">realTimeProxy</span>: <span className="text-green-400">DedicatedInfra</span>{'\n'}
-                  {'\n'}
-                  <span className="ml-4 text-gray-400">// Ultra-Low Latency</span>{'\n'}
-                  <span className="ml-4 text-blue-400">latency</span>: <span className="text-yellow-300">"&lt;200ms"</span>{'\n'}
-                  {'}'}
                 </div>
               </div>
             </div>
@@ -688,11 +848,11 @@ function App() {
         </div>
       </section>
 
-      {/* ROI Section */}
+      {/* ROI Section - Hidden */}
       <section
         id="roi"
         ref={setRef('roi')}
-        className={`py-20 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-1000 delay-600 ${
+        className={`py-20 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-1000 delay-600 hidden ${
           isVisible.roi ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -782,11 +942,11 @@ function App() {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Pricing Section - Hidden */}
       <section
         id="pricing"
         ref={setRef('pricing')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-1000 delay-700 ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-1000 delay-700 hidden ${
           isVisible.pricing ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -803,7 +963,7 @@ function App() {
             <div className="bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-xl hover:shadow-cyan-500/20 transition-all">
               <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Free</h3>
               <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">$0</div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">20p Azure/Google WaveNet trial</div>
+              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">Start with 20 minutes of Azure/Google WaveNet credits to experience ultra-low latency translation</div>
               <button className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all">
                 Get Started
               </button>
@@ -889,7 +1049,7 @@ function App() {
             </div>
 
             {/* Team Plan */}
-            <div className="bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-xl hover:shadow-cyan-500/20 transition-all">
+            <div className="bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-xl hover:shadow-cyan-500/20 transition-all relative">
               <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">Team</h3>
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">Corporate Use</div>
               <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">$299</div>
@@ -901,11 +1061,60 @@ function App() {
                     button_name: 'contact_sales',
                     price: 299
                   });
+                  setShowTeamContactForm(!showTeamContactForm);
                 }}
                 className="w-full bg-cyan-600 dark:bg-cyan-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
               >
                 Contact Sales
               </button>
+              
+              {/* Team Contact Form */}
+              {showTeamContactForm && (
+                <div className="absolute left-0 right-0 top-0 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50">
+                  <div className="mb-3">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Contact Sales Team</h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">Get custom pricing for your team</p>
+                  </div>
+                  <form 
+                    action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+                    method="POST"
+                    target="_blank"
+                  >
+                    <input 
+                      type="text" 
+                      name="YOUR_NAME" 
+                      placeholder="Your Name" 
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm mb-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      required 
+                    />
+                    <input 
+                      type="email" 
+                      name="YOUR_EMAIL" 
+                      placeholder="Your Email" 
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm mb-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      required 
+                    />
+                    <input 
+                      type="text" 
+                      name="COMPANY" 
+                      placeholder="Company Name" 
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm mb-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      required 
+                    />
+                    <input 
+                      type="hidden" 
+                      name="PLAN" 
+                      value="Team Plan - $299/month" 
+                    />
+                    <button 
+                      type="submit" 
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-md text-sm font-semibold transition-colors"
+                    >
+                      Send Request
+                    </button>
+                  </form>
+                </div>
+              )}
               <ul className="mt-6 space-y-2">
                 {['Unlimited Hours', 'Priority Support', 'Dedicated Account Manager', 'ElevenLabs Power Boost: 200k High-Fidelity Character Credits/Month', 'Team Reporting & Billing', 'Enterprise Board Meetings', 'Global Training Webinars', 'Multi-National Project Mgmt'].map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-2">
@@ -916,35 +1125,34 @@ function App() {
               </ul>
             </div>
 
-            {/* Executive Pro Annual */}
-            <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 dark:from-purple-500/20 dark:to-purple-500/5 border-2 border-purple-500 rounded-2xl p-6 relative hover:shadow-2xl hover:shadow-purple-500/20 transition-all backdrop-blur-md">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+            {/* Executive Pro Annual Plan */}
+            <div className="bg-gradient-to-br from-purple-600/20 to-purple-600/5 dark:from-purple-600/20 dark:to-purple-600/5 border-2 border-purple-600 rounded-2xl p-6 relative hover:shadow-2xl hover:shadow-purple-600/20 transition-all backdrop-blur-md">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold">
                 ⭐ PREMIUM
               </div>
               <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">EXECUTIVE PRO ANNUAL</h3>
               <div className="text-gray-600 dark:text-gray-300 text-sm mb-6">High-Value B2B</div>
-              <div className="flex items-baseline gap-2 mb-1">
-                <span className="text-3xl font-bold text-gray-400 dark:text-gray-400 line-through">$999</span>
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">$699</span>
-              </div>
-              <div className="text-gray-600 dark:text-gray-300 text-sm mb-6">KICKSTARTER EXCLUSIVE - $300 OFF RETAIL PRICE</div>
+              <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">$699</div>
+              <div className="text-gray-600 dark:text-gray-300 text-sm mb-6">$999/year</div>
+              <div className="text-orange-500 dark:text-orange-400 text-sm font-bold mb-4">KICKSTARTER EXCLUSIVE - $300 OFF RETAIL PRICE</div>
+              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6">Maximize Output: 200 Translation Hours Per Year</div>
               <button 
                 onClick={() => {
                   trackEvent('pricing_click', {
                     plan: 'executive_pro_annual',
-                    button_name: 'claim_your_spot',
+                    button_name: 'claim_spot',
                     price: 699
                   });
                 }}
-                className="w-full bg-purple-600 dark:bg-purple-600 text-yellow-300 py-3 rounded-lg font-semibold hover:bg-purple-700 dark:hover:bg-purple-700 transition-all hover:scale-105"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-all hover:scale-105 shadow-lg hover:shadow-purple-600/50"
               >
-                Claim Your Spot
+                Claim Spot Now
               </button>
               <ul className="mt-6 space-y-2">
-                {['Maximize Output: 200 Translation Hours Per Year', 'Dedicated Real-Time Proxy Access (Lowest-Latency Performance Guarantee)', 'ElevenLabs UNLIMITED + Customized Voice Cloning Capability', 'Priority 24/7 Technical and Integration Support', 'Billed Annually: No Monthly Fees'].map((feature, idx) => (
+                {['Dedicated Real-Time Proxy Access (Lowest-Latency Performance Guarantee)', 'ElevenLabs UNLIMITED + Customized Voice Cloning Capability', 'Priority 24/7 Technical and Integration Support', 'Billed Annually: No Monthly Fees'].map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-orange-500 dark:text-orange-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">{feature}</span>
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
                   </li>
                 ))}
               </ul>
@@ -952,6 +1160,168 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Login/Register Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowLoginModal(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+            >
+              ✕
+            </button>
+
+            {/* Logo */}
+            <div className="text-center mb-6">
+              <div className="w-12 h-12 bg-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover rounded" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                {isLoginMode ? 'Welcome Back' : 'Create Account'}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                {isLoginMode ? 'Sign in to your CYAN account' : 'Join CYAN for ultra-low latency translation'}
+              </p>
+            </div>
+
+            {/* Form */}
+            <div className="space-y-4">
+              {/* Google Sign-In Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent('oauth_click', {
+                    provider: 'google',
+                    action: isLoginMode ? 'login' : 'register'
+                  });
+                  
+                  // Generate PKCE
+                  const codeVerifier = generatePKCE();
+                  const codeChallenge = codeVerifier;
+                  
+                  // Store verifier for callback
+                  sessionStorage.setItem('pkce_code_verifier', codeVerifier);
+                  
+                  // Direct Google OAuth for frontend (PKCE) - Production
+                  const googleOAuthUrl = 'https://accounts.google.com/oauth/authorize?' +
+                    'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
+                    'redirect_uri=' + encodeURIComponent('https://cyan-os-landingpage.vercel.app') + '&' +
+                    'response_type=code&' +
+                    'scope=openid%20email%20profile&' +
+                    'code_challenge=' + codeChallenge + '&' +
+                    'code_challenge_method=plain&' +
+                    'prompt=consent';
+                  
+                  window.location.href = googleOAuthUrl;
+                }}
+                className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continue with Google
+              </button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                    Or continue with email
+                  </span>
+                </div>
+              </div>
+
+              <form 
+                action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+                method="POST"
+                target="_blank"
+                className="space-y-4"
+              >
+              {!isLoginMode && (
+                <input
+                  type="text"
+                  name="FIRSTNAME"
+                  placeholder="Full Name"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                />
+              )}
+              
+              <input
+                type="email"
+                name="EMAIL"
+                placeholder="Email Address"
+                required
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+              />
+              
+              <input
+                type="password"
+                name="PASSWORD"
+                placeholder="Password"
+                required
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+              />
+              
+              {!isLoginMode && (
+                <input
+                  type="password"
+                  name="CONFIRM_PASSWORD"
+                  placeholder="Confirm Password"
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                />
+              )}
+              
+              <input
+                type="hidden"
+                name="FORM_TYPE"
+                value={isLoginMode ? 'login' : 'register'}
+              />
+              
+              <button
+                type="submit"
+                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-colors"
+              >
+                {isLoginMode ? 'Sign In' : 'Create Account'}
+              </button>
+            </form>
+            </div>
+
+            {/* Toggle Mode */}
+            <div className="mt-6 text-center">
+              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                {isLoginMode ? "Don't have an account?" : 'Already have an account?'}
+                <button
+                  onClick={() => setIsLoginMode(!isLoginMode)}
+                  className="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 font-semibold ml-1"
+                >
+                  {isLoginMode ? 'Sign Up' : 'Sign In'}
+                </button>
+              </p>
+            </div>
+
+            {/* Benefits */}
+            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="text-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Get started with:</p>
+                <div className="flex justify-center space-x-4 text-xs text-gray-600 dark:text-gray-300">
+                  <span>✓ 20min Free Trial</span>
+                  <span>✓ No Credit Card</span>
+                  <span>✓ Cancel Anytime</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-gray-900 dark:bg-gray-950 text-white py-12 px-6 backdrop-blur-sm">

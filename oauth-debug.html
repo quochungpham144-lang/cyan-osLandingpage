@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Debug Test</title>
+</head>
+<body>
+    <h1>Google OAuth Debug Test</h1>
+    
+    <button onclick="testOAuth1()">
+        Test OAuth (email scope only)
+    </button>
+    
+    <button onclick="testOAuth2()">
+        Test OAuth (basic scope)
+    </button>
+    
+    <button onclick="testOAuth3()">
+        Test OAuth (no scope)
+    </button>
+    
+    <script>
+        function testOAuth1() {
+            const googleOAuthUrl = 'https://accounts.google.com/oauth/authorize?' +
+                'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
+                'redirect_uri=http://localhost:5173&' +
+                'response_type=code&' +
+                'scope=email&' +
+                'prompt=consent';
+            
+            console.log('Testing OAuth 1:', googleOAuthUrl);
+            window.location.href = googleOAuthUrl;
+        }
+        
+        function testOAuth2() {
+            const googleOAuthUrl = 'https://accounts.google.com/oauth/authorize?' +
+                'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
+                'redirect_uri=http://localhost:5173&' +
+                'response_type=code&' +
+                'scope=profile&' +
+                'prompt=consent';
+            
+            console.log('Testing OAuth 2:', googleOAuthUrl);
+            window.location.href = googleOAuthUrl;
+        }
+        
+        function testOAuth3() {
+            const googleOAuthUrl = 'https://accounts.google.com/oauth/authorize?' +
+                'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
+                'redirect_uri=http://localhost:5173&' +
+                'response_type=code&' +
+                'prompt=consent';
+            
+            console.log('Testing OAuth 3:', googleOAuthUrl);
+            window.location.href = googleOAuthUrl;
+        }
+    </script>
+</body>
+</html>
