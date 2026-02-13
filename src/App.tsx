@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   Zap,
   Globe,
@@ -43,6 +43,34 @@ function App() {
       console.error('Backend connection failed:', error);
       return false;
     }
+  };
+
+  const handleEmailAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const email = String(formData.get('EMAIL') || '').trim();
+    const fullName = String(formData.get('FIRSTNAME') || '').trim();
+
+    if (!email) return;
+
+    const displayName = fullName || email.split('@')[0] || 'User';
+    const sessionData = {
+      id: `email-${email.toLowerCase()}`,
+      email,
+      name: displayName,
+      picture: '/logoCyan.jpg',
+      provider: 'email'
+    };
+
+    localStorage.setItem('user_session', JSON.stringify(sessionData));
+    setIsLoggedIn(true);
+    setUserInfo(sessionData);
+    setShowLoginModal(false);
+
+    trackEvent('email_auth_success', {
+      action: isLoginMode ? 'login' : 'register',
+      user_email: email
+    });
   };
 
   // Generate PKCE code verifier
@@ -1242,6 +1270,7 @@ function App() {
                 action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
                 method="POST"
                 target="_blank"
+                onSubmit={handleEmailAuthSubmit}
                 className="space-y-4"
               >
               {!isLoginMode && (
