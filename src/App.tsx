@@ -22,14 +22,26 @@ declare global {
 }
 
 function App() {
+  const getStoredSession = () => {
+    const raw = localStorage.getItem('user_session');
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      localStorage.removeItem('user_session');
+      return null;
+    }
+  };
+
+  const initialSession = getStoredSession();
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
   const [showTeamContactForm, setShowTeamContactForm] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState<any>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(initialSession));
+  const [userInfo, setUserInfo] = useState<any>(initialSession);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
   // API connection functions
@@ -46,6 +58,8 @@ function App() {
   };
 
   const handleEmailAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     const form = event.currentTarget;
     const formData = new FormData(form);
     const email = String(formData.get('EMAIL') || '').trim();
@@ -151,22 +165,15 @@ function App() {
     }
   };
 
-  // Check for existing login on mount
+  // Keep local storage in sync with current auth state
   useEffect(() => {
-    const session = localStorage.getItem('user_session');
-    
-    if (session) {
-      try {
-        const sessionData = JSON.parse(session);
-        setIsLoggedIn(true);
-        setUserInfo(sessionData);
-        console.log('Restored user session:', sessionData);
-      } catch (error) {
-        console.error('Failed to restore user session:', error);
-        localStorage.removeItem('user_session');
-      }
+    if (isLoggedIn && userInfo) {
+      localStorage.setItem('user_session', JSON.stringify(userInfo));
+      return;
     }
-  }, []);
+
+    localStorage.removeItem('user_session');
+  }, [isLoggedIn, userInfo]);
 
   // Check for OAuth callback in URL
   useEffect(() => {
@@ -1267,9 +1274,6 @@ function App() {
               </div>
 
               <form 
-                action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
-                method="POST"
-                target="_blank"
                 onSubmit={handleEmailAuthSubmit}
                 className="space-y-4"
               >
