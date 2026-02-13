@@ -99,75 +99,44 @@ function App() {
     });
   };
 
-  // Generate PKCE code verifier
-  const generatePKCE = () => {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    // Convert Uint8Array to regular array for String.fromCharCode
-    const numberArray = Array.from(array);
-    return btoa(String.fromCharCode.apply(null, numberArray))
-      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-  };
-
-  // Handle Google OAuth callback (Frontend Direct - PKCE)
-  const handleGoogleCallback = async (code: string, codeVerifier: string) => {
+  // Handle Google OAuth callback (Frontend Direct - Token flow)
+  const handleGoogleCallback = async (accessToken: string) => {
     try {
-      // Exchange code for tokens directly from Google (PKCE flow)
-      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-        method: 'POST',
+      // Get user info directly from Google using access token
+      const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          code: code,
-          client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
-          redirect_uri: window.location.origin,
-          grant_type: 'authorization_code',
-          code_verifier: codeVerifier
-        })
+          'Authorization': `Bearer ${accessToken}`
+        }
       });
-      
-      const tokenData = await tokenResponse.json();
-      
-      if (tokenData.access_token) {
-        // Get user info from Google
-        const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-          headers: {
-            'Authorization': `Bearer ${tokenData.access_token}`
-          }
-        });
-        
-        const userData = await userResponse.json();
-        
-        // Create simple session
-        const sessionData = {
-          id: userData.id,
-          email: userData.email,
-          name: userData.name,
-          picture: userData.picture,
-          access_token: tokenData.access_token
-        };
-        
-        // Store session
-        localStorage.setItem('user_session', JSON.stringify(sessionData));
-        
-        // Update state
-        setIsLoggedIn(true);
-        setUserInfo(sessionData);
-        
-        // Close modal
-        setShowLoginModal(false);
-        
-        // Track success
-        trackEvent('oauth_success', {
-          provider: 'google',
-          user_email: userData.email
-        });
-        
-        console.log('Google login successful:', userData);
-      } else {
-        console.error('Token exchange failed:', tokenData);
-      }
+
+      const userData = await userResponse.json();
+
+      // Create simple session
+      const sessionData = {
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        picture: userData.picture,
+        access_token: accessToken
+      };
+
+      // Store session
+      localStorage.setItem('user_session', JSON.stringify(sessionData));
+
+      // Update state
+      setIsLoggedIn(true);
+      setUserInfo(sessionData);
+
+      // Close modal
+      setShowLoginModal(false);
+
+      // Track success
+      trackEvent('oauth_success', {
+        provider: 'google',
+        user_email: userData.email
+      });
+
+      console.log('Google login successful:', userData);
     } catch (error) {
       console.error('OAuth callback error:', error);
       trackEvent('oauth_error', {
@@ -190,22 +159,13 @@ function App() {
   // Check for OAuth callback in URL
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const accessToken = hashParams.get('access_token');
     const error = urlParams.get('error');
-    
-    if (code) {
-      // Get PKCE verifier
-      const codeVerifier = sessionStorage.getItem('pkce_code_verifier');
-      
-      if (codeVerifier) {
-        // Handle OAuth callback with PKCE
-        handleGoogleCallback(code, codeVerifier);
-        // Clean up
-        sessionStorage.removeItem('pkce_code_verifier');
-      } else {
-        console.error('PKCE verifier not found');
-      }
-      
+
+    if (accessToken) {
+      // Handle OAuth callback with access token
+      handleGoogleCallback(accessToken);
       // Clean URL
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (error) {
@@ -1243,22 +1203,13 @@ function App() {
                     provider: 'google',
                     action: isLoginMode ? 'login' : 'register'
                   });
-                  
-                  // Generate PKCE
-                  const codeVerifier = generatePKCE();
-                  const codeChallenge = codeVerifier;
-                  
-                  // Store verifier for callback
-                  sessionStorage.setItem('pkce_code_verifier', codeVerifier);
-                  
-                  // Direct Google OAuth for frontend (PKCE) - Production
+
+                  // Direct Google OAuth for frontend (Token flow) - Production
                   const googleOAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
                     'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
                     'redirect_uri=' + encodeURIComponent(window.location.origin) + '&' +
-                    'response_type=code&' +
+                    'response_type=token&' +
                     'scope=openid%20email%20profile&' +
-                    'code_challenge=' + codeChallenge + '&' +
-                    'code_challenge_method=plain&' +
                     'prompt=consent';
                   
                   window.location.href = googleOAuthUrl;
