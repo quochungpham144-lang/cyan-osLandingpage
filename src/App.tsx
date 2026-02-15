@@ -191,7 +191,11 @@ function App() {
         });
 
         const data = await response.json();
-        if (!response.ok || !data?.payment_url || !data?.payment_id) {
+        const paymentUrl = String(data?.payment_url || '')
+          .trim()
+          .replace(/`/g, '');
+
+        if (!response.ok || !paymentUrl || !data?.payment_id) {
           throw new Error(data?.error || 'Unable to create crypto payment.');
         }
 
@@ -207,7 +211,7 @@ function App() {
         );
 
         trackEvent('checkout_started', { plan: planKey, method: 'crypto', price_label: PLAN_PRICE[planKey] });
-        window.location.href = data.payment_url;
+        window.location.href = paymentUrl;
         return;
       }
 
