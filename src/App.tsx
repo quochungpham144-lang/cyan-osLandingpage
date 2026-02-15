@@ -195,7 +195,11 @@ function App() {
           .trim()
           .replace(/`/g, '');
 
-        if (!response.ok || !paymentUrl || !data?.payment_id) {
+        const payAddress = String(data?.pay_address || '').trim();
+        const payAmount = String(data?.pay_amount || '').trim();
+        const payCurrency = String(data?.pay_currency || '').trim();
+
+        if (!response.ok || !data?.payment_id) {
           throw new Error(data?.error || 'Unable to create crypto payment.');
         }
 
@@ -211,7 +215,18 @@ function App() {
         );
 
         trackEvent('checkout_started', { plan: planKey, method: 'crypto', price_label: PLAN_PRICE[planKey] });
-        window.location.href = paymentUrl;
+
+        if (paymentUrl) {
+          window.location.href = paymentUrl;
+          return;
+        }
+
+        if (payAddress && payAmount && payCurrency) {
+          setCheckoutMessage(`Gửi ${payAmount} ${payCurrency.toUpperCase()} đến địa chỉ:\n${payAddress}`);
+          return;
+        }
+
+        throw new Error('NOWPayments không trả về link/địa chỉ thanh toán hợp lệ.');
         return;
       }
 
