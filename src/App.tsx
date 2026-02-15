@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Zap,
   Globe,
@@ -17,7 +17,7 @@ import {
 // Simple type declaration for Google Analytics
 declare global {
   interface Window {
-    gtag?: any;
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -86,7 +86,7 @@ function App() {
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
-  const saveSession = (session: UserSession | null) => {
+  const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
       localStorage.setItem('user_session', JSON.stringify(session));
       setUserInfo(session);
@@ -97,9 +97,9 @@ function App() {
     localStorage.removeItem('user_session');
     setUserInfo(null);
     setIsLoggedIn(false);
-  };
+  }, []);
 
-  const ensureSession = () => {
+  const ensureSession = useCallback(() => {
     if (userInfo) return userInfo;
 
     const guestSession: UserSession = {
@@ -114,7 +114,7 @@ function App() {
 
     saveSession(guestSession);
     return guestSession;
-  };
+  }, [saveSession, userInfo]);
 
   useEffect(() => {
     const { origin, hostname, pathname, search, hash } = window.location;
@@ -127,7 +127,7 @@ function App() {
   }, []);
 
   // API connection functions
-  const checkBackendConnection = async () => {
+  const checkBackendConnection = useCallback(async () => {
     try {
       const response = await fetch('https://translator-backend-pi.vercel.app/api/health');
       const data = await response.json();
@@ -137,21 +137,21 @@ function App() {
       console.error('Backend connection failed:', error);
       return false;
     }
-  };
+  }, []);
 
   // Analytics tracking functions
-  const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
+  const trackEvent = useCallback((eventName: string, parameters?: Record<string, unknown>) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', eventName, parameters);
     }
-  };
+  }, []);
 
   // Track page views (used for analytics)
-  const trackPageView = (path: string) => {
+  const trackPageView = useCallback((path: string) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('config', 'G-BRJN71L7VV', { page_path: path });
     }
-  };
+  }, []);
 
   const handleTeamContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
@@ -248,7 +248,7 @@ function App() {
     }
   };
 
-  const activateCryptoCheckoutFromUrl = async () => {
+  const activateCryptoCheckoutFromUrl = useCallback(async () => {
     const query = new URLSearchParams(window.location.search);
     const cryptoState = query.get('crypto');
     const pendingRaw = localStorage.getItem('pending_crypto_checkout');
@@ -325,9 +325,9 @@ function App() {
     } finally {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  };
+  }, [ensureSession, saveSession, trackEvent]);
 
-  const activateCheckoutFromUrl = async () => {
+  const activateCheckoutFromUrl = useCallback(async () => {
     const query = new URLSearchParams(window.location.search);
     const checkoutState = query.get('checkout');
     const subscriptionId = query.get('subscription_id') || query.get('token') || query.get('ba_token');
@@ -396,7 +396,7 @@ function App() {
     } finally {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  };
+  }, [ensureSession, saveSession, trackEvent]);
 
   const handleEmailAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -429,7 +429,7 @@ function App() {
   };
 
   // Handle Google OAuth callback (Frontend Direct - Token flow)
-  const handleGoogleCallback = async (accessToken: string) => {
+  const handleGoogleCallback = useCallback(async (accessToken: string) => {
     try {
       // Get user info directly from Google using access token
       const userResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
@@ -471,13 +471,13 @@ function App() {
         error: 'Frontend OAuth failed'
       });
     }
-  };
+  }, [saveSession, trackEvent]);
 
   // Keep local storage in sync with current auth state
   useEffect(() => {
     activateCryptoCheckoutFromUrl();
     activateCheckoutFromUrl();
-  }, []);
+  }, [activateCheckoutFromUrl, activateCryptoCheckoutFromUrl]);
 
   // Keep local storage in sync with current auth state
   useEffect(() => {
@@ -508,13 +508,13 @@ function App() {
         error: error
       });
     }
-  }, []);
+  }, [handleGoogleCallback, trackEvent]);
 
   // Check backend on mount
   useEffect(() => {
     checkBackendConnection();
     trackPageView(window.location.pathname);
-  }, []);
+  }, [checkBackendConnection, trackPageView]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
