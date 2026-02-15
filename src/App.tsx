@@ -84,6 +84,14 @@ function App() {
   const [userInfo, setUserInfo] = useState<UserSession | null>(initialSession);
   const [checkoutBusy, setCheckoutBusy] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
+  const [cryptoCheckout, setCryptoCheckout] = useState<{
+    planKey: PlanKey
+    paymentId: string
+    payCurrency: string
+    payAmount: string
+    payAddress: string
+  } | null>(null);
+  const [cryptoActivationBusy, setCryptoActivationBusy] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const saveSession = useCallback((session: UserSession | null) => {
@@ -190,7 +198,13 @@ function App() {
           })
         });
 
-        const data = await response.json();
+        const raw = await response.text();
+        let data: any = null;
+        try {
+          data = JSON.parse(raw);
+        } catch {
+          data = { raw };
+        }
         const paymentUrl = String(data?.payment_url || '')
           .trim()
           .replace(/`/g, '');
@@ -199,8 +213,14 @@ function App() {
         const payAmount = String(data?.pay_amount || '').trim();
         const payCurrency = String(data?.pay_currency || '').trim();
 
-        if (!response.ok || !data?.payment_id) {
-          throw new Error(data?.error || 'Unable to create crypto payment.');
+        if (!response.ok) {
+          const detailMessage =
+            data?.details?.message ||
+            data?.details?.error ||
+            data?.error ||
+            data?.raw ||
+            'Unable to create crypto payment.';
+          throw new Error(String(detailMessage));
         }
 
         localStorage.setItem(
@@ -208,8 +228,9 @@ function App() {
           JSON.stringify({
             userId: session.id,
             planKey,
-            paymentId: data.payment_id,
-            orderId: data.order_id,
+            paymentId: data?.payment_id || '',
+            orderId: data?.order_id || '',
+            hosted: Boolean(data?.hosted),
             createdAt: Date.now()
           })
         );
@@ -222,7 +243,13 @@ function App() {
         }
 
         if (payAddress && payAmount && payCurrency) {
-          setCheckoutMessage(`Gửi ${payAmount} ${payCurrency.toUpperCase()} đến địa chỉ:\n${payAddress}`);
+          setCryptoCheckout({
+            planKey,
+            paymentId: String(data.payment_id),
+            payCurrency,
+            payAmount,
+            payAddress
+          });
           return;
         }
 
@@ -267,6 +294,112 @@ function App() {
     }
   };
 
+  const copyToClipboard = useCallback(async (value: string) => {
+    const text = String(value || '');
+    if (!text) return false;
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (_) {
+      try {
+        const el = document.createElement('textarea');
+        el.value = text;
+        el.style.position = 'fixed';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.focus();
+        el.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(el);
+        return ok;
+      } catch (_) {
+        return false;
+      }
+    }
+  }, []);
+
+  const checkAndActivateCryptoPayment = useCallback(async () => {
+    const pendingRaw = localStorage.getItem('pending_crypto_checkout');
+    if (!pendingRaw) {
+      setCheckoutMessage('Missing crypto checkout session. Please retry from pricing.');
+      return;
+    }
+
+    let pending: {
+      userId: string
+      planKey: PlanKey
+      paymentId: string
+      orderId: string
+    };
+
+    try {
+      pending = JSON.parse(pendingRaw);
+    } catch {
+      setCheckoutMessage('Missing crypto checkout session. Please retry from pricing.');
+      return;
+    }
+
+    setCryptoActivationBusy(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/payment/now/activate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: pending.userId,
+          plan_key: pending.planKey,
+          payment_id: pending.paymentId,
+          order_id: pending.orderId
+        })
+      });
+
+      const raw = await response.text();
+      let data: any = null;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        data = { raw };
+      }
+
+      if (response.status === 202) {
+        setCheckoutMessage('Chưa nhận được thanh toán. Vui lòng đợi vài phút rồi bấm “Tôi đã thanh toán” lại.');
+        return;
+      }
+
+      if (!response.ok || !data?.ok) {
+        const detailMessage = data?.error || data?.raw || 'Crypto payment not active yet.';
+        setCheckoutMessage(String(detailMessage));
+        return;
+      }
+
+      const activeSession = ensureSession();
+      const nextSubscriptions = [
+        ...(activeSession.subscriptions || []).filter((s) => s.id !== pending.paymentId),
+        {
+          id: pending.paymentId,
+          planKey: pending.planKey,
+          status: 'ACTIVE',
+          activatedAt: new Date().toISOString()
+        }
+      ] as SubscriptionRecord[];
+
+      saveSession({
+        ...activeSession,
+        plan: pending.planKey,
+        subscriptions: nextSubscriptions
+      });
+
+      setCryptoCheckout(null);
+      setCheckoutMessage(`Crypto plan activated: ${PLAN_PRICE[pending.planKey]}.`);
+      trackEvent('checkout_activated', { method: 'crypto', plan: pending.planKey, payment_id: pending.paymentId });
+      localStorage.removeItem('pending_crypto_checkout');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not activate crypto payment.';
+      setCheckoutMessage(message);
+    } finally {
+      setCryptoActivationBusy(false);
+    }
+  }, [ensureSession, saveSession, trackEvent]);
+
   const activateCryptoCheckoutFromUrl = useCallback(async () => {
     const query = new URLSearchParams(window.location.search);
     const cryptoState = query.get('crypto');
@@ -291,25 +424,36 @@ function App() {
       const pending = JSON.parse(pendingRaw) as {
         userId: string
         planKey: PlanKey
-        paymentId: string
-        orderId: string
+        paymentId?: string
+        orderId?: string
+        hosted?: boolean
       };
 
-      const response = await fetch(`${BACKEND_URL}/api/payment/now/activate`, {
+      const hasPaymentId = Boolean(pending.paymentId)
+      const activateEndpoint = hasPaymentId ? 'activate' : 'activate-order'
+      const body = hasPaymentId
+        ? {
+            user_id: pending.userId,
+            plan_key: pending.planKey,
+            payment_id: pending.paymentId,
+            order_id: pending.orderId
+          }
+        : {
+            user_id: pending.userId,
+            plan_key: pending.planKey,
+            order_id: pending.orderId
+          }
+
+      const response = await fetch(`${BACKEND_URL}/api/payment/now/${activateEndpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: pending.userId,
-          plan_key: pending.planKey,
-          payment_id: pending.paymentId,
-          order_id: pending.orderId
-        })
+        body: JSON.stringify(body)
       });
 
       const data = await response.json();
       if (response.status === 202) {
-        setCheckoutMessage('Crypto payment received. Activation is processing, please refresh shortly.');
-        trackEvent('checkout_activation_pending', { method: 'crypto', plan: pending.planKey, payment_id: pending.paymentId });
+        setCheckoutMessage('Chưa nhận được thanh toán. Vui lòng đợi vài phút rồi thử lại.');
+        trackEvent('checkout_activation_pending', { method: 'crypto', plan: pending.planKey, payment_id: pending.paymentId || null });
         return;
       }
 
@@ -746,6 +890,70 @@ function App() {
               Dismiss
             </button>
           )}
+        </div>
+      )}
+
+      {cryptoCheckout && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+          <div className="w-full max-w-lg rounded-2xl border border-cyan-500/30 bg-white dark:bg-slate-900 shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-cyan-500/20 px-5 py-4">
+              <div>
+                <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Thanh toán Crypto</div>
+                <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">Mạng: BSC • Coin: {cryptoCheckout.payCurrency.toUpperCase()}</div>
+              </div>
+              <button
+                onClick={() => setCryptoCheckout(null)}
+                className="text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400"
+              >
+                Đóng
+              </button>
+            </div>
+
+            <div className="px-5 py-4 space-y-4">
+              <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
+                <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">Số tiền cần gửi</div>
+                <div className="mt-1 flex items-center justify-between gap-3">
+                  <div className="text-lg font-bold text-gray-900 dark:text-white break-all">{cryptoCheckout.payAmount}</div>
+                  <button
+                    onClick={async () => {
+                      const ok = await copyToClipboard(cryptoCheckout.payAmount);
+                      setCheckoutMessage(ok ? 'Đã copy số tiền.' : 'Copy thất bại.');
+                    }}
+                    className="text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
+                <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">Địa chỉ nhận</div>
+                <div className="mt-1 flex items-start justify-between gap-3">
+                  <div className="text-sm font-mono text-gray-900 dark:text-white break-all">{cryptoCheckout.payAddress}</div>
+                  <button
+                    onClick={async () => {
+                      const ok = await copyToClipboard(cryptoCheckout.payAddress);
+                      setCheckoutMessage(ok ? 'Đã copy địa chỉ.' : 'Copy thất bại.');
+                    }}
+                    className="text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-cyan-500/20 bg-white dark:bg-slate-900 p-4">
+                <div className="text-xs text-gray-600 dark:text-gray-300">Sau khi gửi xong, bấm nút bên dưới để hệ thống kiểm tra và kích hoạt gói.</div>
+                <button
+                  onClick={checkAndActivateCryptoPayment}
+                  disabled={cryptoActivationBusy}
+                  className="mt-3 w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all disabled:opacity-60"
+                >
+                  {cryptoActivationBusy ? 'Đang kiểm tra thanh toán...' : 'Tôi đã thanh toán'}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
           </div>
