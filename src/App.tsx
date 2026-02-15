@@ -736,7 +736,7 @@ function App() {
           {checkoutBusy ? (
             <p className="text-sm font-medium text-cyan-700 dark:text-cyan-300">Creating checkout session...</p>
           ) : (
-            <p className="text-sm text-gray-700 dark:text-gray-200">{checkoutMessage}</p>
+            <p className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap break-words">{checkoutMessage}</p>
           )}
           {checkoutMessage && (
             <button
