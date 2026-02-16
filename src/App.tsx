@@ -125,6 +125,34 @@ function App() {
   }, [saveSession, userInfo]);
 
   useEffect(() => {
+    if (!userInfo?.id) return;
+    if (userInfo.provider === 'guest') return;
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const r = await fetch(`${BACKEND_URL}/api/user/quota?user_id=${encodeURIComponent(userInfo.id)}`);
+        if (!r.ok) return;
+        const data = (await r.json()) as { plan?: PlanKey };
+        const backendPlan = data?.plan;
+        if (!backendPlan) return;
+        if (cancelled) return;
+        if (userInfo.plan === backendPlan) return;
+
+        saveSession({
+          ...userInfo,
+          plan: backendPlan
+        });
+      } catch (_) {}
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userInfo, saveSession]);
+
+  useEffect(() => {
     const { origin, hostname, pathname, search, hash } = window.location;
     const isVercelHost = hostname.endsWith('.vercel.app');
     const isCanonicalHost = origin === CANONICAL_PROD_ORIGIN;
