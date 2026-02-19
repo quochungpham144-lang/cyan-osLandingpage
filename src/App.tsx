@@ -876,6 +876,20 @@ function App() {
                       {userInfo.plan || 'free'}
                     </span>
                   </div>
+                  
+                  {/* Open in App Button (Deep Link) */}
+                  <button
+                    onClick={() => {
+                      const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
+                      window.location.href = deepLink;
+                      trackEvent('open_in_app', { userId: userInfo.id });
+                    }}
+                    className="ml-2 bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:border-cyan-500 transition-all flex items-center gap-2"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-yellow-400" />
+                    Open in App
+                  </button>
+
                   <button 
                     onClick={() => {
                       saveSession(null);
