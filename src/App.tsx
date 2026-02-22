@@ -112,7 +112,7 @@ function App() {
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [view, setView] = useState<'main' | 'privacy'>('main');
+  const [view, setView] = useState<'main' | 'privacy' | 'terms'>('main');
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -283,6 +283,121 @@ function App() {
                 <li>Right to be Forgotten: You may request the deletion of your entire account and associated data at any time.</li>
                 <li>Right of Access: You may request an export of your payment history and account configuration data.</li>
               </ul>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+
+  const termsView = (
+    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <header className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
+              <div className="text-xs text-gray-400">Terms of Service</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setView('main')}
+            className="text-xs font-medium text-gray-400 hover:text-gray-100"
+          >
+            Back to site
+          </button>
+        </header>
+        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
+          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
+            <div>
+              <div className="text-base md:text-lg font-semibold text-white">TERMS OF SERVICE: CYAN AI REAL-TIME TRANSLATOR</div>
+              <div className="mt-1 text-xs text-gray-400">Version: 1.02 – Updated: January 28, 2026</div>
+            </div>
+          </div>
+          <div className="space-y-5 text-sm leading-relaxed">
+            <div>
+              <div className="font-semibold text-white">1. ACCEPTANCE OF TERMS</div>
+              <p className="mt-1 text-gray-300">
+                By accessing and using the Cyan AI utility (hereinafter referred to as the &quot;Service&quot;), you
+                agree to be bound by these Terms. If you are using the Service on behalf of an organization, you agree
+                to these Terms on behalf of that organization.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">2. DESCRIPTION OF SERVICE</div>
+              <p className="mt-1 text-gray-300">
+                Cyan provides an ultra-low latency, real-time AI translation solution, utilizing third-party API
+                infrastructures including ElevenLabs, Microsoft Azure, and Google Cloud AI through our decentralized
+                proxy network.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">3. FAIR USE POLICY</div>
+              <p className="mt-1 text-gray-300">
+                To manage high API costs and maintain system stability:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Executive Pro Plan Limit ($699): Each account is granted 200 hours of audio processing per year.</li>
+                <li>Technology Allocation: Customers receive priority access for up to 40 hours of ElevenLabs Premium technology (including voice cloning).</li>
+                <li>Fallback Mechanism: Upon exceeding the 40-hour Premium limit, the system will automatically switch to High-Quality Standard models (Azure/Google) for the remaining duration to ensure uninterrupted service.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">4. PAYMENT TERMS (PAYPAL &amp; CRYPTOCURRENCY)</div>
+              <p className="mt-1 text-gray-300">
+                We offer two primary payment methods:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>PayPal/Credit Card: Payments are processed in compliance with PayPal&apos;s security regulations.</li>
+                <li>
+                  Cryptocurrency (Stablecoins - USDT/USDC): Transactions are processed via Blockchain networks (Solana,
+                  Polygon, Ethereum). Users are responsible for network fees (Gas fees) and ensuring the correct wallet
+                  address and network are used as required by the system.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">5. REFUND POLICY - CRITICAL NOTICE</div>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>PayPal/Credit Card: Refunds will only be considered within 24 hours of purchase, provided the total translation usage time does not exceed 30 minutes.</li>
+                <li>
+                  Cryptocurrency (Crypto/Stablecoin): Due to the irreversible nature of Blockchain transactions, all
+                  Crypto payments are NON-REFUNDABLE under any circumstances. By choosing to pay via Crypto, you
+                  acknowledge and accept this risk.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">6. VOICE COPYRIGHT &amp; CONTENT</div>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  Voice Cloning: Users represent and warrant that they hold legal ownership or have obtained written
+                  consent from the voice owner before using the cloning feature. Cyan assumes no liability for
+                  unauthorized impersonation.
+                </li>
+                <li>
+                  Prohibitions: Using Cyan to create fraudulent content (Deepfakes), hate speech, or content that
+                  violates current laws is strictly prohibited.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">7. DATA PRIVACY</div>
+              <p className="mt-1 text-gray-300">
+                We implement a Zero-Retention policy: Conversation content is neither stored nor recorded after the
+                translation session concludes. Cloned voice data is encrypted and remains the sole property of the user.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">8. LIMITATION OF LIABILITY</div>
+              <p className="mt-1 text-gray-300">
+                Cyan does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
+                We shall not be held liable for any business losses arising from the use of the service.
+              </p>
             </div>
           </div>
         </main>
@@ -862,7 +977,7 @@ function App() {
     sectionsRef.current[id] = el;
   };
 
-  return view === 'privacy' ? privacyView : (
+  return view === 'privacy' ? privacyView : view === 'terms' ? termsView : (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
@@ -2187,7 +2302,18 @@ function App() {
                     Privacy Policy
                   </button>
                 </li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Terms of Use</a></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setView('terms');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    Terms of Use
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Security</a></li>
               </ul>
             </div>
