@@ -113,6 +113,7 @@ function App() {
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security'>('main');
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -194,14 +195,20 @@ function App() {
     }
   }, []);
 
+  const hasAnalyticsConsent = () => {
+    if (typeof window === 'undefined') return false;
+    const value = window.localStorage.getItem('cyan_cookie_consent');
+    return value === 'all';
+  };
+
   const trackEvent = useCallback((eventName: string, parameters?: Record<string, unknown>) => {
-    if (typeof window !== 'undefined' && window.gtag) {
+    if (typeof window !== 'undefined' && window.gtag && hasAnalyticsConsent()) {
       window.gtag('event', eventName, parameters);
     }
   }, []);
 
   const trackPageView = useCallback((path: string) => {
-    if (typeof window !== 'undefined' && window.gtag) {
+    if (typeof window !== 'undefined' && window.gtag && hasAnalyticsConsent()) {
       window.gtag('config', 'G-BRJN71L7VV', { page_path: path });
     }
   }, []);
@@ -309,12 +316,14 @@ function App() {
             <div>
               <div className="font-semibold text-white">8. COOKIES, ANALYTICS &amp; THIRD-PARTY SERVICES</div>
               <p className="mt-1 text-gray-300">
-                Our web properties may use cookies and similar technologies to remember your preferences and to measure product performance.
+                Our web properties may use cookies, local storage, and similar technologies to remember your preferences,
+                secure access to the Service, and measure product performance.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Analytics: We may use analytics providers (such as Google Analytics) to collect aggregated, pseudonymous usage statistics.</li>
-                <li>Cookie Control: You can control or disable cookies through your browser settings; however, some core features may not function correctly without them.</li>
-                <li>Service Providers: Hosting, logging, and monitoring providers may process limited technical data solely on our behalf and under contractual data protection terms.</li>
+                <li>Authentication &amp; Sessions: We may use cookies and browser storage to keep you signed in, manage session security, and support OAuth-based login flows (including sign-in with Google).</li>
+                <li>Analytics: We may use analytics providers (such as Google Analytics) to collect aggregated, pseudonymous usage statistics about how users from different regions interact with the Service.</li>
+                <li>Cookie Control: You can control or disable cookies through your browser settings; however, some core features (such as login and personalization) may not function correctly without them.</li>
+                <li>Service Providers: Hosting, logging, monitoring, and authentication providers may process limited technical data solely on our behalf and under contractual data protection terms.</li>
               </ul>
             </div>
             <div>
@@ -326,6 +335,18 @@ function App() {
                 <li>International Transfers: Where data is transferred across borders, we rely on appropriate safeguards such as contractual clauses or equivalent mechanisms.</li>
                 <li>Policy Updates: We may update this Privacy Policy from time to time; material changes will be communicated through the Service or by email where appropriate.</li>
                 <li>Contact: For privacy-related questions or requests, you may contact our team via the support channel provided on the Cyan website.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">10. REGION-SPECIFIC RIGHTS (EU/US/OTHER)</div>
+              <p className="mt-1 text-gray-300">
+                Cyan is based in Vietnam and offers services globally in multiple languages. Depending on where you live,
+                additional data protection rights may apply on top of this Policy:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>EU/EEA &amp; UK: Where GDPR or equivalent laws apply, you may have rights to access, rectify, erase, restrict, or object to certain processing, as well as data portability and the right to lodge a complaint with your local supervisory authority.</li>
+                <li>US Residents: In certain US states, you may have rights to access, delete, or opt out of specific types of data processing, subject to applicable state privacy laws.</li>
+                <li>Other Regions: We will honor any mandatory data protection rights granted to you under the laws of your country or region, in addition to the commitments stated in this Policy.</li>
               </ul>
             </div>
           </div>
@@ -491,10 +512,11 @@ function App() {
             <div>
               <div className="font-semibold text-white">13. GOVERNING LAW, DISPUTES &amp; CHANGES TO TERMS</div>
               <p className="mt-1 text-gray-300">
-                These Terms are governed by the laws of the jurisdiction in which Cyan is established, without regard to conflict of laws principles.
+                These Terms are governed by the laws of the Socialist Republic of Vietnam, without regard to conflict of
+                laws principles, while respecting any mandatory consumer protection rights that apply in your own country.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Dispute Resolution: Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the competent courts of that jurisdiction, unless otherwise required by mandatory local law.</li>
+                <li>Dispute Resolution: Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the competent courts in Vietnam, unless otherwise required by mandatory local law.</li>
                 <li>Changes to Terms: We may update these Terms from time to time. Material changes will be communicated via the Service or by email where appropriate, and your continued use of the Service after such changes constitutes acceptance of the updated Terms.</li>
               </ul>
             </div>
@@ -716,6 +738,14 @@ function App() {
     setTeamFormSubmitted(true);
     setTimeout(() => form.reset(), 100);
   };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const consent = window.localStorage.getItem('cyan_cookie_consent');
+    if (!consent) {
+      setShowCookieBanner(true);
+    }
+  }, []);
 
   const startPlanCheckout = async (planKey: PlanKey, method: PaymentMethod = 'paypal') => {
     if (planKey === 'free') {
@@ -2532,6 +2562,59 @@ function App() {
                   <span>✓ No Credit Card</span>
                   <span>✓ Cancel Anytime</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCookieBanner && (
+        <div className="fixed inset-x-0 bottom-0 z-40">
+          <div className="max-w-7xl mx-auto px-4 pb-4">
+            <div className="bg-slate-900/95 border border-slate-700 text-sm text-gray-200 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div className="md:max-w-3xl">
+                <div className="font-semibold text-gray-100 text-xs md:text-sm">Cookies &amp; data usage</div>
+                <p className="mt-1 text-xs md:text-sm text-gray-300">
+                  Cyan uses cookies and similar technologies to keep you signed in (including Google OAuth), secure your
+                  session, and measure how users around the world interact with our product. You can learn more in our
+                  Privacy Policy.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.localStorage.setItem('cyan_cookie_consent', 'necessary');
+                    }
+                    setShowCookieBanner(false);
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs md:text-sm border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
+                >
+                  Necessary only
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.localStorage.setItem('cyan_cookie_consent', 'all');
+                    }
+                    setShowCookieBanner(false);
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs md:text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
+                >
+                  Accept all
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView('privacy');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="px-2 py-1 rounded-lg text-xs md:text-sm text-gray-300 hover:text-cyan-400 transition-colors"
+                >
+                  Learn more
+                </button>
               </div>
             </div>
           </div>
