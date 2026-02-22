@@ -112,7 +112,7 @@ function App() {
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [view, setView] = useState<'main' | 'privacy' | 'terms'>('main');
+  const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security'>('main');
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -397,6 +397,155 @@ function App() {
               <p className="mt-1 text-gray-300">
                 Cyan does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
                 We shall not be held liable for any business losses arising from the use of the service.
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+
+  const securityView = (
+    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <header className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN AI</div>
+              <div className="text-xs text-gray-400">Dedicated Voice Copyright &amp; Cloning Policy</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setView('main')}
+            className="text-xs font-medium text-gray-400 hover:text-gray-100"
+          >
+            Back to site
+          </button>
+        </header>
+        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
+          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
+            <div>
+              <div className="text-base md:text-lg font-semibold text-white">
+                CYAN AI: DEDICATED VOICE COPYRIGHT &amp; CLONING POLICY
+              </div>
+              <div className="mt-1 text-xs text-gray-400">Effective Date: January 28, 2026</div>
+            </div>
+          </div>
+          <div className="space-y-5 text-sm leading-relaxed">
+            <div>
+              <div className="font-semibold text-white">1. LEGAL OWNERSHIP OF VOICE DATA</div>
+              <p className="mt-1 text-gray-300">
+                Cyan AI (the &quot;Company&quot;) recognizes that a person&apos;s voice is a core part of their
+                personal identity and intellectual property.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  User-Provided Content: By uploading audio for the purpose of &quot;Voice Cloning,&quot; the User
+                  represents and warrants that they are the legal owner of the voice or have obtained express, written,
+                  and notarized consent from the owner of the voice.
+                </li>
+                <li>
+                  Cyan’s Role: Cyan acts strictly as a Service Provider and a neutral processing platform. We do not
+                  claim ownership over any voice models generated through our Service.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">2. VOICE CLONING COMPLIANCE &amp; CONSENT (VCC)</div>
+              <p className="mt-1 text-gray-300">
+                The use of the Customized Voice Cloning capability (available in the Executive Pro Plan) is strictly
+                subject to the following conditions:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  The &quot;Self-Cloning&quot; Rule: Users are encouraged to clone only their own voices for
+                  professional use in meetings and webinars.
+                </li>
+                <li>
+                  Prohibition of Celebrity/Public Figure Cloning: Users are strictly prohibited from uploading audio of
+                  celebrities, politicians, or any public figure for the purpose of voice cloning, regardless of whether
+                  the source material is publicly available.
+                </li>
+                <li>
+                  Verification Rights: Cyan reserves the right, at its sole discretion, to request proof of consent or
+                  identity verification before activating a Customized Voice Clone.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">3. INTELLECTUAL PROPERTY RIGHTS (IPR)</div>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  Output Rights: Subject to the User’s compliance with these terms, the User owns the rights to the
+                  translated audio output generated by the Service.
+                </li>
+                <li>
+                  Model Training Data: Cyan does not use User-provided voice samples to train its core proprietary AI
+                  models. Voice samples are used exclusively to generate a temporary or permanent voice profile for that
+                  specific User&apos;s account.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">4. PROHIBITED USES &amp; &quot;DEEPFAKE&quot; PREVENTION</div>
+              <p className="mt-1 text-gray-300">
+                Cyan maintains a Zero-Tolerance Policy regarding the following activities:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  Impersonation with Malicious Intent: Using a cloned voice to commit fraud, gain unauthorized access
+                  to financial accounts (Voice Biometrics fraud), or mislead any third party.
+                </li>
+                <li>
+                  Defamation: Creating content that harms the reputation of any individual through synthetic voice
+                  output.
+                </li>
+                <li>
+                  Electoral Interference: Using the Service to create deceptive content related to elections or
+                  political processes.
+                </li>
+                <li>
+                  Violation of Publicity Rights: Any use that violates the &quot;Right of Publicity&quot; under
+                  international laws.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">5. MONITORING AND ENFORCEMENT</div>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  Automated Detection: Cyan utilizes advanced audio watermarking and metadata tracking (in
+                  collaboration with providers like ElevenLabs) to identify synthetic speech generated by our platform.
+                </li>
+                <li>
+                  Account Termination: Any violation of this Voice Copyright Policy will result in an immediate and
+                  permanent ban from the Service without a refund.
+                </li>
+                <li>
+                  Legal Cooperation: Cyan will cooperate fully with law enforcement agencies in any investigation
+                  involving the misuse of our voice cloning technology for illegal activities.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">6. INDEMNIFICATION</div>
+              <p className="mt-1 text-gray-300">
+                The User agrees to indemnify, defend, and hold harmless Cyan AI, its founders, and its technology
+                partners (ElevenLabs, Azure, Google) from any and all claims, damages, or legal fees arising from the
+                User’s unauthorized use of a third party’s voice.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">7. LIMITATION OF LIABILITY REGARDING THIRD-PARTY MODELS</div>
+              <p className="mt-1 text-gray-300">
+                Cyan utilizes third-party AI models (e.g., ElevenLabs) for voice synthesis. While Cyan implements its
+                own safety layers, the User also agrees to be bound by the ElevenLabs Terms of Service regarding
+                acceptable voice use. Any changes in third-party policies that restrict certain voices will be passed on
+                to the User immediately.
               </p>
             </div>
           </div>
@@ -977,7 +1126,13 @@ function App() {
     sectionsRef.current[id] = el;
   };
 
-  return view === 'privacy' ? privacyView : view === 'terms' ? termsView : (
+  return view === 'privacy'
+    ? privacyView
+    : view === 'terms'
+      ? termsView
+      : view === 'security'
+        ? securityView
+        : (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
@@ -2314,7 +2469,18 @@ function App() {
                     Terms of Use
                   </button>
                 </li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Security</a></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setView('security');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    Security
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
