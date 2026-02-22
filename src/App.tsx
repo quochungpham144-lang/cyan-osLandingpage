@@ -112,6 +112,7 @@ function App() {
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [view, setView] = useState<'main' | 'privacy'>('main');
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -181,7 +182,6 @@ function App() {
     }
   }, []);
 
-  // API connection functions
   const checkBackendConnection = useCallback(async () => {
     try {
       const response = await fetch('https://translator-backend-pi.vercel.app/api/health');
@@ -194,19 +194,103 @@ function App() {
     }
   }, []);
 
-  // Analytics tracking functions
   const trackEvent = useCallback((eventName: string, parameters?: Record<string, unknown>) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', eventName, parameters);
     }
   }, []);
 
-  // Track page views (used for analytics)
   const trackPageView = useCallback((path: string) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('config', 'G-BRJN71L7VV', { page_path: path });
     }
   }, []);
+
+  if (view === 'privacy') {
+    return (
+      <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+        <div className="max-w-4xl mx-auto px-6 py-10">
+          <header className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-cyan-300">CYAN AI TRANSLATOR</div>
+                <div className="text-xs text-gray-400">Ultra-low latency AI translation</div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setView('main')}
+              className="text-xs font-medium text-gray-400 hover:text-gray-100"
+            >
+              Back to site
+            </button>
+          </header>
+          <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
+            <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
+              <div>
+                <div className="text-base md:text-lg font-semibold text-white">PRIVACY POLICY: CYAN AI TRANSLATOR</div>
+                <div className="mt-1 text-xs text-gray-400">Effective Date: January 28, 2026</div>
+              </div>
+            </div>
+            <div className="space-y-5 text-sm leading-relaxed">
+              <div>
+                <div className="font-semibold text-white">1. ZERO-RETENTION POLICY</div>
+                <p className="mt-1 text-gray-300">
+                  Given the real-time nature of Cyan&apos;s translation services, we adhere to the highest security standards:
+                </p>
+                <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                  <li>Audio Data: We do not record, store, or monitor any of your audio data.</li>
+                  <li>Streaming Mechanism: Audio is streamed to partner APIs (ElevenLabs/Azure) and is immediately deleted after conversion into translated text/voice.</li>
+                  <li>Text Data: Translated text content exists only temporarily in volatile memory (RAM) for display purposes and is cleared once the session ends.</li>
+                </ul>
+              </div>
+              <div>
+                <div className="font-semibold text-white">2. VOICE CLONING DATA</div>
+                <p className="mt-1 text-gray-300">
+                  For customers utilizing the Customized Voice Cloning feature:
+                </p>
+                <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                  <li>Sample Data: Audio files uploaded for voice training are encrypted using military-grade standards (AES-256).</li>
+                  <li>User Control: You maintain full authority to delete your Voice Clone at any time via the Dashboard.</li>
+                  <li>Permanent Deletion: Upon deletion, all associated data is permanently removed from our servers and partner APIs.</li>
+                </ul>
+              </div>
+              <div>
+                <div className="font-semibold text-white">3. THIRD-PARTY DATA PROVIDERS</div>
+                <p className="mt-1 text-gray-300">
+                  To deliver high-quality services, Cyan integrates with leading AI infrastructures. By using Cyan, you also agree to the privacy policies of these partners:
+                </p>
+                <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                  <li>ElevenLabs: For high-quality speech synthesis processing.</li>
+                  <li>Microsoft Azure &amp; Google Cloud: For Speech-to-Text (STT) and Neural Machine Translation (NMT) processing.</li>
+                  <li>Anonymization: We ensure that only anonymized data (excluding personal information such as names or emails) is transmitted to these APIs.</li>
+                </ul>
+              </div>
+              <div>
+                <div className="font-semibold text-white">4. PAYMENT SECURITY</div>
+                <p className="mt-1 text-gray-300">
+                  We utilize PayPal for payment processing. Cyan never accesses or stores your credit card numbers, CVV codes, or bank account information. All transactions are conducted directly on PayPal&apos;s secure infrastructure.
+                </p>
+              </div>
+              <div>
+                <div className="font-semibold text-white">5. USER RIGHTS (GDPR &amp; CCPA COMPLIANCE)</div>
+                <p className="mt-1 text-gray-300">
+                  Regardless of your location, Cyan is committed to complying with international security standards:
+                </p>
+                <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                  <li>Right to be Forgotten: You may request the deletion of your entire account and associated data at any time.</li>
+                  <li>Right of Access: You may request an export of your payment history and account configuration data.</li>
+                </ul>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -2093,7 +2177,18 @@ function App() {
             <div>
               <h4 className="font-bold mb-4">Legal</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Privacy Policy</a></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setView('privacy');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    Privacy Policy
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Terms of Use</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Security</a></li>
               </ul>
