@@ -2600,6 +2600,7 @@ function App() {
                       window.localStorage.setItem('cyan_cookie_consent', 'all');
                     }
                     setShowCookieBanner(false);
+                    trackEvent('cookie_consent', { choice: 'all' });
                   }}
                   className="px-3 py-1.5 rounded-lg text-xs md:text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
                 >
