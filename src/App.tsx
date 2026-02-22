@@ -31,6 +31,23 @@ interface SubscriptionRecord {
   activatedAt?: string
 }
 
+interface CryptoPaymentResponse {
+  ok?: boolean
+  payment_url?: string
+  payment_id?: string
+  order_id?: string
+  hosted?: boolean
+  pay_address?: string
+  pay_amount?: string
+  pay_currency?: string
+  error?: string
+  raw?: string
+  details?: {
+    message?: string
+    error?: string
+  }
+}
+
 interface UserSession {
   id: string
   email: string
@@ -92,6 +109,7 @@ function App() {
     payAddress: string
   } | null>(null);
   const [cryptoActivationBusy, setCryptoActivationBusy] = useState(false);
+  const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const saveSession = useCallback((session: UserSession | null) => {
@@ -144,7 +162,7 @@ function App() {
           ...userInfo,
           plan: backendPlan
         });
-      } catch (_) {}
+      } catch (e) { void e }
     })();
 
     return () => {
@@ -189,6 +207,31 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('autoOpenApp') === '1') {
+      setAutoOpenApp(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!autoOpenApp) return;
+    if (!isLoggedIn || !userInfo) return;
+    const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
+    window.location.href = deepLink;
+    trackEvent('open_in_app_auto', { userId: userInfo.id });
+    setAutoOpenApp(false);
+  }, [autoOpenApp, isLoggedIn, userInfo, trackEvent]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('autoOpenApp') === '1') {
+      setAutoOpenApp(true);
+    }
+  }, []);
+
   const handleTeamContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
     setTeamFormSubmitted(true);
@@ -227,7 +270,7 @@ function App() {
         });
 
         const raw = await response.text();
-        let data: any = null;
+        let data: CryptoPaymentResponse | null = null;
         try {
           data = JSON.parse(raw);
         } catch {
@@ -273,7 +316,7 @@ function App() {
         if (payAddress && payAmount && payCurrency) {
           setCryptoCheckout({
             planKey,
-            paymentId: String(data.payment_id),
+            paymentId: String(data?.payment_id || ''),
             payCurrency,
             payAmount,
             payAddress
@@ -328,7 +371,7 @@ function App() {
     try {
       await navigator.clipboard.writeText(text);
       return true;
-    } catch (_) {
+    } catch (e) { void e
       try {
         const el = document.createElement('textarea');
         el.value = text;
@@ -340,9 +383,7 @@ function App() {
         const ok = document.execCommand('copy');
         document.body.removeChild(el);
         return ok;
-      } catch (_) {
-        return false;
-      }
+      } catch (err) { void err; return false }
     }
   }, []);
 
@@ -381,7 +422,7 @@ function App() {
       });
 
       const raw = await response.text();
-      let data: any = null;
+      let data: CryptoPaymentResponse | null = null;
       try {
         data = JSON.parse(raw);
       } catch {
@@ -884,9 +925,9 @@ function App() {
                       window.location.href = deepLink;
                       trackEvent('open_in_app', { userId: userInfo.id });
                     }}
-                    className="ml-2 bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium hover:border-cyan-500 transition-all flex items-center gap-2"
+                    className="ml-2 bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-2.5 py-1 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center gap-1.5"
                   >
-                    <Zap className="w-3.5 h-3.5 text-yellow-400" />
+                    <Zap className="w-3 h-3 text-yellow-400" />
                     Open in App
                   </button>
 
