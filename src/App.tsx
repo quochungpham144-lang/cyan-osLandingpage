@@ -284,6 +284,50 @@ function App() {
                 <li>Right of Access: You may request an export of your payment history and account configuration data.</li>
               </ul>
             </div>
+            <div>
+              <div className="font-semibold text-white">6. CATEGORIES OF DATA WE PROCESS</div>
+              <p className="mt-1 text-gray-300">
+                In addition to audio and translated text, Cyan may process limited categories of personal data necessary to operate the Service:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Account Information: Email address, name, and authentication identifiers used to create and manage your account.</li>
+                <li>Billing &amp; Transaction Data: Subscription plan information, invoices, and payment status (processed via PayPal or crypto providers).</li>
+                <li>Technical &amp; Usage Data: Device information, IP address, timestamps, and basic analytics used to secure and improve the Service.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">7. LEGAL BASES FOR PROCESSING</div>
+              <p className="mt-1 text-gray-300">
+                Where applicable privacy laws such as GDPR or CCPA apply, Cyan relies on the following legal bases:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Performance of a Contract: To provide and maintain the translation and voice cloning services you have requested.</li>
+                <li>Legitimate Interests: To secure the platform, prevent abuse, and improve product performance, balanced against your privacy rights.</li>
+                <li>Consent: For specific optional features or marketing communications where we explicitly request your consent.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">8. COOKIES, ANALYTICS &amp; THIRD-PARTY SERVICES</div>
+              <p className="mt-1 text-gray-300">
+                Our web properties may use cookies and similar technologies to remember your preferences and to measure product performance.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Analytics: We may use analytics providers (such as Google Analytics) to collect aggregated, pseudonymous usage statistics.</li>
+                <li>Cookie Control: You can control or disable cookies through your browser settings; however, some core features may not function correctly without them.</li>
+                <li>Service Providers: Hosting, logging, and monitoring providers may process limited technical data solely on our behalf and under contractual data protection terms.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">9. DATA RETENTION, INTERNATIONAL TRANSFERS &amp; CONTACT</div>
+              <p className="mt-1 text-gray-300">
+                Non-audio account and billing information is retained only for as long as necessary to provide the Service, comply with legal obligations, and resolve disputes.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>International Transfers: Where data is transferred across borders, we rely on appropriate safeguards such as contractual clauses or equivalent mechanisms.</li>
+                <li>Policy Updates: We may update this Privacy Policy from time to time; material changes will be communicated through the Service or by email where appropriate.</li>
+                <li>Contact: For privacy-related questions or requests, you may contact our team via the support channel provided on the Cyan website.</li>
+              </ul>
+            </div>
           </div>
         </main>
       </div>
@@ -398,6 +442,61 @@ function App() {
                 Cyan does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
                 We shall not be held liable for any business losses arising from the use of the service.
               </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">9. ACCOUNT REGISTRATION &amp; ELIGIBILITY</div>
+              <p className="mt-1 text-gray-300">
+                By creating an account, you represent that you are at least 18 years old, or are otherwise legally
+                capable of entering into binding contracts in your jurisdiction, and that all registration information
+                you provide is accurate and kept up to date.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Organizational Use: If you register on behalf of a company or entity, you confirm that you have authority to bind that entity to these Terms.</li>
+                <li>Account Security: You are responsible for safeguarding your login credentials and for all activities that occur under your account.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">10. LICENSE GRANT &amp; OWNERSHIP</div>
+              <p className="mt-1 text-gray-300">
+                Subject to your compliance with these Terms, Cyan grants you a limited, non-exclusive, non-transferable,
+                and revocable license to access and use the Service for lawful business or personal purposes.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Ownership: All rights, title, and interest in and to the Service, including software, models, and branding, remain with Cyan and its licensors.</li>
+                <li>No Reverse Engineering: You may not reverse engineer, decompile, or attempt to extract source code or underlying models except where permitted by law.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">11. SERVICE AVAILABILITY &amp; MODIFICATIONS</div>
+              <p className="mt-1 text-gray-300">
+                Cyan aims to provide a stable, high-availability translation service but does not guarantee uninterrupted
+                or error-free operation.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Changes: We may modify, suspend, or discontinue parts of the Service (including plans and features) with reasonable notice where practicable.</li>
+                <li>Abuse &amp; Misuse: We reserve the right to suspend or terminate accounts involved in abuse, fraud, or violations of these Terms or applicable law.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">12. DISCLAIMERS &amp; LIMITATION OF LIABILITY</div>
+              <p className="mt-1 text-gray-300">
+                To the maximum extent permitted by law, the Service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis, without warranties of any kind, whether express or implied.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Exclusions: Cyan disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
+                <li>Liability Cap: To the extent permitted by law, Cyan&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
+                <li>Indirect Damages: Cyan is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">13. GOVERNING LAW, DISPUTES &amp; CHANGES TO TERMS</div>
+              <p className="mt-1 text-gray-300">
+                These Terms are governed by the laws of the jurisdiction in which Cyan is established, without regard to conflict of laws principles.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Dispute Resolution: Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the competent courts of that jurisdiction, unless otherwise required by mandatory local law.</li>
+                <li>Changes to Terms: We may update these Terms from time to time. Material changes will be communicated via the Service or by email where appropriate, and your continued use of the Service after such changes constitutes acceptance of the updated Terms.</li>
+              </ul>
             </div>
           </div>
         </main>
@@ -547,6 +646,39 @@ function App() {
                 acceptable voice use. Any changes in third-party policies that restrict certain voices will be passed on
                 to the User immediately.
               </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">8. INCIDENT RESPONSE &amp; INVESTIGATION</div>
+              <p className="mt-1 text-gray-300">
+                If Cyan reasonably suspects that the voice cloning capabilities of the Service are being misused,
+                we may take immediate steps to protect affected individuals and the integrity of the platform.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Initial Action: We may temporarily suspend or restrict access to specific voice models or user accounts while an investigation is conducted.</li>
+                <li>Investigation: Cyan may review technical logs, consult with technology partners, and request additional information from the User.</li>
+                <li>Outcome: Following investigation, Cyan may restore access, impose additional restrictions, or permanently terminate the account in line with this Policy and applicable law.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">9. USER COOPERATION &amp; APPEALS</div>
+              <p className="mt-1 text-gray-300">
+                Users agree to cooperate in good faith with Cyan&apos;s efforts to prevent abuse of voice technologies.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Information Requests: Cyan may request documentation or clarification to verify rights to a specific voice or use case.</li>
+                <li>Appeal Process: If you believe your account or voice model has been restricted in error, you may contact support with relevant evidence for review.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">10. RELATIONSHIP TO PRIVACY &amp; SECURITY POLICIES</div>
+              <p className="mt-1 text-gray-300">
+                This Dedicated Voice Copyright &amp; Cloning Policy operates alongside Cyan&apos;s general Privacy
+                Policy and Terms of Service.
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Zero-Retention: Except where required for security or legal reasons, audio processed through the Service is subject to Cyan&apos;s zero-retention commitments described in the Privacy Policy.</li>
+                <li>Policy Updates: Cyan may update this Policy periodically to reflect evolving legal, ethical, and technological standards in synthetic media and voice AI.</li>
+              </ul>
             </div>
           </div>
         </main>
