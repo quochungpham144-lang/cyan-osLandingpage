@@ -1644,17 +1644,17 @@ function App() {
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex flex-col items-center">
-            <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
               <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div className="text-center">
-              <span className="text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
-              <div className="text-xs text-gray-500 dark:text-gray-400">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+              <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+              <div className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">ULTRA-LOW LATENCY AI TRANSLATOR</div>
             </div>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="hidden sm:flex items-center gap-4 sm:gap-6">
             <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
             <div className="relative group">
               <button className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 flex items-center gap-1 px-2">
@@ -1669,8 +1669,8 @@ function App() {
             <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
             <a href="#pricing" onClick={(e) => { e.preventDefault(); const pricingSection = document.getElementById('pricing'); if (pricingSection) { pricingSection.classList.remove('hidden'); pricingSection.style.display = 'block'; setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
             
-            {/* Email CTA in Navigation */}
-            <div className="relative group">
+            {/* Email CTA in Navigation - Desktop only */}
+            <div className="relative group hidden lg:block">
               <button 
                 onClick={() => {
                   trackEvent('cta_click', {
@@ -1726,89 +1726,89 @@ function App() {
                 </div>
               </div>
             </div>
-            
+          
+          {/* Mobile Menu Button */}
+          <div className="sm:hidden flex items-center gap-2">
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
             >
-              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
-              {isLoggedIn && userInfo ? (
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setAccountMenuOpen((open) => !open)}
-                      className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
-                    >
-                      <img 
-                        src={userInfo.picture || '/logoCyan.jpg'} 
-                        alt={userInfo.name}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                      <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">
-                        {userInfo.name}
-                      </span>
-                    </button>
-
-                    {accountMenuOpen && (
-                      <div className="absolute right-0 top-11 min-w-[220px] rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-2 z-40">
-                        <div className="px-3 pb-2">
-                          <p className="text-xs text-gray-500 dark:text-gray-400">Current plan</p>
-                          <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2.5 py-1">
-                            <span className="text-[11px] font-semibold uppercase tracking-wide">
-                              {userInfo.plan || 'free'}
-                            </span>
-                            <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                              {PLAN_PRICE[userInfo.plan || 'free']}
-                            </span>
-                          </p>
-                        </div>
-                        <div className="px-3 pt-2 border-t border-gray-100 dark:border-slate-800 flex justify-end">
-                          <button 
-                            type="button"
-                            onClick={() => {
-                              saveSession(null);
-                              trackEvent('logout', {
-                                provider: userInfo.provider
-                              });
-                              setAccountMenuOpen(false);
-                            }}
-                            className="text-[11px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                          >
-                            Logout
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
+            {isLoggedIn && userInfo ? (
+              <div className="flex items-center gap-2">
+                <div className="relative">
                   <button
-                    onClick={() => {
-                      const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
-                      window.location.href = deepLink;
-                      trackEvent('open_in_app', { userId: userInfo.id });
-                    }}
-                    className="ml-2 bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-2.5 py-1 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center gap-1.5"
+                    type="button"
+                    onClick={() => setAccountMenuOpen((open) => !open)}
+                    className="flex items-center gap-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-1 py-1 transition-colors"
                   >
-                    <Zap className="w-3 h-3 text-yellow-400" />
-                    Open in App
+                    <img 
+                      src={userInfo.picture || '/logoCyan.jpg'} 
+                      alt={userInfo.name}
+                      className="w-6 h-6 rounded-full object-cover"
+                    />
                   </button>
+
+                  {accountMenuOpen && (
+                    <div className="absolute right-0 top-8 min-w-[180px] rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-2 z-40">
+                      <div className="px-3 pb-2">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Current plan</p>
+                        <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-1">
+                          <span className="text-[10px] font-semibold uppercase tracking-wide">
+                            {userInfo.plan || 'free'}
+                          </span>
+                          <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                            {PLAN_PRICE[userInfo.plan || 'free']}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="px-3 pt-2 border-t border-gray-100 dark:border-slate-800 flex justify-end">
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            saveSession(null);
+                            trackEvent('logout', {
+                              provider: userInfo.provider
+                            });
+                            setAccountMenuOpen(false);
+                          }}
+                          className="text-[10px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <button 
+
+                <button
                   onClick={() => {
-                    trackEvent('cta_click', {
-                      button_name: 'login',
-                      location: 'navigation'
-                    });
-                    setShowLoginModal(true);
+                    const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
+                    window.location.href = deepLink;
+                    trackEvent('open_in_app', { userId: userInfo.id });
                   }}
-                  className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-4 py-2 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+                  className="bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-2 py-1 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center gap-1"
                 >
-                  Login
+                  <Zap className="w-2 h-2 text-yellow-400" />
+                  App
                 </button>
-              )}
+              </div>
+            ) : (
+              <button 
+                onClick={() => {
+                  trackEvent('cta_click', {
+                    button_name: 'login',
+                    location: 'navigation'
+                  });
+                  setShowLoginModal(true);
+                }}
+                className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg font-semibold text-sm hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+              >
+                Login
+              </button>
+            )}
+          </div>
 
       {(checkoutBusy || checkoutMessage) && (
         <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-xl border border-cyan-500/40 bg-white/95 dark:bg-slate-900/95 px-4 py-3 shadow-2xl backdrop-blur">
@@ -1899,70 +1899,70 @@ function App() {
       <section
         id="hero"
         ref={setRef('hero')}
-        className={`pt-32 pb-20 px-6 transition-all duration-1000 ${
+        className={`pt-32 pb-20 px-4 sm:px-6 transition-all duration-1000 ${
           isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
         <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-4 mb-4">
+          <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mb-4">
             <div
-              className="text-base font-mono font-semibold uppercase tracking-[0.3em] text-[#22ff66]"
+              className="text-sm sm:text-base font-mono font-semibold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#22ff66]"
               style={{ textShadow: '0 0 10px rgba(34, 255, 102, 0.7)' }}
             >
               FEATURED IN
             </div>
-            <div className="flex items-center gap-5">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
               <a
                 href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
                 <img
                   alt="CYAN: Ultra-Low Latency AI Translator - Secure your $699ExecutiveProAnnual spot now.MinimalLatencyAI | Product Hunt"
                   src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1049078&amp;theme=light"
-                  className="h-7 w-auto"
+                  className="h-6 sm:h-7 w-auto"
                 />
               </a>
               <a
                 href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
                 <img
                   src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
                   alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
-                  className="h-7 w-auto"
+                  className="h-6 sm:h-7 w-auto"
                 />
               </a>
               <a
                 href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
                 <img
                   src="https://devhub.best/images/badges/top1-dark.svg"
                   alt="DevHub Top 1 Daily Winner"
-                  className="h-7 w-auto"
+                  className="h-6 sm:h-7 w-auto"
                 />
               </a>
             </div>
           </div>
-          <div className="mt-16">
-            <div className="inline-block mb-4 px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-4 h-4 inline mr-2 rounded" />
+          <div className="mt-12 sm:mt-16">
+            <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
+              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-3 h-3 sm:w-4 sm:h-4 inline mr-2 rounded" />
               Powered by Cyan OS
             </div>
-            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent">
-              ULTRA-LOW LATENCY AI TRANSLATOR
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent leading-tight">
+              ULTRA-LOW LATENCY<br />AI TRANSLATOR
             </h1>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto font-light">
-              Break Language Barriers in Real-time Meetings with<br />Impeccable Clarity and Natural Voice.
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto font-light leading-relaxed px-2">
+              Break Language Barriers in Real-time<br />Meetings with Impeccable Clarity<br />and Natural Voice.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
               <button 
                 onClick={() => {
                   trackEvent('cta_click', {
@@ -1972,7 +1972,7 @@ function App() {
                   });
                   setView('video');
                 }}
-                className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105"
+                className="w-full sm:w-auto bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105 min-h-[48px]"
               >
                 Experience Natural Voice
               </button>
@@ -1986,7 +1986,7 @@ function App() {
                   setView('about');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm"
+                className="w-full sm:w-auto bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm min-h-[48px]"
               >
                 Learn More
               </button>

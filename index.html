@@ -33,6 +33,24 @@
         font-family: 'Inter', sans-serif;
       }
       
+      /* iPhone 15 Pro Max specific fixes */
+      @media only screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+        .hero-section {
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+        }
+        
+        .featured-badges img {
+          opacity: 1 !important;
+          filter: contrast(1.1) brightness(1.05) !important;
+        }
+        
+        .featured-text {
+          font-size: 0.875rem !important;
+          letter-spacing: 0.05em !important;
+        }
+      }
+      
       .bg-grid-pattern {
         background-image: 
           linear-gradient(to right, rgba(34, 197, 94, 0.9) 1px, transparent 1px),
@@ -61,6 +79,20 @@
       
       .delay-2000 {
         animation-delay: 2s;
+      }
+      
+      /* Improve badge visibility */
+      .featured-badges {
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      }
+      
+      .featured-badges img {
+        transition: all 0.3s ease;
+      }
+      
+      .featured-badges:hover img {
+        transform: scale(1.05);
+        filter: brightness(1.1) contrast(1.1);
       }
     </style>
   </head>
