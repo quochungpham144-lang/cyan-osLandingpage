@@ -1733,8 +1733,8 @@ function App() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-4">
             <div
-              className="text-base font-mono uppercase tracking-[0.3em] text-emerald-400"
-              style={{ textShadow: '0 0 6px rgba(52, 211, 153, 0.4)' }}
+              className="text-base font-mono font-semibold uppercase tracking-[0.3em] text-[#22ff66]"
+              style={{ textShadow: '0 0 10px rgba(34, 255, 102, 0.7)' }}
             >
               FEATURED IN
             </div>
@@ -1765,52 +1765,54 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="inline-block mb-4 px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
-            <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-4 h-4 inline mr-2 rounded" />
-            Powered by Cyan OS
-          </div>
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent">
-            ULTRA-LOW LATENCY AI TRANSLATOR
-          </h1>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto font-light">
-            Break Language Barriers in Real-time Meetings with<br />Impeccable Clarity and Natural Voice.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button 
-              onClick={() => {
-                trackEvent('cta_click', {
-                  button_name: 'experience_natural_voice',
-                  location: 'hero_section'
-                });
-              }}
-              className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105"
-            >
-              Experience Natural Voice
-            </button>
-            <button className="bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm">
-              Learn More
-            </button>
-          </div>
+          <div className="mt-16">
+            <div className="inline-block mb-4 px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
+              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-4 h-4 inline mr-2 rounded" />
+              Powered by Cyan OS
+            </div>
+            <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent">
+              ULTRA-LOW LATENCY AI TRANSLATOR
+            </h1>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto font-light">
+              Break Language Barriers in Real-time Meetings with<br />Impeccable Clarity and Natural Voice.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button 
+                onClick={() => {
+                  trackEvent('cta_click', {
+                    button_name: 'experience_natural_voice',
+                    location: 'hero_section'
+                  });
+                }}
+                className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105"
+              >
+                Experience Natural Voice
+              </button>
+              <button className="bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm">
+                Learn More
+              </button>
+            </div>
 
-          {/* Hero Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-4xl mx-auto">
-            {[
-              { icon: Clock, label: '<400ms', desc: 'Translation Latency' },
-              { icon: Globe, label: '+36', desc: 'Languages Supported' },
-              { icon: TrendingDown, label: 'Up to 80%', desc: 'Cost Reduction' }
-            ].map((stat, idx) => (
-              <div key={idx} className="bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-xl hover:shadow-cyan-500/20 transition-all hover:scale-105">
-                <stat.icon className="w-10 h-10 text-cyan-600 dark:text-cyan-400 mb-3 mx-auto" />
-                <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">{stat.label}</div>
-                <div className="text-gray-600 dark:text-gray-400 text-sm">{stat.desc}</div>
-              </div>
-            ))}
+            {/* Hero Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-4xl mx-auto">
+              {[
+                { icon: Clock, label: '<400ms', desc: 'Translation Latency' },
+                { icon: Globe, label: '+36', desc: 'Languages Supported' },
+                { icon: TrendingDown, label: 'Up to 80%', desc: 'Cost Reduction' }
+              ].map((stat, idx) => (
+                <div key={idx} className="bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-xl hover:shadow-cyan-500/20 transition-all hover:scale-105">
+                  <stat.icon className="w-10 h-10 text-cyan-600 dark:text-cyan-400 mb-3 mx-auto" />
+                  <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">{stat.label}</div>
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">{stat.desc}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Problem Section */}
+          {/* Problem Section */}
       <section
         id="problem"
         ref={setRef('problem')}
