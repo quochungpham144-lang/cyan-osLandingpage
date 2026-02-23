@@ -2158,6 +2158,17 @@ function App() {
         className="pt-32 pb-20 px-4 sm:px-6"
       >
         <div className="max-w-7xl mx-auto text-center">
+          <div className="sm:hidden flex justify-end mb-3">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-cyan-600 text-white text-xs font-semibold shadow-md active:scale-95 transition"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span>Menu</span>
+            </button>
+          </div>
           <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mb-4">
             <div
               className="text-sm sm:text-base font-mono font-semibold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#22ff66]"
