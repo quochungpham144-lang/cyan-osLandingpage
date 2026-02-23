@@ -1527,13 +1527,10 @@ function App() {
     localStorage.removeItem('user_session');
   }, [isLoggedIn, userInfo]);
 
-  // Draggable floating buttons functionality (mobile only)
+  // Draggable floating buttons functionality (all devices)
   useEffect(() => {
     const floatingButtons = document.getElementById('floating-buttons');
     if (!floatingButtons) return;
-    
-    // Only enable dragging on mobile devices
-    if (window.innerWidth >= 640) return; // sm breakpoint
 
     let isDragging = false;
     let currentX = 0;
@@ -1693,7 +1690,7 @@ function App() {
       {/* Draggable Floating CTA Buttons */}
       <div 
         id="floating-buttons"
-        className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3 sm:cursor-move sm:select-none cursor-default"
+        className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
         style={{ touchAction: 'none' }}
       >
         <a
