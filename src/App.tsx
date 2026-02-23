@@ -112,7 +112,7 @@ function App() {
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video'>('main');
+  const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
 
   const saveSession = useCallback((session: UserSession | null) => {
@@ -904,6 +904,106 @@ function App() {
     </div>
   );
 
+  const aboutView = (
+    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <header className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS LITE</div>
+              <div className="text-xs text-gray-400">About the ultra-low latency voice translator</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setView('main')}
+            className="text-xs font-medium text-gray-400 hover:text-gray-100"
+          >
+            Back to site
+          </button>
+        </header>
+        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
+          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
+            <div>
+              <div className="text-base md:text-lg font-semibold text-white">ABOUT CYAN OS LITE</div>
+              <div className="mt-1 text-xs text-gray-400">
+                Real-time AI voice translation designed for natural negotiation and live meetings
+              </div>
+            </div>
+          </div>
+          <div className="space-y-5 text-sm leading-relaxed">
+            <div>
+              <div className="font-semibold text-white">What is Cyan OS Lite?</div>
+              <p className="mt-1 text-gray-300">
+                Cyan OS Lite is a real-time AI translator that sits next to your calls, meetings, and webinars and turns
+                your voice into another language in well under a second. It is built on top of a lightweight runtime
+                layer we call Cyan OS, which orchestrates providers such as ElevenLabs, Microsoft Azure, and Google
+                Wavenet to keep latency in the 200–400ms range while staying cost-efficient.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">Why we focus on natural voice</div>
+              <p className="mt-1 text-gray-300">
+                Most translation tools are optimised for captions, not for how human conversations actually feel. Cyan
+                OS Lite is tuned for voice-first experiences where tone, pacing, and micro-pauses matter: negotiations,
+                investor calls, sales demos, and high-stakes one-on-ones. Partner engines such as ElevenLabs are used so
+                that translated speech sounds warm and expressive instead of robotic.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">Built for negotiation and live meetings</div>
+              <p className="mt-1 text-gray-300">
+                In a real negotiation, a 2–3 second delay can kill the flow of trust. Cyan OS Lite streams translation
+                in very small chunks so that your counterpart hears the first words in under half a second. This makes
+                cross-language calls, board meetings, and customer support sessions feel closer to a native
+                conversation, not a relay race between you and a distant interpreter.
+              </p>
+              <p className="mt-2 text-gray-300">
+                The desktop client integrates with existing tools: you can route audio from Zoom, Meet, or Teams into
+                Cyan and send translated speech back to headphones, speakers, or a virtual microphone that remote
+                participants can select as their audio source.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">Cyan OS Lite vs. full Cyan OS</div>
+              <p className="mt-1 text-gray-300">
+                Cyan OS Lite focuses on a streamlined, opinionated path: ultra-low latency voice translation with
+                sensible defaults. It exposes the same real-time pipeline we use internally, but without requiring
+                teams to manage complex routing, watermarking, or multi-region deployments. The full Cyan OS stack
+                extends these ideas for enterprise deployments and deeper integrations.
+              </p>
+            </div>
+            <div>
+              <div className="font-semibold text-white">Who is it for?</div>
+              <p className="mt-1 text-gray-300">
+                Cyan OS Lite is built for founders, operators, and teams who need to sound like themselves in another
+                language when it matters most. Typical scenarios include:
+              </p>
+              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>Negotiating with international partners or suppliers without a human interpreter on the call.</li>
+                <li>Pitching to investors in a language you are not fully fluent in.</li>
+                <li>Running support or success calls where empathy and tone of voice are critical.</li>
+                <li>Hosting webinars and live trainings for audiences across multiple regions.</li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-semibold text-white">Voice, privacy, and control</div>
+              <p className="mt-1 text-gray-300">
+                Cyan follows a zero-retention philosophy for live sessions: audio is streamed for processing and then
+                discarded rather than archived. For users on higher tiers, Cyan OS Lite can be combined with customised
+                voices so that translated speech still feels like your own, subject to strict consent and copyright
+                rules around voice cloning.
+              </p>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
@@ -1494,7 +1594,9 @@ function App() {
           ? howItWorksView
           : view === 'video'
             ? videoView
-            : (
+            : view === 'about'
+              ? aboutView
+              : (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
@@ -1859,7 +1961,18 @@ function App() {
               >
                 Experience Natural Voice
               </button>
-              <button className="bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm">
+              <button
+                onClick={() => {
+                  trackEvent('cta_click', {
+                    button_name: 'learn_more',
+                    location: 'hero_section',
+                    destination: 'about_view'
+                  });
+                  setView('about');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-8 py-4 rounded-xl font-semibold text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm"
+              >
                 Learn More
               </button>
             </div>
@@ -2378,6 +2491,30 @@ function App() {
             <div className="inline-block bg-gradient-to-r from-cyan-glow/20 to-cyan-glow/10 dark:from-cyan-glow/30 dark:to-cyan-glow/20 border border-cyan-glow/50 dark:border-cyan-glow/60 rounded-2xl p-8 backdrop-blur-md shadow-lg shadow-cyan-glow/10">
               <div className="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-2">$2,247.50</div>
               <div className="text-xl text-gray-600 dark:text-gray-400">Saved per 10 hours of content</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-10 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
+              Also listed on
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-600 dark:text-gray-300">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                Product Hunt
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                NextGen Tools
+              </span>
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                VibeRank
+              </span>
             </div>
           </div>
         </div>
@@ -2931,7 +3068,18 @@ function App() {
             <div>
               <h4 className="font-bold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">About</a></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setView('about');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    About
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Contact</a></li>
