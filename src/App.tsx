@@ -1549,8 +1549,12 @@ function App() {
         initialY = (e as MouseEvent).clientY - yOffset;
       }
 
-      if (e.target === floatingButtons || (e.target as HTMLElement).parentElement === floatingButtons) {
+      // Check if target is within floating buttons container
+      const target = e.target as HTMLElement;
+      console.log('Drag start target:', target, 'closest:', target.closest('#floating-buttons'));
+      if (target === floatingButtons || target.closest('#floating-buttons')) {
         isDragging = true;
+        console.log('Dragging started!');
       }
     };
 
@@ -1564,21 +1568,25 @@ function App() {
       if (isDragging) {
         e.preventDefault();
         
+        let clientX, clientY;
         if (e.type === 'touchmove') {
-          currentX = (e as TouchEvent).touches[0].clientX - initialX;
-          currentY = (e as TouchEvent).touches[0].clientY - initialY;
+          clientX = (e as TouchEvent).touches[0].clientX;
+          clientY = (e as TouchEvent).touches[0].clientY;
         } else {
-          currentX = (e as MouseEvent).clientX - initialX;
-          currentY = (e as MouseEvent).clientY - initialY;
+          clientX = (e as MouseEvent).clientX;
+          clientY = (e as MouseEvent).clientY;
         }
+
+        currentX = clientX - initialX;
+        currentY = clientY - initialY;
 
         xOffset = currentX;
         yOffset = currentY;
 
         // Constrain to viewport
         const rect = floatingButtons.getBoundingClientRect();
-        const maxX = window.innerWidth - rect.width;
-        const maxY = window.innerHeight - rect.height;
+        const maxX = window.innerWidth - rect.width - 32; // 32px padding from right
+        const maxY = window.innerHeight - rect.height - 32; // 32px padding from bottom
         
         const constrainedX = Math.max(0, Math.min(currentX, maxX));
         const constrainedY = Math.max(0, Math.min(currentY, maxY));
@@ -1594,6 +1602,11 @@ function App() {
     floatingButtons.addEventListener('mousedown', dragStart, { passive: false });
     document.addEventListener('mouseup', dragEnd, { passive: false });
     document.addEventListener('mousemove', drag, { passive: false });
+    
+    // Debug: Log when dragging starts
+    floatingButtons.addEventListener('mousedown', (e) => {
+      console.log('Mouse down on floating buttons', e.target);
+    });
 
     return () => {
       // Cleanup event listeners
