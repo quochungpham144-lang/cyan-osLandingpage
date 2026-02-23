@@ -1607,25 +1607,40 @@ function App() {
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-500/50 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
       </div>
-      {/* Floating CTA Button */}
-      <a
-        href="#pricing"
-        onClick={() => {
-          trackEvent('cta_click', {
-            button_name: 'floating_get_started',
-            location: 'floating_button'
-          });
-          const pricingSection = document.getElementById('pricing');
-          if (pricingSection) {
-            pricingSection.classList.remove('hidden');
-            pricingSection.style.display = 'block';
-            setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-          }
-        }}
-        className="fixed bottom-8 right-8 z-50 bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105"
-      >
-        Get Started <ArrowRight className="w-4 h-4" />
-      </a>
+      {/* Floating CTA Buttons */}
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            trackEvent('cta_click', {
+              button_name: 'download_cyan',
+              location: 'floating_button'
+            });
+            // TODO: cập nhật link download khi desktop app sẵn sàng
+          }}
+          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105"
+        >
+          Download CYAN
+        </button>
+        <a
+          href="#pricing"
+          onClick={() => {
+            trackEvent('cta_click', {
+              button_name: 'floating_get_started',
+              location: 'floating_button'
+            });
+            const pricingSection = document.getElementById('pricing');
+            if (pricingSection) {
+              pricingSection.classList.remove('hidden');
+              pricingSection.style.display = 'block';
+              setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+            }
+          }}
+          className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105"
+        >
+          Get Started <ArrowRight className="w-4 h-4" />
+        </a>
+      </div>
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 z-40">
@@ -1711,20 +1726,6 @@ function App() {
                 </div>
               </div>
             </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                trackEvent('cta_click', {
-                  button_name: 'download_cyan',
-                  location: 'navigation'
-                });
-                // TODO: cập nhật link download khi desktop app sẵn sàng
-              }}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-cyan-500/70 text-xs font-semibold text-cyan-700 dark:text-cyan-300 bg-white/80 dark:bg-slate-800/80 hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 shadow-sm transition-all"
-            >
-              Download CYAN
-            </button>
             
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
