@@ -2522,14 +2522,14 @@ function App() {
                 Drop Cyan into the tools you already use
               </h3>
               <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl">
-                Cyan plugs into your existing call, meeting, streaming and collaboration stack instead of
-                forcing a new workflow.
+                Cyan plugs straight into your existing meeting, streaming and collaboration tools via a
+                lightweight extension, so you do not have to change your workflow.
               </p>
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400 max-w-sm">
               <p>
-                Route audio through Cyan once, then reuse it across desktop apps, meeting platforms,
-                streaming software and contact center tools.
+                Most everyday platforms work out of the box through the Cyan extension. For more advanced
+                setups, you can still route audio via virtual devices when you need to.
               </p>
             </div>
           </div>
@@ -2539,8 +2539,8 @@ function App() {
               {
                 icon: Layers,
                 title: 'Desktop & OS',
-                subtitle: 'Windows, macOS, browsers',
-                description: 'Run Cyan as a system-level translator for any desktop app, including Slack, Discord and softphone clients.',
+                subtitle: 'Windows, macOS',
+                description: 'Use Cyan alongside any desktop app. The audio engine runs on your machine, not only in the browser.',
                 bgClass: 'bg-gradient-to-br from-slate-900 to-slate-800',
                 borderClass: 'border-slate-700/80',
                 titleClass: 'text-white',
@@ -2550,8 +2550,8 @@ function App() {
               {
                 icon: Globe,
                 title: 'Video Meetings',
-                subtitle: 'Zoom, Google Meet, Teams, Whereby',
-                description: 'Feed translated audio into your meeting platforms in real time for global calls and webinars.',
+                subtitle: 'Zoom, Google Meet, Microsoft Teams, Gather, Whereby',
+                description: 'Drop Cyan into your daily standups, customer calls and webinars without changing your meeting links.',
                 bgClass: 'bg-gradient-to-br from-cyan-600 to-sky-500',
                 borderClass: 'border-cyan-400/80',
                 titleClass: 'text-white',
@@ -2560,9 +2560,9 @@ function App() {
               },
               {
                 icon: Mic,
-                title: 'Recording & Creators',
-                subtitle: 'Local recording and virtual audio',
-                description: 'Connect Cyan output into your recording pipeline and local production tools using virtual audio devices.',
+                title: 'Streaming & Creators',
+                subtitle: 'Twitch and local recording tools',
+                description: 'Feed Cyan into Twitch or your recording pipeline using the Cyan extension or optional system routing.',
                 bgClass: 'bg-gradient-to-br from-purple-600 to-pink-500',
                 borderClass: 'border-pink-400/80',
                 titleClass: 'text-white',
@@ -2605,8 +2605,8 @@ function App() {
             ))}
           </div>
           <div className="mt-6 text-xs md:text-sm text-gray-600 dark:text-gray-400">
-            Integrated with the tools you already use today: Zoom, Google Meet, Microsoft Teams,
-            Discord, Slack, Whereby and Gather.
+            Integrated with the tools you already use today: Zoom, Google Meet, Microsoft Teams, Discord,
+            Slack, Twitch, Gather and Whereby.
           </div>
         </div>
       </section>
