@@ -2767,7 +2767,7 @@ function App() {
         </div>
       </section>
 
-      <section className="py-16 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+      <section id="platforms" className="py-16 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 mb-10">
             <div>
