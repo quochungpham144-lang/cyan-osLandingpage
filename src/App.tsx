@@ -1731,6 +1731,40 @@ function App() {
         }`}
       >
         <div className="max-w-7xl mx-auto text-center">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div
+              className="text-base font-mono uppercase tracking-[0.3em] text-emerald-400"
+              style={{ textShadow: '0 0 6px rgba(52, 211, 153, 0.4)' }}
+            >
+              FEATURED IN
+            </div>
+            <div className="flex items-center gap-5">
+              <a
+                href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-cyan-ultra-low-latency-ai-translator"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
+              >
+                <img
+                  alt="CYAN: Ultra-Low Latency AI Translator - Secure your $699ExecutiveProAnnual spot now.MinimalLatencyAI | Product Hunt"
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1049078&amp;theme=light"
+                  className="h-10 w-auto"
+                />
+              </a>
+              <a
+                href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
+              >
+                <img
+                  src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
+                  alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
+                  className="h-10 w-auto"
+                />
+              </a>
+            </div>
+          </div>
           <div className="inline-block mb-4 px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
             <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-4 h-4 inline mr-2 rounded" />
             Powered by Cyan OS
@@ -2799,7 +2833,25 @@ function App() {
                     Features
                   </button>
                 </li>
-                <li><a href="#pricing" className="hover:text-cyan-400 transition-colors">Pricing</a></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const pricingSection = document.getElementById('pricing');
+                      if (pricingSection) {
+                        pricingSection.classList.remove('hidden');
+                        pricingSection.style.display = 'block';
+                        setTimeout(
+                          () => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+                          50
+                        );
+                      }
+                    }}
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    Pricing
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Documentation</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">API Reference</a></li>
               </ul>
