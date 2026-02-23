@@ -1527,6 +1527,85 @@ function App() {
     localStorage.removeItem('user_session');
   }, [isLoggedIn, userInfo]);
 
+  // Draggable floating buttons functionality
+  useEffect(() => {
+    const floatingButtons = document.getElementById('floating-buttons');
+    if (!floatingButtons) return;
+
+    let isDragging = false;
+    let currentX = 0;
+    let currentY = 0;
+    let initialX = 0;
+    let initialY = 0;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    const dragStart = (e: MouseEvent | TouchEvent) => {
+      if (e.type === 'touchstart') {
+        initialX = (e as TouchEvent).touches[0].clientX - xOffset;
+        initialY = (e as TouchEvent).touches[0].clientY - yOffset;
+      } else {
+        initialX = (e as MouseEvent).clientX - xOffset;
+        initialY = (e as MouseEvent).clientY - yOffset;
+      }
+
+      if (e.target === floatingButtons || (e.target as HTMLElement).parentElement === floatingButtons) {
+        isDragging = true;
+      }
+    };
+
+    const dragEnd = () => {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    };
+
+    const drag = (e: MouseEvent | TouchEvent) => {
+      if (isDragging) {
+        e.preventDefault();
+        
+        if (e.type === 'touchmove') {
+          currentX = (e as TouchEvent).touches[0].clientX - initialX;
+          currentY = (e as TouchEvent).touches[0].clientY - initialY;
+        } else {
+          currentX = (e as MouseEvent).clientX - initialX;
+          currentY = (e as MouseEvent).clientY - initialY;
+        }
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        // Constrain to viewport
+        const rect = floatingButtons.getBoundingClientRect();
+        const maxX = window.innerWidth - rect.width;
+        const maxY = window.innerHeight - rect.height;
+        
+        const constrainedX = Math.max(0, Math.min(currentX, maxX));
+        const constrainedY = Math.max(0, Math.min(currentY, maxY));
+
+        floatingButtons.style.transform = `translate(${constrainedX}px, ${constrainedY}px)`;
+      }
+    };
+
+    // Add event listeners
+    floatingButtons.addEventListener('touchstart', dragStart, { passive: false });
+    floatingButtons.addEventListener('touchend', dragEnd, { passive: false });
+    floatingButtons.addEventListener('touchmove', drag, { passive: false });
+    floatingButtons.addEventListener('mousedown', dragStart, { passive: false });
+    document.addEventListener('mouseup', dragEnd, { passive: false });
+    document.addEventListener('mousemove', drag, { passive: false });
+
+    return () => {
+      // Cleanup event listeners
+      floatingButtons.removeEventListener('touchstart', dragStart);
+      floatingButtons.removeEventListener('touchend', dragEnd);
+      floatingButtons.removeEventListener('touchmove', drag);
+      floatingButtons.removeEventListener('mousedown', dragStart);
+      document.removeEventListener('mouseup', dragEnd);
+      document.removeEventListener('mousemove', drag);
+    };
+  }, []);
+
   // Check for OAuth callback in URL
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -1608,8 +1687,12 @@ function App() {
           <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-500/50 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
       </div>
-      {/* Floating CTA Buttons */}
-      <div className="fixed bottom-24 right-8 z-50 flex flex-col items-end gap-3">
+      {/* Draggable Floating CTA Buttons */}
+      <div 
+        id="floating-buttons"
+        className="fixed bottom-24 right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
+        style={{ touchAction: 'none' }}
+      >
         <a
           href="#pricing"
           onClick={() => {
@@ -1624,7 +1707,8 @@ function App() {
               setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
             }
           }}
-          className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105"
+          className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105 pointer-events-auto"
+          style={{ pointerEvents: 'auto' }}
         >
           Get Started Free <ArrowRight className="w-4 h-4" />
         </a>
@@ -1637,7 +1721,8 @@ function App() {
             });
             // TODO: cập nhật link download khi desktop app sẵn sàng
           }}
-          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105"
+          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105 pointer-events-auto"
+          style={{ pointerEvents: 'auto' }}
         >
           Download CYAN
         </button>
@@ -1837,10 +1922,24 @@ function App() {
               {mobileMenuOpen && (
                 <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-h-[80vh] overflow-y-auto">
                   <div className="p-2">
-                    {/* Navigation Links */}
+                    {/* Navigation Links - All Sections */}
                     <div className="space-y-1">
-                      <a href="#solution" className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Solution</a>
-                      <a href="#engine" className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Engine</a>
+                      <a href="#hero" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Home</a>
+                      <a href="#solution" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Solution</a>
+                      <a href="#engine" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Engine</a>
+                      <a href="#platforms" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Platforms</a>
+                      <a href="#developers" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Developers</a>
+                      <a href="#api" onClick={() => { setMobileMenuOpen(false); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">API</a>
+                      <a href="#roi" onClick={(e) => {
+                        e.preventDefault(); 
+                        const roiSection = document.getElementById('roi'); 
+                        if (roiSection) { 
+                          roiSection.classList.remove('hidden'); 
+                          roiSection.style.display = 'block'; 
+                          setTimeout(() => roiSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); 
+                          setMobileMenuOpen(false); 
+                        }
+                      }} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">ROI Calculator</a>
                       <a href="#pricing" onClick={(e) => {
                         e.preventDefault(); 
                         const pricingSection = document.getElementById('pricing'); 
@@ -1851,6 +1950,9 @@ function App() {
                           setMobileMenuOpen(false); 
                         }
                       }} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Pricing</a>
+                      <a href="#testimonials" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Testimonials</a>
+                      <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">FAQ</a>
+                      <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Contact</a>
                     </div>
                     
                     <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
