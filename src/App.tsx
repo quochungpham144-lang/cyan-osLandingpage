@@ -1710,7 +1710,7 @@ function App() {
       {/* Draggable Floating CTA Buttons */}
       <div 
         id="floating-buttons"
-        className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
+        className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
         style={{ touchAction: 'none' }}
       >
         <a
@@ -2155,9 +2155,7 @@ function App() {
       <section
         id="hero"
         ref={setRef('hero')}
-        className={`pt-32 pb-20 px-4 sm:px-6 transition-all duration-1000 ${
-          isVisible.hero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
+        className="pt-32 pb-20 px-4 sm:px-6"
       >
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mb-4">
