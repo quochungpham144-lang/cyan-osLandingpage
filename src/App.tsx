@@ -2539,50 +2539,74 @@ function App() {
               {
                 icon: Layers,
                 title: 'Desktop & OS',
-                subtitle: 'Windows, macOS',
-                description: 'Run Cyan as a system-level translator for any desktop app.'
+                subtitle: 'Windows, macOS, browsers',
+                description: 'Run Cyan as a system-level translator for any desktop app, including Slack, Discord and softphone clients.',
+                bgClass: 'bg-gradient-to-br from-slate-900 to-slate-800',
+                borderClass: 'border-slate-700/80',
+                titleClass: 'text-white',
+                subtitleClass: 'text-slate-200',
+                descClass: 'text-slate-200'
               },
               {
                 icon: Globe,
                 title: 'Video Meetings',
-                subtitle: 'Zoom, Google Meet, Teams',
-                description: 'Feed translated audio into your meeting platforms in real time.'
+                subtitle: 'Zoom, Google Meet, Teams, Whereby',
+                description: 'Feed translated audio into your meeting platforms in real time for global calls and webinars.',
+                bgClass: 'bg-gradient-to-br from-cyan-600 to-sky-500',
+                borderClass: 'border-cyan-400/80',
+                titleClass: 'text-white',
+                subtitleClass: 'text-cyan-50/80',
+                descClass: 'text-cyan-50/90'
               },
               {
                 icon: Mic,
                 title: 'Streaming & Creators',
                 subtitle: 'OBS Studio, Twitch, YouTube Live',
-                description: 'Send Cyan output into your existing streaming and recording setup.'
+                description: 'Send Cyan output into your existing streaming, recording and creator tooling in a few clicks.',
+                bgClass: 'bg-gradient-to-br from-purple-600 to-pink-500',
+                borderClass: 'border-pink-400/80',
+                titleClass: 'text-white',
+                subtitleClass: 'text-pink-50/80',
+                descClass: 'text-pink-50/90'
               },
               {
                 icon: Shield,
                 title: 'Contact Centers',
-                subtitle: 'Call center and BPO tools',
-                description: 'Use Cyan as a translation layer on top of your voice infrastructure.'
+                subtitle: 'Call center, BPO and SIP tools',
+                description: 'Use Cyan as a translation layer on top of your existing voice infrastructure and call flows.',
+                bgClass: 'bg-gradient-to-br from-emerald-600 to-teal-500',
+                borderClass: 'border-emerald-400/80',
+                titleClass: 'text-white',
+                subtitleClass: 'text-emerald-50/80',
+                descClass: 'text-emerald-50/90'
               }
             ].map((item, idx) => (
               <div
                 key={idx}
-                className="flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 shadow-sm hover:shadow-lg hover:border-cyan-500/60 transition-all"
+                className={`flex flex-col h-full rounded-2xl border backdrop-blur-md p-4 shadow-sm hover:shadow-lg hover:border-cyan-300/80 transition-all ${item.bgClass} ${item.borderClass}`}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-600/10 dark:bg-cyan-600/20 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
                     <item.icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                    <div className={`text-sm font-semibold ${item.titleClass}`}>
                       {item.title}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                    <div className={`text-xs ${item.subtitleClass}`}>
                       {item.subtitle}
                     </div>
                   </div>
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className={`text-xs leading-relaxed ${item.descClass}`}>
                   {item.description}
                 </p>
               </div>
             ))}
+          </div>
+          <div className="mt-6 text-xs md:text-sm text-gray-600 dark:text-gray-400">
+            Integrated with the tools you already use: Zoom, Google Meet, Microsoft Teams, Discord,
+            Slack, Whereby, OBS Studio, Twitch and YouTube Live.
           </div>
         </div>
       </section>
