@@ -2511,6 +2511,82 @@ function App() {
         </div>
       </section>
 
+      <section className="py-16 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 mb-10">
+            <div>
+              <div className="text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
+                For Platforms
+              </div>
+              <h3 className="mt-4 text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                Drop Cyan into the tools you already use
+              </h3>
+              <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl">
+                Cyan plugs into your existing call, meeting, streaming and collaboration stack instead of
+                forcing a new workflow.
+              </p>
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400 max-w-sm">
+              <p>
+                Route audio through Cyan once, then reuse it across desktop apps, meeting platforms,
+                streaming software and contact center tools.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                icon: Layers,
+                title: 'Desktop & OS',
+                subtitle: 'Windows, macOS',
+                description: 'Run Cyan as a system-level translator for any desktop app.'
+              },
+              {
+                icon: Globe,
+                title: 'Video Meetings',
+                subtitle: 'Zoom, Google Meet, Teams',
+                description: 'Feed translated audio into your meeting platforms in real time.'
+              },
+              {
+                icon: Mic,
+                title: 'Streaming & Creators',
+                subtitle: 'OBS Studio, Twitch, YouTube Live',
+                description: 'Send Cyan output into your existing streaming and recording setup.'
+              },
+              {
+                icon: Shield,
+                title: 'Contact Centers',
+                subtitle: 'Call center and BPO tools',
+                description: 'Use Cyan as a translation layer on top of your voice infrastructure.'
+              }
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-4 shadow-sm hover:shadow-lg hover:border-cyan-500/60 transition-all"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-600/10 dark:bg-cyan-600/20 flex items-center justify-center text-cyan-600 dark:text-cyan-400">
+                    <item.icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      {item.title}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      {item.subtitle}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-10 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center gap-4">
