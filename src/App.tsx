@@ -1711,6 +1711,20 @@ function App() {
                 </div>
               </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                trackEvent('cta_click', {
+                  button_name: 'download_cyan',
+                  location: 'navigation'
+                });
+                // TODO: cập nhật link download khi desktop app sẵn sàng
+              }}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-cyan-500/70 text-xs font-semibold text-cyan-700 dark:text-cyan-300 bg-white/80 dark:bg-slate-800/80 hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 shadow-sm transition-all"
+            >
+              Download CYAN
+            </button>
             
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
@@ -1922,14 +1936,14 @@ function App() {
                 />
               </a>
               <a
-                href="https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator"
+                href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
               >
                 <img
-                  src="https://viberank.dev/badge?app=CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator&theme=dark"
-                  alt="CYAN: Ultra-Low Latency AI Translator on VibeRank"
+                  src="https://devhub.best/images/badges/top1-dark.svg"
+                  alt="DevHub Top 1 Daily Winner"
                   className="h-7 w-auto"
                 />
               </a>
@@ -2520,6 +2534,15 @@ function App() {
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 NextGen Tools
+              </a>
+              <a
+                href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                DevHub
               </a>
               <a
                 href="https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator"
