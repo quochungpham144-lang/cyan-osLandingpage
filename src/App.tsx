@@ -1669,6 +1669,92 @@ function App() {
             <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
             <a href="#pricing" onClick={(e) => { e.preventDefault(); const pricingSection = document.getElementById('pricing'); if (pricingSection) { pricingSection.classList.remove('hidden'); pricingSection.style.display = 'block'; setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
             
+            {/* Desktop Login/User Buttons */}
+            <div className="hidden sm:flex items-center gap-3">
+              <button 
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+              >
+                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+              {isLoggedIn && userInfo ? (
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setAccountMenuOpen((open) => !open)}
+                      className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
+                    >
+                      <img 
+                        src={userInfo.picture || '/logoCyan.jpg'} 
+                        alt={userInfo.name}
+                        className="w-6 h-6 rounded-full object-cover"
+                      />
+                      <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">
+                        {userInfo.name}
+                      </span>
+                    </button>
+
+                    {accountMenuOpen && (
+                      <div className="absolute right-0 top-11 min-w-[220px] rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-2 z-40">
+                        <div className="px-3 pb-2">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Current plan</p>
+                          <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2.5 py-1">
+                            <span className="text-[11px] font-semibold uppercase tracking-wide">
+                              {userInfo.plan || 'free'}
+                            </span>
+                            <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                              {PLAN_PRICE[userInfo.plan || 'free']}
+                            </span>
+                          </p>
+                        </div>
+                        <div className="px-3 pt-2 border-t border-gray-100 dark:border-slate-800 flex justify-end">
+                          <button 
+                            type="button"
+                            onClick={() => {
+                              saveSession(null);
+                              trackEvent('logout', {
+                                provider: userInfo.provider
+                              });
+                              setAccountMenuOpen(false);
+                            }}
+                            className="text-[11px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
+                      window.location.href = deepLink;
+                      trackEvent('open_in_app', { userId: userInfo.id });
+                    }}
+                    className="ml-2 bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-2.5 py-1 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center gap-1.5"
+                  >
+                    <Zap className="w-3 h-3 text-yellow-400" />
+                    Open in App
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={() => {
+                    trackEvent('cta_click', {
+                      button_name: 'login',
+                      location: 'navigation'
+                    });
+                    setShowLoginModal(true);
+                  }}
+                  className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-4 py-2 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+                >
+                  Login
+                </button>
+              )}
+            </div>
+            
             {/* Email CTA in Navigation - Desktop only */}
             <div className="relative group hidden lg:block">
               <button 
