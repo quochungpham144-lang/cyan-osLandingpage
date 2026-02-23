@@ -2503,18 +2503,33 @@ function App() {
               Also listed on
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70">
+              <a
+                href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-cyan-ultra-low-latency-ai-translator"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+              >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 Product Hunt
-              </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70">
+              </a>
+              <a
+                href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+              >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 NextGen Tools
-              </span>
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70">
+              </a>
+              <a
+                href="https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+              >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 VibeRank
-              </span>
+              </a>
             </div>
           </div>
         </div>
