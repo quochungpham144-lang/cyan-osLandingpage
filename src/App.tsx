@@ -2560,9 +2560,9 @@ function App() {
               },
               {
                 icon: Mic,
-                title: 'Streaming & Creators',
-                subtitle: 'OBS Studio, Twitch, YouTube Live',
-                description: 'Send Cyan output into your existing streaming, recording and creator tooling in a few clicks.',
+                title: 'Recording & Creators',
+                subtitle: 'Local recording and virtual audio',
+                description: 'Connect Cyan output into your recording pipeline and local production tools using virtual audio devices.',
                 bgClass: 'bg-gradient-to-br from-purple-600 to-pink-500',
                 borderClass: 'border-pink-400/80',
                 titleClass: 'text-white',
@@ -2605,8 +2605,8 @@ function App() {
             ))}
           </div>
           <div className="mt-6 text-xs md:text-sm text-gray-600 dark:text-gray-400">
-            Integrated with the tools you already use: Zoom, Google Meet, Microsoft Teams, Discord,
-            Slack, Whereby, OBS Studio, Twitch and YouTube Live.
+            Integrated with the tools you already use today: Zoom, Google Meet, Microsoft Teams,
+            Discord, Slack, Whereby and Gather.
           </div>
         </div>
       </section>
