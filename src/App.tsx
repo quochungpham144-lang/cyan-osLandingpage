@@ -1609,19 +1609,6 @@ function App() {
       </div>
       {/* Floating CTA Buttons */}
       <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3">
-        <button
-          type="button"
-          onClick={() => {
-            trackEvent('cta_click', {
-              button_name: 'download_cyan',
-              location: 'floating_button'
-            });
-            // TODO: cập nhật link download khi desktop app sẵn sàng
-          }}
-          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105"
-        >
-          Download CYAN
-        </button>
         <a
           href="#pricing"
           onClick={() => {
@@ -1638,8 +1625,21 @@ function App() {
           }}
           className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105"
         >
-          Get Started <ArrowRight className="w-4 h-4" />
+          Get Started Free <ArrowRight className="w-4 h-4" />
         </a>
+        <button
+          type="button"
+          onClick={() => {
+            trackEvent('cta_click', {
+              button_name: 'download_cyan',
+              location: 'floating_button'
+            });
+            // TODO: cập nhật link download khi desktop app sẵn sàng
+          }}
+          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105"
+        >
+          Download CYAN
+        </button>
       </div>
 
       {/* Navigation */}
