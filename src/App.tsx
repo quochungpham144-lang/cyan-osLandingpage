@@ -112,7 +112,7 @@ function App() {
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features'>('main');
+  const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
 
   const saveSession = useCallback((session: UserSession | null) => {
@@ -850,6 +850,60 @@ function App() {
     </div>
   );
 
+  const videoView = (
+    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-slate-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        <header className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
+              <div className="text-xs text-gray-400">Experience Natural Voice</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setView('main')}
+            className="text-xs font-medium text-gray-400 hover:text-gray-100"
+          >
+            Back to site
+          </button>
+        </header>
+        <main className="relative bg-gray-900/80 border border-cyan-500/40 rounded-2xl shadow-[0_0_45px_rgba(34,255,200,0.35)] px-6 py-6 md:px-8 md:py-8 overflow-hidden">
+          <div className="pointer-events-none absolute -top-40 -left-32 w-80 h-80 bg-cyan-500/40 rounded-full blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-40 -right-32 w-96 h-96 bg-blue-500/40 rounded-full blur-3xl" />
+          <div className="relative">
+            <div className="flex items-start justify-between gap-4 pb-4 mb-6">
+              <div>
+                <div className="text-base md:text-lg font-semibold text-white">DEMO: ULTRA-LOW LATENCY AI TRANSLATION</div>
+                <div className="mt-1 text-xs text-gray-400">
+                  Electron Cyan – Experience natural voice translation without leaving this site
+                </div>
+              </div>
+            </div>
+            <div className="relative rounded-2xl overflow-hidden border border-cyan-400/40 bg-black/90 shadow-[0_0_60px_rgba(34,255,200,0.4)]">
+              <div className="relative pt-[56.25%]">
+                <iframe
+                  src="https://www.youtube.com/embed/zffQKk-tCpo?autoplay=1&rel=0"
+                  title="Electron Cyan - ULTRA-LOW LATENCY AI TRANSLATOR"
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+            <p className="mt-4 text-xs md:text-sm text-gray-300">
+              This video runs in an embedded player so visitors stay on cyan.ai while exploring how ultra-low
+              latency translation works in real meetings.
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
@@ -1438,7 +1492,9 @@ function App() {
         ? securityView
         : view === 'features'
           ? howItWorksView
-          : (
+          : view === 'video'
+            ? videoView
+            : (
     <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
@@ -1748,7 +1804,7 @@ function App() {
                 <img
                   alt="CYAN: Ultra-Low Latency AI Translator - Secure your $699ExecutiveProAnnual spot now.MinimalLatencyAI | Product Hunt"
                   src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1049078&amp;theme=light"
-                  className="h-10 w-auto"
+                  className="h-7 w-auto"
                 />
               </a>
               <a
@@ -1760,7 +1816,19 @@ function App() {
                 <img
                   src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
                   alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
-                  className="h-10 w-auto"
+                  className="h-7 w-auto"
+                />
+              </a>
+              <a
+                href="https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm"
+              >
+                <img
+                  src="https://viberank.dev/badge?app=CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator&theme=dark"
+                  alt="CYAN: Ultra-Low Latency AI Translator on VibeRank"
+                  className="h-7 w-auto"
                 />
               </a>
             </div>
@@ -1782,8 +1850,10 @@ function App() {
                 onClick={() => {
                   trackEvent('cta_click', {
                     button_name: 'experience_natural_voice',
-                    location: 'hero_section'
+                    location: 'hero_section',
+                    destination: 'video_demo'
                   });
+                  setView('video');
                 }}
                 className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105"
               >
