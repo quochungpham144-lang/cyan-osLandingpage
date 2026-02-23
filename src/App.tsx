@@ -1609,7 +1609,7 @@ function App() {
         </div>
       </div>
       {/* Floating CTA Buttons */}
-      <div className="fixed bottom-8 right-8 z-50 flex flex-col items-end gap-3">
+      <div className="fixed bottom-24 right-8 z-50 flex flex-col items-end gap-3">
         <a
           href="#pricing"
           onClick={() => {
@@ -1835,21 +1835,23 @@ function App() {
               </button>
               
               {mobileMenuOpen && (
-                <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-h-[80vh] overflow-y-auto">
                   <div className="p-2">
                     {/* Navigation Links */}
-                    <a href="#solution" className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Solution</a>
-                    <a href="#engine" className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Engine</a>
-                    <a href="#pricing" onClick={(e) => {
-                      e.preventDefault(); 
-                      const pricingSection = document.getElementById('pricing'); 
-                      if (pricingSection) { 
-                        pricingSection.classList.remove('hidden'); 
-                        pricingSection.style.display = 'block'; 
-                        setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); 
-                        setMobileMenuOpen(false); 
-                      }
-                    }} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Pricing</a>
+                    <div className="space-y-1">
+                      <a href="#solution" className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Solution</a>
+                      <a href="#engine" className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Engine</a>
+                      <a href="#pricing" onClick={(e) => {
+                        e.preventDefault(); 
+                        const pricingSection = document.getElementById('pricing'); 
+                        if (pricingSection) { 
+                          pricingSection.classList.remove('hidden'); 
+                          pricingSection.style.display = 'block'; 
+                          setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); 
+                          setMobileMenuOpen(false); 
+                        }
+                      }} className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">Pricing</a>
+                    </div>
                     
                     <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
                     
@@ -1874,7 +1876,7 @@ function App() {
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                       </svg>
-                      Early Access
+                      <span className="text-xs">Early Access</span>
                     </button>
                     
                     <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
@@ -1888,8 +1890,8 @@ function App() {
                             alt={userInfo.name}
                             className="w-6 h-6 rounded-full object-cover"
                           />
-                          <div className="flex-1">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white">{userInfo.name}</div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white truncate">{userInfo.name}</div>
                             <div className="text-xs text-gray-500 dark:text-gray-400">{userInfo.plan || 'free'}</div>
                           </div>
                         </div>
@@ -1899,10 +1901,10 @@ function App() {
                             window.location.href = deepLink;
                             trackEvent('open_in_app', { userId: userInfo.id });
                           }}
-                          className="w-full bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-3 py-2 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center justify-center gap-1"
+                          className="w-full bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-3 py-1.5 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center justify-center gap-1"
                         >
                           <Zap className="w-2 h-2 text-yellow-400" />
-                          Open in App
+                          <span className="text-xs">Open App</span>
                         </button>
                         <button
                           onClick={() => {
@@ -1913,7 +1915,7 @@ function App() {
                             setAccountMenuOpen(false);
                             setMobileMenuOpen(false);
                           }}
-                          className="w-full text-center text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                          className="w-full text-center text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors py-1"
                         >
                           Logout
                         </button>
