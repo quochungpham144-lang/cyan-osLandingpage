@@ -1541,12 +1541,18 @@ function App() {
     let yOffset = 0;
 
     const dragStart = (e: MouseEvent | TouchEvent) => {
+      console.log('Drag start event type:', e.type);
+      
       if (e.type === 'touchstart') {
-        initialX = (e as TouchEvent).touches[0].clientX - xOffset;
-        initialY = (e as TouchEvent).touches[0].clientY - yOffset;
+        const touch = (e as TouchEvent).touches[0];
+        initialX = touch.clientX - xOffset;
+        initialY = touch.clientY - yOffset;
+        console.log('Touch start position:', touch.clientX, touch.clientY);
       } else {
-        initialX = (e as MouseEvent).clientX - xOffset;
-        initialY = (e as MouseEvent).clientY - yOffset;
+        const mouse = e as MouseEvent;
+        initialX = mouse.clientX - xOffset;
+        initialY = mouse.clientY - yOffset;
+        console.log('Mouse start position:', mouse.clientX, mouse.clientY);
       }
 
       // Check if target is within floating buttons container
@@ -1591,6 +1597,7 @@ function App() {
         const constrainedX = Math.max(0, Math.min(currentX, maxX));
         const constrainedY = Math.max(0, Math.min(currentY, maxY));
 
+        console.log('Dragging to:', constrainedX, constrainedY);
         floatingButtons.style.transform = `translate(${constrainedX}px, ${constrainedY}px)`;
       }
     };
@@ -1913,7 +1920,7 @@ function App() {
             </div>
           
           {/* Mobile Menu Button */}
-          <div className="sm:hidden flex items-center gap-2">
+          <div className="flex sm:hidden items-center gap-2">
             <button 
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
@@ -1924,7 +1931,10 @@ function App() {
             {/* Mobile Navigation Menu */}
             <div className="relative">
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                onClick={() => {
+                  console.log('Mobile menu button clicked, current state:', mobileMenuOpen);
+                  setMobileMenuOpen(!mobileMenuOpen);
+                }}
                 className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
