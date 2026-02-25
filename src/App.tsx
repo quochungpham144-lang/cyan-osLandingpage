@@ -2178,16 +2178,8 @@ function App() {
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
               <a
-                href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-cyan-ultra-low-latency-ai-translator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <img
-                  alt="CYAN: Ultra-Low Latency AI Translator - Secure your $699ExecutiveProAnnual spot now.MinimalLatencyAI | Product Hunt"
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1049078&amp;theme=light"
-                  className="h-6 sm:h-7 w-auto"
-                />
+                href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?utm_source=badge-follow&utm_medium=badge&utm_source=badge-cyan&#0045;ultra&#0045;low&#0045;latency&#0045;ai&#0045;translator" target="_blank">
+                <img src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1136748&theme=light" alt="CYAN&#0058;&#0032;Ultra&#0045;Low&#0032;Latency&#0032;AI&#0032;Translator - Secure&#0032;your&#0032;&#0036;699ExecutiveProAnnual&#0032;spot&#0032;now&#0046;MinimalLatencyAI | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" />
               </a>
               <a
                 href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
