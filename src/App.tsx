@@ -2181,39 +2181,28 @@ function App() {
                 href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?utm_source=badge-follow&utm_medium=badge&utm_source=badge-cyan&#0045;ultra&#0045;low&#0045;latency&#0045;ai&#0045;translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
-                <img 
-                  src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1136748&theme=light" 
-                  alt="CYAN&#0058;&#0032;Ultra&#0045;Low&#0032;Latency&#0032;AI&#0032;Translator - Secure&#0032;your&#0032;&#0036;699ExecutiveProAnnual&#0032;spot&#0032;now&#0046;MinimalLatencyAI | Product Hunt" 
-                  style={{ width: '250px', height: '54px' }} 
-                  width="250" 
-                  height="54" 
-                />
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                Product Hunt
               </a>
               <a
                 href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
                 target="_blank"
-                rel="noopener"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
-                <img
-                  src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
-                  alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
-                  className="h-6 sm:h-7 w-auto"
-                />
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                NextGen Tools
               </a>
               <a
                 href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
-                <img
-                  src="https://devhub.best/images/badges/top1-dark.svg"
-                  alt="DevHub Top 1 Daily Winner"
-                  className="h-6 sm:h-7 w-auto"
-                />
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
+                DevHub
               </a>
             </div>
           </div>
@@ -2416,7 +2405,7 @@ function App() {
                   { icon: Mic, title: 'Multi-provider Text-to-Speech', desc: 'Azure, ElevenLabs, Google' },
                   { icon: Zap, title: 'Voice Cloning from Audio Sample', desc: 'Create custom voice from 30s audio' },
                   { icon: Clock, title: 'Real-time Streaming', desc: 'Fast playback with <400ms latency' },
-                  { icon: Layers, title: 'Chunked Processing', desc: 'Efficient long text processing' }
+                  { icon: Layers, title: 'Chunked Processing', desc: 'Intelligent text segmentation for natural pauses and optimal voice quality' }
                 ].map((feature, idx) => (
                   <div key={idx} className="flex gap-4 items-start bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
                     <div className="w-10 h-10 bg-cyan-600/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -2434,7 +2423,7 @@ function App() {
             {/* API Endpoints */}
             <div>
               <h3 className="text-2xl font-bold mb-6 text-cyan-600 dark:text-cyan-400">🚀 API Endpoints</h3>
-              <div className="bg-gray-900 dark:bg-gray-950 rounded-xl p-6 font-mono text-sm">
+              <div className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 font-mono text-sm">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <span className="text-pink-400">POST</span>
@@ -2889,7 +2878,7 @@ function App() {
                 href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 Product Hunt
@@ -2898,7 +2887,7 @@ function App() {
                 href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 NextGen Tools
@@ -2907,7 +2896,7 @@ function App() {
                 href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 DevHub
@@ -2916,7 +2905,7 @@ function App() {
                 href="https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
                 VibeRank
