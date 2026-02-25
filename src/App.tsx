@@ -2186,9 +2186,7 @@ function App() {
                 <img 
                   src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1136748&theme=light" 
                   alt="CYAN&#0058;&#0032;Ultra&#0045;Low&#0032;Latency&#0032;AI&#0032;Translator - Secure&#0032;your&#0032;&#0036;699ExecutiveProAnnual&#0032;spot&#0032;now&#0046;MinimalLatencyAI | Product Hunt" 
-                  style={{ width: '250px', height: '54px' }} 
-                  width="250" 
-                  height="54" 
+                  className="h-6 sm:h-7 w-auto"
                 />
               </a>
               <a
