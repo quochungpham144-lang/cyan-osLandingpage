@@ -2181,30 +2181,40 @@ function App() {
                 href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?utm_source=badge-follow&utm_medium=badge&utm_source=badge-cyan&#0045;ultra&#0045;low&#0045;latency&#0045;ai&#0045;translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                Product Hunt
+                <img 
+                  src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1136748&theme=light" 
+                  alt="CYAN&#0058;&#0032;Ultra&#0045;Low&#0032;Latency&#0032;AI&#0032;Translator - Secure&#0032;your&#0032;&#0036;699ExecutiveProAnnual&#0032;spot&#0032;now&#0046;MinimalLatencyAI | Product Hunt" 
+                  style={{ width: '250px', height: '54px' }} 
+                  width="250" 
+                  height="54" 
+                />
               </a>
               <a
                 href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
                 target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                rel="noopener"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                NextGen Tools
+                <img
+                  src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
+                  alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
+                  className="h-6 sm:h-7 w-auto"
+                />
               </a>
               <a
                 href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                DevHub
+                <img
+                  src="https://devhub.best/images/badges/top1-dark.svg"
+                  alt="DevHub Top 1 Daily Winner"
+                  className="h-6 sm:h-7 w-auto"
+                />
               </a>
-            </div>
           </div>
           <div className="mt-12 sm:mt-16">
             <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
