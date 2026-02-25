@@ -2215,6 +2215,7 @@ function App() {
                   className="h-6 sm:h-7 w-auto"
                 />
               </a>
+            </div>
           </div>
           <div className="mt-12 sm:mt-16">
             <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
