@@ -2144,13 +2144,12 @@ function App() {
               >
                 Pricing
               </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              <a
+                href="mailto:contact@cyan-os.cc"
                 className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
               >
                 Contact
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -3481,7 +3480,14 @@ function App() {
                 </li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Contact</a></li>
+                <li>
+                  <a 
+                    href="mailto:contact@cyan-os.cc" 
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
