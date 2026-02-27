@@ -2627,6 +2627,23 @@ function App() {
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
               Simple, powerful API that scales from prototype to production
             </p>
+            <div className="mt-4 flex justify-center">
+              <a
+                href="https://rapidapi.com/quochungpham144/api/cyan-os-lite"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('cta_click', {
+                    button_name: 'rapidapi_cyan_os_lite',
+                    location: 'developer_api'
+                  })
+                }
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900 text-white text-sm hover:bg-cyan-700 dark:bg-gray-900 dark:hover:bg-cyan-700 border border-cyan-500/60 shadow-sm transition-colors"
+              >
+                <Globe className="w-4 h-4 text-cyan-400" />
+                <span>View API on RapidAPI</span>
+              </a>
+            </div>
           </div>
 
           <div className="bg-gray-900 dark:bg-gray-950 rounded-3xl p-8 md:p-12 shadow-2xl shadow-cyan-600/10 border-2 border-cyan-600/20 dark:border-cyan-400/20 backdrop-blur-md">
