@@ -2640,7 +2640,11 @@ function App() {
                 }
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900 text-white text-sm hover:bg-cyan-700 dark:bg-gray-900 dark:hover:bg-cyan-700 border border-cyan-500/60 shadow-sm transition-colors"
               >
-                <Globe className="w-4 h-4 text-cyan-400" />
+                <img
+                  src="/tap-search-icon.svg"
+                  alt="Tap to view API"
+                  className="w-4 h-4"
+                />
                 <span>View API on RapidAPI</span>
               </a>
             </div>
