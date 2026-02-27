@@ -3504,7 +3504,7 @@ function App() {
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
                 <li>
                   <div className="space-y-1 text-sm text-gray-400">
-                    <span className="block uppercase tracking-wide text-xs text-gray-500">Contact:</span>
+                    <span className="hover:text-cyan-400 transition-colors cursor-default">Contact:</span>
                     <div className="flex items-center gap-2 text-xs">
                       <span className="font-mono break-all">contact@cyan-os.cc</span>
                       <button
