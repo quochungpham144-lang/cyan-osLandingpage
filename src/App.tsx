@@ -2146,10 +2146,6 @@ function App() {
               </button>
               <a
                 href="mailto:contact@cyan-os.cc"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = 'mailto:contact@cyan-os.cc';
-                }}
                 className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
               >
                 Contact
@@ -2642,7 +2638,7 @@ function App() {
                     location: 'developer_api'
                   })
                 }
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-gray-900 text-sm hover:bg-cyan-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-cyan-100 border border-cyan-500/80 shadow-sm transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-50 text-cyan-900 text-sm hover:bg-cyan-100 dark:bg-slate-900 dark:text-cyan-100 dark:hover:bg-cyan-800 border border-cyan-500/80 shadow-sm transition-colors"
               >
                 <img
                   src="/tap-search-icon.svg"
@@ -3508,10 +3504,6 @@ function App() {
                 <li>
                   <a 
                     href="mailto:contact@cyan-os.cc" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      window.location.href = 'mailto:contact@cyan-os.cc';
-                    }}
                     className="hover:text-cyan-400 transition-colors"
                   >
                     Contact
