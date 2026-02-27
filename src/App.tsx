@@ -1924,6 +1924,65 @@ function App() {
           >
             {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
+          {isLoggedIn && userInfo ? (
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setAccountMenuOpen((open) => !open)}
+                className="w-8 h-8 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-700 flex items-center justify-center"
+              >
+                <img 
+                  src={userInfo.picture || '/logoCyan.jpg'} 
+                  alt={userInfo.name}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+              {accountMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-2 z-50">
+                  <div className="px-3 pb-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Current plan</p>
+                    <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2.5 py-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide">
+                        {userInfo.plan || 'free'}
+                      </span>
+                      <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                        {PLAN_PRICE[userInfo.plan || 'free']}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="px-3 pt-2 border-t border-gray-100 dark:border-slate-800 flex justify-end">
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        saveSession(null);
+                        trackEvent('logout', {
+                          provider: userInfo.provider
+                        });
+                        setAccountMenuOpen(false);
+                      }}
+                      className="text-[11px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button 
+              onClick={() => {
+                trackEvent('cta_click', {
+                  button_name: 'login',
+                  location: 'navigation_mobile'
+                });
+                setShowLoginModal(true);
+              }}
+              className="w-8 h-8 rounded-full bg-cyan-600 text-yellow-300 flex items-center justify-center text-xs font-semibold"
+              aria-label="Login"
+            >
+              Login
+            </button>
+          )}
         </div>
 
       {(checkoutBusy || checkoutMessage) && (
@@ -2084,20 +2143,6 @@ function App() {
                 className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
               >
                 Pricing
-              </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Testimonials
-              </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                FAQ
               </button>
               <button
                 type="button"
