@@ -3502,12 +3502,19 @@ function App() {
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
                 <li>
-                  <a 
-                    href="mailto:contact@cyan-os.cc" 
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    Contact
-                  </a>
+                  <div className="space-y-1">
+                    <span className="hover:text-cyan-400 transition-colors cursor-default">Contact</span>
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
+                      <span className="font-mono">contact@cyan-os.cc</span>
+                      <button
+                        type="button"
+                        onClick={async () => { await copyToClipboard('contact@cyan-os.cc'); }}
+                        className="px-2 py-0.5 rounded-full border border-cyan-500/60 text-cyan-300 hover:bg-cyan-500/10 transition-colors"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
