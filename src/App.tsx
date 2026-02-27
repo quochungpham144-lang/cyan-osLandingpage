@@ -11,7 +11,8 @@ import {
   Layers,
   TrendingDown,
   Sun,
-  Moon
+  Moon,
+  Copy
 } from 'lucide-react';
 
 // Simple type declaration for Google Analytics
@@ -3502,16 +3503,17 @@ function App() {
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
                 <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
                 <li>
-                  <div className="space-y-1">
-                    <span className="hover:text-cyan-400 transition-colors cursor-default">Contact</span>
-                    <div className="flex items-center gap-2 text-xs text-gray-400">
-                      <span className="font-mono">contact@cyan-os.cc</span>
+                  <div className="space-y-1 text-sm text-gray-400">
+                    <span className="block uppercase tracking-wide text-xs text-gray-500">Contact:</span>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="font-mono break-all">contact@cyan-os.cc</span>
                       <button
                         type="button"
                         onClick={async () => { await copyToClipboard('contact@cyan-os.cc'); }}
-                        className="px-2 py-0.5 rounded-full border border-cyan-500/60 text-cyan-300 hover:bg-cyan-500/10 transition-colors"
+                        className="p-1 rounded border border-cyan-500/60 text-cyan-300 hover:bg-cyan-500/10 transition-colors flex items-center justify-center"
+                        aria-label="Copy contact email"
                       >
-                        Copy
+                        <Copy className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
