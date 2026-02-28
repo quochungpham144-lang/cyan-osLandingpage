@@ -3060,7 +3060,10 @@ function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-8">
             {/* Pro Plan */}
-            <div className="group bg-white dark:bg-slate-800/80 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div className="group bg-white dark:bg-slate-800/80 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 pt-8 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-cyan-500/25 z-20 whitespace-nowrap text-center">
+                ⭐ RECOMMENDED
+              </div>
               <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-500/10 to-transparent rounded-bl-2xl"></div>
               <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">Pro</h3>
               <div className="text-gray-600 dark:text-gray-400 text-sm mb-6 relative z-10">Small Business B2B</div>
