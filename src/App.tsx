@@ -2397,6 +2397,47 @@ Cyan OS Lite
               </a>
             </div>
           </div>
+          {/* Mobile quick actions */}
+          <div className="sm:hidden flex items-center gap-2">
+            {isLoggedIn ? (
+              <button
+                type="button"
+                onClick={() => {
+                  saveSession(null);
+                  trackEvent('logout', { provider: userInfo?.provider || 'unknown' });
+                }}
+                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-900 text-gray-100 border border-slate-700 hover:bg-slate-800 transition-colors"
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLoginModal(true);
+                  trackEvent('cta_click', { button_name: 'mobile_login' });
+                }}
+                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-900 text-gray-100 border border-slate-700 hover:bg-slate-800 transition-colors"
+              >
+                Login
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                trackEvent('cta_click', { button_name: 'mobile_early_access' });
+                const pricingSection = document.getElementById('pricing');
+                if (pricingSection) {
+                  pricingSection.classList.remove('hidden');
+                  pricingSection.style.display = 'block';
+                  setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                }
+              }}
+              className="px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
+            >
+              Early Access
+            </button>
+          </div>
         </div>
       </nav>
 
