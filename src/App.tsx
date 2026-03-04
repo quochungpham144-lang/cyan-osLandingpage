@@ -1952,7 +1952,7 @@ Cyan OS Lite
       {/* Draggable Floating CTA Buttons */}
       <div 
         id="floating-buttons"
-        className="fixed bottom-32 sm:bottom-8 right-4 sm:right-8 z-30 flex flex-col items-end gap-3 cursor-move select-none"
+        className="fixed bottom-20 sm:bottom-10 right-4 sm:right-8 z-30 flex flex-col items-end gap-3 cursor-move select-none"
         style={{ touchAction: 'none' }}
       >
         <a
@@ -2464,7 +2464,7 @@ Cyan OS Lite
       <section
         id="hero"
         ref={setRef('hero')}
-        className="pt-32 pb-20 px-4 sm:px-6"
+        className="pt-36 sm:pt-40 pb-20 px-4 sm:px-6"
       >
         <div className="max-w-7xl mx-auto text-center">
           <div className="sm:hidden h-3" />
