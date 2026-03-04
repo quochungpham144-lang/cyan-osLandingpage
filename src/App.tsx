@@ -2425,26 +2425,28 @@ Cyan OS Lite
             )}
             <form
               className="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
+              action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+              method="POST"
+              target="brevo-submit-frame"
               onSubmit={(e) => {
-                e.preventDefault();
-                if (!mobileEarlyEmail.trim()) return;
-                trackEvent('cta_click', { button_name: 'mobile_early_access_submit', email: mobileEarlyEmail });
-                const pricingSection = document.getElementById('pricing');
-                if (pricingSection) {
-                  pricingSection.classList.remove('hidden');
-                  pricingSection.style.display = 'block';
-                  setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                if (!mobileEarlyEmail.trim()) {
+                  e.preventDefault();
+                  return;
                 }
+                trackEvent('cta_click', { button_name: 'mobile_early_access_submit', email: mobileEarlyEmail });
                 setMobileEarlyEmail('');
               }}
             >
+              <input type="hidden" name="FIRSTNAME" value="Mobile" />
+              <input type="hidden" name="FORM_TYPE" value="MOBILE_EARLY" />
               <input
                 type="email"
+                name="EMAIL"
                 value={mobileEarlyEmail}
                 onChange={(e) => setMobileEarlyEmail(e.target.value)}
                 required
                 placeholder="Email for early access"
-                className="w-36 text-[11px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
+                className="w-40 text-[11px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
               />
               <button
                 type="submit"
@@ -2452,6 +2454,7 @@ Cyan OS Lite
               >
                 Join
               </button>
+              <iframe name="brevo-submit-frame" title="brevo-submit-frame" className="hidden" />
             </form>
           </div>
         </div>
