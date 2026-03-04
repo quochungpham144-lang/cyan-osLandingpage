@@ -1951,7 +1951,7 @@ Cyan OS Lite
       {/* Draggable Floating CTA Buttons */}
       <div 
         id="floating-buttons"
-        className="fixed bottom-32 sm:bottom-8 right-4 sm:right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
+        className="fixed bottom-32 sm:bottom-8 right-4 sm:right-8 z-30 flex flex-col items-end gap-3 cursor-move select-none"
         style={{ touchAction: 'none' }}
       >
         <a
@@ -1982,10 +1982,13 @@ Cyan OS Lite
             });
             // TODO: cập nhật link download khi desktop app sẵn sàng
           }}
-          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
+          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
           style={{ pointerEvents: 'auto' }}
         >
-          <span className="leading-tight">Download CYAN (Private Beta)</span>
+          <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
+          <span className="leading-tight text-[10px] text-cyan-200">
+            Currently in Private Beta. Sign up to request early access.
+          </span>
         </button>
       </div>
 
@@ -3621,17 +3624,17 @@ Cyan OS Lite
 
       {showCookieBanner && (
         <div className="fixed inset-x-0 bottom-0 z-40">
-          <div className="max-w-7xl mx-auto px-4 pb-4">
-            <div className="bg-slate-900/95 border border-slate-700 text-sm text-gray-200 rounded-2xl px-4 py-3 md:px-6 md:py-4 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div className="max-w-7xl mx-auto px-3 pb-2">
+            <div className="bg-slate-900/95 border border-slate-700 text-sm text-gray-200 rounded-xl px-3 py-2 md:px-5 md:py-3 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-2">
               <div className="md:max-w-3xl">
-                <div className="font-semibold text-gray-100 text-xs md:text-sm">Cookies &amp; data usage</div>
-                <p className="mt-1 text-xs md:text-sm text-gray-300">
+                <div className="font-semibold text-gray-100 text-[11px] md:text-sm">Cookies &amp; data usage</div>
+                <p className="mt-1 text-[11px] md:text-sm text-gray-300">
                   Cyan uses cookies and similar technologies to keep you signed in (including Google OAuth), secure your
                   session, and measure how users around the world interact with our product. You can learn more in our
                   Privacy Policy.
                 </p>
               </div>
-              <div className="flex flex-wrap items-center gap-2 justify-end">
+              <div className="flex flex-wrap items-center gap-1.5 justify-end">
                 <button
                   type="button"
                   onClick={() => {
@@ -3640,7 +3643,7 @@ Cyan OS Lite
                     }
                     setShowCookieBanner(false);
                   }}
-                  className="px-3 py-1.5 rounded-lg text-xs md:text-sm border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
+                  className="px-3 py-1.5 rounded-lg text-[11px] md:text-sm border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
                 >
                   Necessary only
                 </button>
@@ -3653,7 +3656,7 @@ Cyan OS Lite
                     setShowCookieBanner(false);
                     trackEvent('cookie_consent', { choice: 'all' });
                   }}
-                  className="px-3 py-1.5 rounded-lg text-xs md:text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
+                  className="px-3 py-1.5 rounded-lg text-[11px] md:text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
                 >
                   Accept all
                 </button>
@@ -3663,7 +3666,7 @@ Cyan OS Lite
                     setView('privacy');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
-                  className="px-2 py-1 rounded-lg text-xs md:text-sm text-gray-300 hover:text-cyan-400 transition-colors"
+                  className="px-2 py-1 rounded-lg text-[11px] md:text-sm text-gray-300 hover:text-cyan-400 transition-colors"
                 >
                   Learn more
                 </button>
