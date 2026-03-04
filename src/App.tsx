@@ -2459,7 +2459,9 @@ Cyan OS Lite
               <iframe name="brevo-submit-frame" title="brevo-submit-frame" className="hidden" />
             </form>
             {mobileEarlySubmitted && (
-              <p className="text-[11px] text-cyan-200">Cảm ơn bạn! Email đã được gửi.</p>
+              <div className="mt-2 w-full rounded-lg border border-cyan-700/70 bg-slate-900/80 px-3 py-2 text-[11px] text-cyan-100">
+                Thank you! Your email has been sent.
+              </div>
             )}
           </div>
         </div>
