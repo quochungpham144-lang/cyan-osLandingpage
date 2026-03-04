@@ -3623,54 +3623,48 @@ Cyan OS Lite
       )}
 
       {showCookieBanner && (
-        <div className="fixed inset-x-0 bottom-0 z-40">
-          <div className="max-w-7xl mx-auto px-3 pb-2">
-            <div className="bg-slate-900/95 border border-slate-700 text-sm text-gray-200 rounded-xl px-3 py-2 md:px-5 md:py-3 shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-              <div className="md:max-w-3xl">
-                <div className="font-semibold text-gray-100 text-[11px] md:text-sm">Cookies &amp; data usage</div>
-                <p className="mt-1 text-[11px] md:text-sm text-gray-300">
-                  Cyan uses cookies and similar technologies to keep you signed in (including Google OAuth), secure your
-                  session, and measure how users around the world interact with our product. You can learn more in our
-                  Privacy Policy.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-1.5 justify-end">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== 'undefined') {
-                      window.localStorage.setItem('cyan_cookie_consent', 'necessary');
-                    }
-                    setShowCookieBanner(false);
-                  }}
-                  className="px-3 py-1.5 rounded-lg text-[11px] md:text-sm border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
-                >
-                  Necessary only
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (typeof window !== 'undefined') {
-                      window.localStorage.setItem('cyan_cookie_consent', 'all');
-                    }
-                    setShowCookieBanner(false);
-                    trackEvent('cookie_consent', { choice: 'all' });
-                  }}
-                  className="px-3 py-1.5 rounded-lg text-[11px] md:text-sm bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
-                >
-                  Accept all
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setView('privacy');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="px-2 py-1 rounded-lg text-[11px] md:text-sm text-gray-300 hover:text-cyan-400 transition-colors"
-                >
-                  Learn more
-                </button>
-              </div>
+        <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
+          <div className="max-w-md w-full bg-slate-900/95 border border-slate-700 text-[11px] md:text-xs text-gray-200 rounded-full px-3 py-2 shadow-xl flex items-center gap-2 md:gap-3">
+            <div className="flex-1 leading-tight">
+              <div className="font-semibold text-gray-100 text-[11px] md:text-xs">Cookies &amp; data</div>
+              <p className="text-[10px] md:text-[11px] text-gray-300">We use cookies to keep you signed in and measure usage. Privacy Policy.</p>
+            </div>
+            <div className="flex items-center gap-1 md:gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    window.localStorage.setItem('cyan_cookie_consent', 'necessary');
+                  }
+                  setShowCookieBanner(false);
+                }}
+                className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
+              >
+                Necessary
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    window.localStorage.setItem('cyan_cookie_consent', 'all');
+                  }
+                  setShowCookieBanner(false);
+                  trackEvent('cookie_consent', { choice: 'all' });
+                }}
+                className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
+              >
+                Accept
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setView('privacy');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="px-2 py-1 rounded-full text-[10px] md:text-[11px] text-gray-300 hover:text-cyan-400 transition-colors"
+              >
+                Policy
+              </button>
             </div>
           </div>
         </div>
