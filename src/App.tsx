@@ -115,6 +115,7 @@ function App() {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
+  const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -2417,26 +2418,41 @@ Cyan OS Lite
                   setShowLoginModal(true);
                   trackEvent('cta_click', { button_name: 'mobile_login' });
                 }}
-                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-900 text-gray-100 border border-slate-700 hover:bg-slate-800 transition-colors"
+                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-white text-cyan-700 border border-cyan-500 shadow-sm hover:bg-cyan-50 transition-colors"
               >
                 Login
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => {
-                trackEvent('cta_click', { button_name: 'mobile_early_access' });
+            <form
+              className="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!mobileEarlyEmail.trim()) return;
+                trackEvent('cta_click', { button_name: 'mobile_early_access_submit', email: mobileEarlyEmail });
                 const pricingSection = document.getElementById('pricing');
                 if (pricingSection) {
                   pricingSection.classList.remove('hidden');
                   pricingSection.style.display = 'block';
                   setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
                 }
+                setMobileEarlyEmail('');
               }}
-              className="px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
             >
-              Early Access
-            </button>
+              <input
+                type="email"
+                value={mobileEarlyEmail}
+                onChange={(e) => setMobileEarlyEmail(e.target.value)}
+                required
+                placeholder="Email for early access"
+                className="w-36 text-[11px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
+              />
+              <button
+                type="submit"
+                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
+              >
+                Join
+              </button>
+            </form>
           </div>
         </div>
       </nav>
