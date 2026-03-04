@@ -2428,7 +2428,7 @@ Cyan OS Lite
               className="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
               action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
               method="POST"
-              target="brevo-submit-frame"
+              target="_blank"
               onSubmit={(e) => {
                 if (!mobileEarlyEmail.trim()) {
                   e.preventDefault();
@@ -2456,11 +2456,10 @@ Cyan OS Lite
               >
                 Join
               </button>
-              <iframe name="brevo-submit-frame" title="brevo-submit-frame" className="hidden" />
             </form>
             {mobileEarlySubmitted && (
               <div className="mt-2 w-full rounded-lg border border-cyan-700/70 bg-slate-900/80 px-3 py-2 text-[11px] text-cyan-100">
-                Thank you! Your email has been sent.
+                Thank you! Your email has been sent. A Brevo confirmation page opened.
               </div>
             )}
           </div>
