@@ -3737,7 +3737,21 @@ Cyan OS Lite
                     Documentation
                   </button>
                 </li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">API Reference</a></li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowApiSection(true);
+                      setTimeout(
+                        () => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }),
+                        100
+                      );
+                    }}
+                    className="hover:text-cyan-400 transition-colors"
+                  >
+                    API Reference
+                  </button>
+                </li>
               </ul>
             </div>
             <div>
