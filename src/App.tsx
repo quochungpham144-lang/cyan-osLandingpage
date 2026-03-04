@@ -1951,7 +1951,7 @@ Cyan OS Lite
       {/* Draggable Floating CTA Buttons */}
       <div 
         id="floating-buttons"
-        className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
+        className="fixed bottom-32 sm:bottom-8 right-4 sm:right-8 z-50 flex flex-col items-end gap-3 cursor-move select-none"
         style={{ touchAction: 'none' }}
       >
         <a
@@ -1982,13 +1982,10 @@ Cyan OS Lite
             });
             // TODO: cập nhật link download khi desktop app sẵn sàng
           }}
-          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-xs sm:text-sm hover:scale-105 pointer-events-auto"
+          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
           style={{ pointerEvents: 'auto' }}
         >
-          <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
-          <span className="leading-tight text-[10px] text-cyan-200">
-            Currently in Private Beta. Request early access.
-          </span>
+          <span className="leading-tight">Download CYAN (Private Beta)</span>
         </button>
       </div>
 
