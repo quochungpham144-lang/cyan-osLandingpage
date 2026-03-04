@@ -116,6 +116,7 @@ function App() {
   const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
+  const [mobileEarlySubmitted, setMobileEarlySubmitted] = useState(false);
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -2434,6 +2435,7 @@ Cyan OS Lite
                   return;
                 }
                 trackEvent('cta_click', { button_name: 'mobile_early_access_submit', email: mobileEarlyEmail });
+                setMobileEarlySubmitted(true);
                 setMobileEarlyEmail('');
               }}
             >
@@ -2456,6 +2458,9 @@ Cyan OS Lite
               </button>
               <iframe name="brevo-submit-frame" title="brevo-submit-frame" className="hidden" />
             </form>
+            {mobileEarlySubmitted && (
+              <p className="text-[11px] text-cyan-200">Cảm ơn bạn! Email đã được gửi.</p>
+            )}
           </div>
         </div>
       </nav>
@@ -2467,7 +2472,7 @@ Cyan OS Lite
         className="pt-36 sm:pt-40 pb-20 px-4 sm:px-6"
       >
         <div className="max-w-7xl mx-auto text-center">
-          <div className="sm:hidden h-3" />
+          <div className="sm:hidden h-10" />
           <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mb-4">
             <div
               className="text-sm sm:text-base font-mono font-semibold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#22ff66]"
