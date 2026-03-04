@@ -1973,20 +1973,24 @@ Cyan OS Lite
         >
           Get Started Free <ArrowRight className="w-4 h-4" />
         </a>
-        <button
-          type="button"
-          onClick={() => {
-            trackEvent('cta_click', {
-              button_name: 'download_cyan',
-              location: 'floating_button'
-            });
-            // TODO: cập nhật link download khi desktop app sẵn sàng
-          }}
-          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105 pointer-events-auto"
-          style={{ pointerEvents: 'auto' }}
-        >
-          Download CYAN
-        </button>
+        <div className="flex flex-col items-end gap-1 pointer-events-auto" style={{ pointerEvents: 'auto' }}>
+          <button
+            type="button"
+            onClick={() => {
+              trackEvent('cta_click', {
+                button_name: 'download_cyan',
+                location: 'floating_button'
+              });
+              // TODO: cập nhật link download khi desktop app sẵn sàng
+            }}
+            className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 text-sm hover:scale-105"
+          >
+            Download CYAN
+          </button>
+          <p className="max-w-[260px] text-[11px] text-slate-200/90 bg-slate-900/95 border border-slate-700/80 rounded-md px-3 py-1 shadow-lg">
+            Currently in Private Beta. Sign up to request early access.
+          </p>
+        </div>
       </div>
 
       {/* Navigation */}
