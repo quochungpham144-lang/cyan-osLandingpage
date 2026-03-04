@@ -1763,7 +1763,54 @@ Typical one-way latency: 200–400ms (network + provider + local render).`}
 
                           <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
                             <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              2. Audio Watermarking for Realtime Streams
+                              2. TTS Routing: Local ONNX Piper vs Cloud Voices
+                            </h2>
+                            <p className="text-xs md:text-sm text-slate-300 mb-3">
+                              For text-to-speech, Cyan uses a hybrid strategy: a local ONNX model (Piper) for instant
+                              preview, and high-quality cloud voices (Google WaveNet, Azure Neural, ElevenLabs) for the
+                              main stream. This keeps the experience responsive while still delivering natural voices.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
+                                <div className="text-cyan-400 mb-1">Preview vs full stream</div>
+                                <pre className="whitespace-pre leading-relaxed">
+{`text = user_message
+snippet = first_5_words(text)
+
+Piper (local ONNX)
+  ↓  synthesize(snippet)
+  ↓  22.05kHz → 16kHz PCM
+  ↓  play instantly in ear`}
+                                </pre>
+                                <p className="mt-2 text-[10px] text-slate-400">
+                                  Piper is optimized for low CPU and fast startup. It gives the user an immediate sense
+                                  of the target voice and language while the cloud stream is being prepared.
+                                </p>
+                              </div>
+                              <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
+                                <div className="text-cyan-400 mb-1">Cloud TTS routing (WaveNet, Azure, ElevenLabs)</div>
+                                <pre className="whitespace-pre leading-relaxed">
+{`if plan == "free":
+  engine = "google_wavenet"
+elif plan == "pro":
+  engine = "azure_neural" or "elevenlabs"
+
+/api/tts/speak-stream(engine, language, text)
+  ↓  provider streams audio chunks
+  ↓  Cyan OS Lite forwards chunks to client
+  ↓  audio watermark injected before output`}
+                                </pre>
+                                <p className="mt-2 text-[10px] text-slate-400">
+                                  The gateway chooses the engine based on plan, language, and health checks. If a cloud
+                                  provider fails, Cyan OS Lite can fall back or temporarily rely more on ONNX voices.
+                                </p>
+                              </div>
+                            </div>
+                          </section>
+
+                          <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
+                            <h2 className="text-lg font-semibold text-cyan-300 mb-3">
+                              3. Audio Watermarking for Realtime Streams
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
                               To protect generated audio, Cyan inserts a lightweight PCM watermark before it reaches the
@@ -1797,7 +1844,7 @@ Typical one-way latency: 200–400ms (network + provider + local render).`}
 
                           <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
                             <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              3. RapidAPI & Ocean / Blockchain Gateways
+                              4. RapidAPI & Ocean / Blockchain Gateways
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
                               Cyan OS Lite is also exposed as a standalone API product via RapidAPI and blockchain-based
