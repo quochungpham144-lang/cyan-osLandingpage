@@ -1680,6 +1680,15 @@ function App() {
     }
   }, [isDarkMode]);
 
+  // Prevent background scroll when login modal is open
+  useEffect(() => {
+    if (showLoginModal) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = originalOverflow; };
+    }
+  }, [showLoginModal]);
+
   const setRef = (id: string) => (el: HTMLElement | null) => {
     sectionsRef.current[id] = el;
   };
@@ -3537,8 +3546,8 @@ Cyan OS Lite
 
       {/* Login/Register Modal */}
       {showLoginModal && (
-        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative">
+        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative mx-auto my-10">
             {/* Close Button */}
             <button
               onClick={() => setShowLoginModal(false)}
