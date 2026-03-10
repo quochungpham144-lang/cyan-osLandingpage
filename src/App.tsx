@@ -3537,8 +3537,8 @@ Cyan OS Lite
 
       {/* Login/Register Modal */}
       {showLoginModal && (
-        <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm grid place-items-center p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[88vh] overflow-y-auto">
             {/* Close Button */}
             <button
               onClick={() => setShowLoginModal(false)}
