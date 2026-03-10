@@ -1543,26 +1543,19 @@ function App() {
     let yOffset = 0;
 
     const dragStart = (e: MouseEvent | TouchEvent) => {
-      console.log('Drag start event type:', e.type);
-      
       if (e.type === 'touchstart') {
         const touch = (e as TouchEvent).touches[0];
         initialX = touch.clientX - xOffset;
         initialY = touch.clientY - yOffset;
-        console.log('Touch start position:', touch.clientX, touch.clientY);
       } else {
         const mouse = e as MouseEvent;
         initialX = mouse.clientX - xOffset;
         initialY = mouse.clientY - yOffset;
-        console.log('Mouse start position:', mouse.clientX, mouse.clientY);
       }
 
-      // Check if target is within floating buttons container
       const target = e.target as HTMLElement;
-      console.log('Drag start target:', target, 'closest:', target.closest('#floating-buttons'));
       if (target === floatingButtons || target.closest('#floating-buttons')) {
         isDragging = true;
-        console.log('Dragging started!');
       }
     };
 
@@ -1599,7 +1592,6 @@ function App() {
         const constrainedX = Math.max(0, Math.min(currentX, maxX));
         const constrainedY = Math.max(0, Math.min(currentY, maxY));
 
-        console.log('Dragging to:', constrainedX, constrainedY);
         floatingButtons.style.transform = `translate(${constrainedX}px, ${constrainedY}px)`;
       }
     };
@@ -1611,11 +1603,6 @@ function App() {
     floatingButtons.addEventListener('mousedown', dragStart, { passive: false });
     document.addEventListener('mouseup', dragEnd, { passive: false });
     document.addEventListener('mousemove', drag, { passive: false });
-    
-    // Debug: Log when dragging starts
-    floatingButtons.addEventListener('mousedown', (e) => {
-      console.log('Mouse down on floating buttons', e.target);
-    });
 
     return () => {
       // Cleanup event listeners
@@ -1656,22 +1643,33 @@ function App() {
   }, [checkBackendConnection, trackPageView]);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          const updates: { [key: string]: boolean } = {};
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              updates[entry.target.id] = true;
+            }
+          });
+          if (Object.keys(updates).length > 0) {
+            setIsVisible((prev) => ({ ...prev, ...updates }));
           }
-        });
+        }, 50);
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '50px' }
     );
 
     Object.values(sectionsRef.current).forEach((ref) => {
       if (ref) observer.observe(ref);
     });
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(timeoutId);
+      observer.disconnect();
+    };
   }, []);
 
   useEffect(() => {

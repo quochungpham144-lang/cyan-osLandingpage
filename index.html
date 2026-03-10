@@ -94,6 +94,36 @@
         transform: scale(1.05);
         filter: brightness(1.1) contrast(1.1);
       }
+      
+      /* Performance optimizations */
+      section {
+        contain: layout style;
+      }
+      
+      .scroll-smooth {
+        scroll-behavior: smooth;
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      
+      /* Optimize animations */
+      .animate-pulse,
+      [class*="transition"],
+      [class*="hover:"] {
+        will-change: transform, opacity;
+      }
+      
+      /* Improve scroll performance */
+      body {
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
     </style>
   </head>
   <body>
