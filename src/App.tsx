@@ -1466,6 +1466,25 @@ function App() {
       action: isLoginMode ? 'login' : 'register',
       user_email: email
     });
+
+    // Send to extension if opened from extension
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('source') === 'extension') {
+      if (window.opener) {
+        window.opener.postMessage({
+          type: 'CYAN_LOGIN_SUCCESS',
+          user: {
+            id: sessionData.id,
+            email: sessionData.email,
+            name: sessionData.name,
+            picture: sessionData.picture
+          },
+          token: sessionData.id // Simple token for email auth
+        }, '*');
+      }
+      // Close tab after sending message
+      setTimeout(() => window.close(), 1000);
+    }
   };
 
   // Handle Google OAuth callback (Frontend Direct - Token flow)
@@ -1504,6 +1523,25 @@ function App() {
       });
 
       console.log('Google login successful:', userData);
+
+      // Send to extension if opened from extension
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('source') === 'extension') {
+        if (window.opener) {
+          window.opener.postMessage({
+            type: 'CYAN_LOGIN_SUCCESS',
+            user: {
+              id: sessionData.id,
+              email: sessionData.email,
+              name: sessionData.name,
+              picture: sessionData.picture
+            },
+            token: accessToken
+          }, '*');
+        }
+        // Close tab after sending message
+        setTimeout(() => window.close(), 1000);
+      }
     } catch (error) {
       console.error('OAuth callback error:', error);
       trackEvent('oauth_error', {
