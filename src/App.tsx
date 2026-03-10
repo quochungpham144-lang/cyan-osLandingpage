@@ -1680,15 +1680,6 @@ function App() {
     }
   }, [isDarkMode]);
 
-  // Prevent background scroll when login modal is open
-  useEffect(() => {
-    if (showLoginModal) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => { document.body.style.overflow = originalOverflow; };
-    }
-  }, [showLoginModal]);
-
   const setRef = (id: string) => (el: HTMLElement | null) => {
     sectionsRef.current[id] = el;
   };
