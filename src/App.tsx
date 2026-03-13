@@ -3805,39 +3805,13 @@ Cyan OS Lite
                   try {
                     await startGoogleLoginWithGis();
                     return;
-                  } catch {
-                    void 0;
+                  } catch (error) {
+                    const message = error instanceof Error ? error.message : 'Google login failed. Please try again.';
+                    setCheckoutMessage(message);
+                    setShowLoginModal(true);
+                    trackEvent('oauth_error', { provider: 'google', error: message });
+                    return;
                   }
-
-                  const origin = window.location.origin;
-                  const stateBytes = new Uint8Array(16);
-                  window.crypto.getRandomValues(stateBytes);
-                  const state = Array.from(stateBytes).map((v) => v.toString(16).padStart(2, '0')).join('');
-
-                  const verifierBytes = new Uint8Array(32);
-                  window.crypto.getRandomValues(verifierBytes);
-                  const verifierBase = btoa(String.fromCharCode(...verifierBytes));
-                  const verifier = verifierBase.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-
-                  const encoder = new TextEncoder();
-                  const digest = await window.crypto.subtle.digest('SHA-256', encoder.encode(verifier));
-                  const challengeBase = btoa(String.fromCharCode(...new Uint8Array(digest)));
-                  const challenge = challengeBase.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-
-                  window.localStorage.setItem('cyan_google_oauth_verifier', verifier);
-                  window.localStorage.setItem('cyan_google_oauth_state', state);
-
-                  const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-                  url.searchParams.set('client_id', '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com');
-                  url.searchParams.set('redirect_uri', origin);
-                  url.searchParams.set('response_type', 'code');
-                  url.searchParams.set('scope', 'openid email profile');
-                  url.searchParams.set('prompt', 'consent');
-                  url.searchParams.set('code_challenge', challenge);
-                  url.searchParams.set('code_challenge_method', 'S256');
-                  url.searchParams.set('state', state);
-
-                  window.location.href = url.toString();
                 }}
                 className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
