@@ -1622,24 +1622,75 @@ function App() {
     };
   }, []);
 
-  // Check for OAuth callback in URL
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const oauthError = urlParams.get('error');
+    const oauthCode = urlParams.get('code');
+    const oauthState = urlParams.get('state');
     const accessToken = hashParams.get('access_token');
-    const error = urlParams.get('error');
+
+    const clearUrl = () => {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    };
+
+    const completeCodeFlow = async () => {
+      const storedVerifier = window.sessionStorage.getItem('cyan_google_oauth_verifier') || '';
+      const storedState = window.sessionStorage.getItem('cyan_google_oauth_state') || '';
+      window.sessionStorage.removeItem('cyan_google_oauth_verifier');
+      window.sessionStorage.removeItem('cyan_google_oauth_state');
+
+      if (!storedVerifier || !storedState || !oauthState || storedState !== oauthState) {
+        trackEvent('oauth_error', { provider: 'google', error: 'state_mismatch' });
+        clearUrl();
+        return;
+      }
+
+      const tokenBody = new URLSearchParams({
+        client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
+        code: oauthCode || '',
+        code_verifier: storedVerifier,
+        redirect_uri: window.location.origin,
+        grant_type: 'authorization_code'
+      });
+
+      try {
+        const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: tokenBody.toString()
+        });
+
+        const tokenData = await tokenResponse.json();
+        const token = String(tokenData?.access_token || '');
+        if (!token) {
+          trackEvent('oauth_error', { provider: 'google', error: 'token_exchange_failed' });
+          clearUrl();
+          return;
+        }
+
+        await handleGoogleCallback(token);
+        clearUrl();
+      } catch {
+        trackEvent('oauth_error', { provider: 'google', error: 'token_exchange_failed' });
+        clearUrl();
+      }
+    };
+
+    if (oauthCode) {
+      void completeCodeFlow();
+      return;
+    }
 
     if (accessToken) {
-      // Handle OAuth callback with access token
-      handleGoogleCallback(accessToken);
-      // Clean URL
-      window.history.replaceState({}, document.title, window.location.pathname);
-    } else if (error) {
-      console.error('OAuth error:', error);
-      trackEvent('oauth_error', {
-        provider: 'google',
-        error: error
-      });
+      void handleGoogleCallback(accessToken);
+      clearUrl();
+      return;
+    }
+
+    if (oauthError) {
+      trackEvent('oauth_error', { provider: 'google', error: oauthError });
+      clearUrl();
     }
   }, [handleGoogleCallback, trackEvent]);
 
@@ -3652,21 +3703,41 @@ Cyan OS Lite
               {/* Google Sign-In Button */}
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
                   trackEvent('oauth_click', {
                     provider: 'google',
                     action: isLoginMode ? 'login' : 'register'
                   });
 
-                  // Direct Google OAuth for frontend (Token flow) - Production
-                  const googleOAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
-                    'client_id=464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com&' +
-                    'redirect_uri=' + encodeURIComponent(window.location.origin) + '&' +
-                    'response_type=token&' +
-                    'scope=openid%20email%20profile&' +
-                    'prompt=consent';
-                  
-                  window.location.href = googleOAuthUrl;
+                  const origin = window.location.origin;
+                  const stateBytes = new Uint8Array(16);
+                  window.crypto.getRandomValues(stateBytes);
+                  const state = Array.from(stateBytes).map((v) => v.toString(16).padStart(2, '0')).join('');
+
+                  const verifierBytes = new Uint8Array(32);
+                  window.crypto.getRandomValues(verifierBytes);
+                  const verifierBase = btoa(String.fromCharCode(...verifierBytes));
+                  const verifier = verifierBase.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+
+                  const encoder = new TextEncoder();
+                  const digest = await window.crypto.subtle.digest('SHA-256', encoder.encode(verifier));
+                  const challengeBase = btoa(String.fromCharCode(...new Uint8Array(digest)));
+                  const challenge = challengeBase.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+
+                  window.sessionStorage.setItem('cyan_google_oauth_verifier', verifier);
+                  window.sessionStorage.setItem('cyan_google_oauth_state', state);
+
+                  const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+                  url.searchParams.set('client_id', '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com');
+                  url.searchParams.set('redirect_uri', origin);
+                  url.searchParams.set('response_type', 'code');
+                  url.searchParams.set('scope', 'openid email profile');
+                  url.searchParams.set('prompt', 'consent');
+                  url.searchParams.set('code_challenge', challenge);
+                  url.searchParams.set('code_challenge_method', 'S256');
+                  url.searchParams.set('state', state);
+
+                  window.location.href = url.toString();
                 }}
                 className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
