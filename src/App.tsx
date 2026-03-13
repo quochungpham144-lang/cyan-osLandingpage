@@ -117,6 +117,13 @@ function App() {
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
   const [mobileEarlySubmitted, setMobileEarlySubmitted] = useState(false);
+  const [clickPulse, setClickPulse] = useState<{ x: number; y: number; id: number } | null>(null);
+
+  useEffect(() => {
+    if (!clickPulse) return;
+    const timer = window.setTimeout(() => setClickPulse(null), 500);
+    return () => window.clearTimeout(timer);
+  }, [clickPulse]);
 
   const saveSession = useCallback((session: UserSession | null) => {
     if (session) {
@@ -1938,16 +1945,39 @@ Cyan OS Lite
                   </div>
                 )
                 : (
-    <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden">
+    <div
+      className="min-h-screen bg-gradient-to-b from-emerald-50 via-emerald-100/35 to-cyan-50/55 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden"
+      onMouseDown={(event) => {
+        if (typeof window !== 'undefined' && !window.matchMedia('(pointer:fine)').matches) return;
+        setClickPulse({ x: event.clientX, y: event.clientY, id: Date.now() });
+      }}
+    >
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-grid-pattern opacity-40 dark:opacity-50"></div>
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-green-500/50 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/2 right-0 w-96 h-96 bg-blue-500/50 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-500/50 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-100/55 via-cyan-100/35 to-white/20 dark:from-slate-900/0 dark:via-slate-900/0 dark:to-slate-950/0"></div>
+        <div className="absolute inset-0 bg-grid-pattern opacity-20 dark:opacity-40 hidden sm:block"></div>
+        <div className="absolute inset-0 hidden sm:block">
+          <div className="absolute top-0 -left-16 w-[34rem] h-[34rem] bg-emerald-400/35 dark:bg-emerald-600/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-1/3 -right-20 w-[32rem] h-[32rem] bg-cyan-400/35 dark:bg-cyan-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute bottom-0 left-1/3 w-[30rem] h-[30rem] bg-teal-400/25 dark:bg-teal-600/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
+        </div>
+        <div className="absolute inset-0 sm:hidden">
+          <div className="absolute -top-16 -left-10 w-56 h-56 bg-emerald-300/25 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-12 -right-10 w-52 h-52 bg-cyan-300/20 rounded-full blur-2xl"></div>
         </div>
       </div>
+      {clickPulse && (
+        <div key={clickPulse.id} className="fixed inset-0 pointer-events-none z-20">
+          <span
+            className="absolute w-20 h-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/35 dark:bg-cyan-400/25 animate-ping"
+            style={{ left: clickPulse.x, top: clickPulse.y }}
+          />
+          <span
+            className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/70 dark:border-cyan-300/60"
+            style={{ left: clickPulse.x, top: clickPulse.y }}
+          />
+        </div>
+      )}
       {/* Draggable Floating CTA Buttons */}
       <div 
         id="floating-buttons"
@@ -1995,14 +2025,21 @@ Cyan OS Lite
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-          <div className="flex flex-col items-center">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
               <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
-            <div className="text-center">
+            <div className="text-left sm:text-center">
               <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
               <div className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">ULTRA-LOW LATENCY AI TRANSLATOR</div>
             </div>
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+              aria-label="Toggle dark mode"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
           </div>
           <div className="hidden sm:flex items-center gap-4 sm:gap-6">
             <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
@@ -2163,12 +2200,6 @@ Cyan OS Lite
               )}
         </div>
         <div className="flex sm:hidden items-center gap-2">
-          <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
-          >
-            {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
           {isLoggedIn && userInfo ? (
             <div className="relative">
               <button
@@ -2554,7 +2585,7 @@ Cyan OS Lite
                   setView('about');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="w-full sm:w-auto bg-gray-100 dark:bg-slate-700/80 text-gray-900 dark:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg border-2 border-gray-200 dark:border-slate-600 hover:border-cyan-500 dark:hover:border-cyan-400 transition-all backdrop-blur-sm min-h-[48px]"
+                className="w-full sm:w-auto bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg border border-cyan-200/60 dark:border-cyan-300/40 hover:brightness-105 transition-all backdrop-blur-sm min-h-[48px] shadow-lg shadow-cyan-500/20"
               >
                 Learn More
               </button>
@@ -2563,11 +2594,11 @@ Cyan OS Lite
             {/* Hero Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-4xl mx-auto">
               {[
-                { icon: Clock, label: '<400ms', desc: 'Translation Latency' },
-                { icon: Globe, label: '+36', desc: 'Languages Supported' },
-                { icon: TrendingDown, label: 'Up to 80%', desc: 'Cost Reduction' }
+                { icon: Clock, label: '<400ms', desc: 'Translation Latency', borderClass: 'border-amber-300/80 dark:border-amber-400/40' },
+                { icon: Globe, label: '+36', desc: 'Languages Supported', borderClass: 'border-cyan-300/80 dark:border-cyan-400/40' },
+                { icon: TrendingDown, label: 'Up to 80%', desc: 'Cost Reduction', borderClass: 'border-emerald-300/80 dark:border-emerald-400/40' }
               ].map((stat, idx) => (
-                <div key={idx} className="bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-xl hover:shadow-cyan-500/20 transition-all hover:scale-105">
+                <div key={idx} className={`bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border rounded-2xl p-6 ${stat.borderClass} hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-xl hover:shadow-cyan-500/20 transition-all hover:scale-105`}>
                   <stat.icon className="w-10 h-10 text-cyan-600 dark:text-cyan-400 mb-3 mx-auto" />
                   <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">{stat.label}</div>
                   <div className="text-gray-600 dark:text-gray-400 text-sm">{stat.desc}</div>
@@ -2582,7 +2613,7 @@ Cyan OS Lite
       <section
         id="problem"
         ref={setRef('problem')}
-        className={`py-20 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-1000 delay-200 ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/40 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-200 ${
           isVisible.problem ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -2599,22 +2630,28 @@ Cyan OS Lite
               {
                 icon: Globe,
                 title: 'COMMUNICATION GAPS',
-                desc: 'Language barriers create misunderstandings and lost opportunities in critical business conversations, limiting global collaboration and growth potential.'
+                desc: 'Language barriers create misunderstandings and lost opportunities in critical business conversations, limiting global collaboration and growth potential.',
+                pillClass: 'from-pink-500/20 to-rose-500/20 border-pink-400/50 text-pink-700 dark:text-pink-200 dark:border-pink-300/40',
+                cardBorderClass: 'border-pink-300/70 dark:border-pink-400/40'
               },
               {
                 icon: Clock,
                 title: 'TIME DELAYS',
-                desc: 'Traditional translation methods slow down meetings and decision-making, causing frustration and reducing productivity in time-sensitive situations.'
+                desc: 'Traditional translation methods slow down meetings and decision-making, causing frustration and reducing productivity in time-sensitive situations.',
+                pillClass: 'from-amber-500/20 to-orange-500/20 border-amber-400/50 text-amber-700 dark:text-amber-200 dark:border-amber-300/40',
+                cardBorderClass: 'border-amber-300/70 dark:border-amber-400/40'
               },
               {
                 icon: Mic,
                 title: 'UNNATURAL VOICES',
-                desc: 'Robotic, monotone AI voices diminish the human connection and emotional nuance essential for building trust in professional relationships.'
+                desc: 'Robotic, monotone AI voices diminish the human connection and emotional nuance essential for building trust in professional relationships.',
+                pillClass: 'from-violet-500/20 to-fuchsia-500/20 border-violet-400/50 text-violet-700 dark:text-violet-200 dark:border-violet-300/40',
+                cardBorderClass: 'border-violet-300/70 dark:border-violet-400/40'
               }
             ].map((challenge, idx) => (
-              <div key={idx} className="bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 rounded-2xl p-8 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10">
+              <div key={idx} className={`bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md border rounded-2xl p-8 ${challenge.cardBorderClass} hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10`}>
                 <challenge.icon className="w-12 h-12 text-cyan-600 dark:text-cyan-400 mb-4" />
-                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-gray-100">{challenge.title}</h3>
+                <h3 className={`inline-flex rounded-full px-4 py-1.5 text-sm font-bold mb-4 border bg-gradient-to-r ${challenge.pillClass}`}>{challenge.title}</h3>
                 <p className="text-gray-600 dark:text-gray-400">{challenge.desc}</p>
               </div>
             ))}
@@ -2626,7 +2663,7 @@ Cyan OS Lite
       <section
         id="solution"
         ref={setRef('solution')}
-        className={`py-20 px-6 bg-gray-50/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-1000 delay-300 ${
+        className={`py-20 px-6 bg-gradient-to-b from-cyan-50/35 via-white/45 to-blue-50/30 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-300 ${
           isVisible.solution ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -2685,7 +2722,7 @@ Cyan OS Lite
       <section
         id="api"
         ref={setRef('api')}
-        className={`py-20 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-500 ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-500 ${
           showApiSection ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'
         }`}
         style={{ display: showApiSection ? 'block' : 'none' }}
@@ -2845,7 +2882,7 @@ Cyan OS Lite
       <section
         id="engine"
         ref={setRef('engine')}
-        className={`py-20 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-1000 delay-400 ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-400 ${
           isVisible.engine ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -2864,30 +2901,38 @@ Cyan OS Lite
                   {
                     icon: Layers,
                     title: 'Multi-Provider TTS',
-                    desc: 'Intelligent routing across ElevenLabs, OpenAI, and Azure for maximum reliability'
+                    desc: 'Intelligent routing across ElevenLabs, OpenAI, and Azure for maximum reliability',
+                    pillClass: 'from-cyan-500/20 to-sky-500/20 border-cyan-400/50 text-cyan-700 dark:text-cyan-200 dark:border-cyan-300/40',
+                    cardBorderClass: 'border-cyan-300/70 dark:border-cyan-400/40'
                   },
                   {
                     icon: Mic,
                     title: 'Voice Cloning',
-                    desc: 'Create custom voice profiles from just 30 seconds of audio with 98% accuracy'
+                    desc: 'Create custom voice profiles from just 30 seconds of audio with 98% accuracy',
+                    pillClass: 'from-purple-500/20 to-fuchsia-500/20 border-purple-400/50 text-purple-700 dark:text-purple-200 dark:border-purple-300/40',
+                    cardBorderClass: 'border-purple-300/70 dark:border-purple-400/40'
                   },
                   {
                     icon: Zap,
                     title: 'Real-time Streaming',
-                    desc: 'Stream audio as it\'s generated with chunked processing for zero perceived latency'
+                    desc: 'Stream audio as it\'s generated with chunked processing for zero perceived latency',
+                    pillClass: 'from-emerald-500/20 to-teal-500/20 border-emerald-400/50 text-emerald-700 dark:text-emerald-200 dark:border-emerald-300/40',
+                    cardBorderClass: 'border-emerald-300/70 dark:border-emerald-400/40'
                   },
                   {
                     icon: Shield,
                     title: 'Chunked Processing',
-                    desc: 'Intelligent text segmentation for natural pauses and optimal voice quality'
+                    desc: 'Intelligent text segmentation for natural pauses and optimal voice quality',
+                    pillClass: 'from-indigo-500/20 to-blue-500/20 border-indigo-400/50 text-indigo-700 dark:text-indigo-200 dark:border-indigo-300/40',
+                    cardBorderClass: 'border-indigo-300/70 dark:border-indigo-400/40'
                   }
                 ].map((feature, idx) => (
-                  <div key={idx} className="flex gap-4 items-start bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md p-5 rounded-xl border border-gray-200/50 dark:border-gray-700/50 hover:shadow-lg hover:shadow-cyan-glow/10 transition-all">
+                  <div key={idx} className={`flex gap-4 items-start bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md p-5 rounded-xl border ${feature.cardBorderClass} hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-glow/10 transition-all`}>
                     <div className="w-12 h-12 bg-cyan-glow dark:bg-cyan-glow rounded-lg flex items-center justify-center flex-shrink-0">
                       <feature.icon className="w-6 h-6 text-gray-900 dark:text-gray-900" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold mb-1 text-gray-900 dark:text-gray-100">{feature.title}</h3>
+                      <h3 className={`inline-flex rounded-full px-3 py-1 text-xs md:text-sm font-bold mb-2 border bg-gradient-to-r ${feature.pillClass}`}>{feature.title}</h3>
                       <p className="text-gray-600 dark:text-gray-400 text-sm">{feature.desc}</p>
                     </div>
                   </div>
@@ -2922,7 +2967,7 @@ Cyan OS Lite
       <section
         id="developers"
         ref={setRef('developers')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-1000 delay-500 ${
+        className={`py-20 px-6 bg-gradient-to-b from-emerald-50/70 via-cyan-100/45 to-white/55 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-1000 delay-500 ${
           isVisible.developers ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -3010,7 +3055,7 @@ Cyan OS Lite
       <section
         id="roi"
         ref={setRef('roi')}
-        className={`py-20 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm transition-all duration-1000 delay-600 hidden ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-600 hidden ${
           isVisible.roi ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -3100,7 +3145,7 @@ Cyan OS Lite
         </div>
       </section>
 
-      <section id="platforms" className="py-16 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+      <section id="platforms" className="py-16 px-6 bg-gradient-to-b from-emerald-50/65 via-cyan-100/45 to-white/55 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 mb-10">
             <div>
@@ -3115,8 +3160,8 @@ Cyan OS Lite
                 lightweight extension, so you do not have to change your workflow.
               </p>
             </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 max-w-sm">
-              <p>
+            <div className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
+              <p className="inline-block rounded-2xl bg-gradient-to-r from-cyan-500/15 to-blue-500/15 dark:from-cyan-500/20 dark:to-blue-500/20 border border-cyan-400/40 dark:border-cyan-300/30 px-4 py-3 text-gray-700 dark:text-cyan-100 shadow-sm">
                 Most everyday platforms work out of the box through the Cyan extension. For more advanced
                 setups, you can still route audio via virtual devices when you need to.
               </p>
@@ -3200,7 +3245,7 @@ Cyan OS Lite
         </div>
       </section>
 
-      <section className="py-10 px-6 bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm">
+      <section className="py-10 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center gap-4">
             <div className="text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
