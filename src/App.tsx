@@ -84,6 +84,9 @@ interface UserSession {
 }
 
 const BACKEND_URL = 'https://translator-backend-pi.vercel.app'
+const GOOGLE_CLIENT_ID =
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_GOOGLE_CLIENT_ID ||
+  '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com'
 
 const PLAN_PRICE: Record<PlanKey, string> = {
   free: '$0',
@@ -1585,7 +1588,7 @@ function App() {
 
     if (!googleTokenClientRef.current) {
       googleTokenClientRef.current = oauth2.initTokenClient({
-        client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
+        client_id: GOOGLE_CLIENT_ID,
         scope: 'openid email profile',
         callback: async (resp: GoogleTokenResponse) => {
           const token = String(resp.access_token || '');
@@ -1734,7 +1737,7 @@ function App() {
       }
 
       const tokenBody = new URLSearchParams({
-        client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
+        client_id: GOOGLE_CLIENT_ID,
         code: oauthCode || '',
         code_verifier: storedVerifier,
         redirect_uri: window.location.origin,
