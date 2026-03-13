@@ -19,11 +19,34 @@ import {
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
+    google?: GoogleIdentity;
   }
 }
 
 type PlanKey = 'free' | 'basic' | 'standard' | 'pro' | 'team' | 'executive_pro_annual'
 type PaymentMethod = 'paypal' | 'crypto'
+
+type GoogleTokenResponse = {
+  access_token?: string
+  error?: string
+  error_description?: string
+}
+
+type GoogleTokenClient = {
+  requestAccessToken: (options?: { prompt?: string }) => void
+}
+
+type GoogleIdentity = {
+  accounts?: {
+    oauth2?: {
+      initTokenClient: (config: {
+        client_id: string
+        scope: string
+        callback: (resp: GoogleTokenResponse) => void | Promise<void>
+      }) => GoogleTokenClient
+    }
+  }
+}
 
 interface SubscriptionRecord {
   id: string
@@ -112,6 +135,8 @@ function App() {
   const [cryptoActivationBusy, setCryptoActivationBusy] = useState(false);
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+  const googleIdentityLoaderRef = useRef<Promise<void> | null>(null);
+  const googleTokenClientRef = useRef<GoogleTokenClient | null>(null);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
@@ -1519,6 +1544,65 @@ function App() {
       });
     }
   }, [saveSession, trackEvent]);
+
+  const ensureGoogleIdentity = useCallback(() => {
+    if (window.google?.accounts?.oauth2) {
+      return Promise.resolve();
+    }
+
+    if (googleIdentityLoaderRef.current) {
+      return googleIdentityLoaderRef.current;
+    }
+
+    googleIdentityLoaderRef.current = new Promise<void>((resolve, reject) => {
+      const existing = document.getElementById('google-identity-service') as HTMLScriptElement | null;
+      if (existing) {
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(new Error('google_identity_load_failed')), { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.id = 'google-identity-service';
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('google_identity_load_failed'));
+      document.head.appendChild(script);
+    });
+
+    return googleIdentityLoaderRef.current;
+  }, []);
+
+  const startGoogleLoginWithGis = useCallback(async () => {
+    await ensureGoogleIdentity();
+
+    const oauth2 = window.google?.accounts?.oauth2;
+    if (!oauth2) {
+      throw new Error('google_identity_unavailable');
+    }
+
+    if (!googleTokenClientRef.current) {
+      googleTokenClientRef.current = oauth2.initTokenClient({
+        client_id: '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com',
+        scope: 'openid email profile',
+        callback: async (resp: GoogleTokenResponse) => {
+          const token = String(resp.access_token || '');
+          if (!token) {
+            trackEvent('oauth_error', { provider: 'google', error: String(resp.error || 'no_access_token') });
+            setCheckoutMessage(String(resp.error_description || resp.error || 'Google login failed. Please try again.'));
+            setShowLoginModal(true);
+            return;
+          }
+
+          await handleGoogleCallback(token);
+        }
+      });
+    }
+
+    googleTokenClientRef.current.requestAccessToken({ prompt: 'consent' });
+  }, [ensureGoogleIdentity, handleGoogleCallback, trackEvent]);
 
   // Keep local storage in sync with current auth state
   useEffect(() => {
@@ -3717,6 +3801,13 @@ Cyan OS Lite
                     provider: 'google',
                     action: isLoginMode ? 'login' : 'register'
                   });
+
+                  try {
+                    await startGoogleLoginWithGis();
+                    return;
+                  } catch {
+                    void 0;
+                  }
 
                   const origin = window.location.origin;
                   const stateBytes = new Uint8Array(16);
