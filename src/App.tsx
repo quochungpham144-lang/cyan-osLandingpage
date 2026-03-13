@@ -1954,15 +1954,16 @@ Cyan OS Lite
     >
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-100/55 via-cyan-100/35 to-white/20 dark:from-slate-900/0 dark:via-slate-900/0 dark:to-slate-950/0"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-emerald-100/60 via-cyan-100/35 to-white/20 dark:from-slate-900/0 dark:via-slate-900/0 dark:to-slate-950/0"></div>
+        <div className="absolute top-0 left-0 w-[34rem] h-[34rem] bg-gradient-to-br from-emerald-300/40 via-cyan-200/20 to-transparent dark:from-emerald-500/15 dark:via-cyan-500/10 dark:to-transparent blur-3xl"></div>
         <div className="absolute inset-0 bg-grid-pattern opacity-20 dark:opacity-40 hidden sm:block"></div>
         <div className="absolute inset-0 hidden sm:block">
-          <div className="absolute top-0 -left-16 w-[34rem] h-[34rem] bg-emerald-400/35 dark:bg-emerald-600/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -top-8 -left-20 w-[38rem] h-[38rem] bg-emerald-400/45 dark:bg-emerald-600/24 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute top-1/3 -right-20 w-[32rem] h-[32rem] bg-cyan-400/35 dark:bg-cyan-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
           <div className="absolute bottom-0 left-1/3 w-[30rem] h-[30rem] bg-teal-400/25 dark:bg-teal-600/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
         <div className="absolute inset-0 sm:hidden">
-          <div className="absolute -top-16 -left-10 w-56 h-56 bg-emerald-300/25 rounded-full blur-2xl"></div>
+          <div className="absolute -top-16 -left-10 w-64 h-64 bg-emerald-300/35 rounded-full blur-2xl"></div>
           <div className="absolute bottom-12 -right-10 w-52 h-52 bg-cyan-300/20 rounded-full blur-2xl"></div>
         </div>
       </div>
