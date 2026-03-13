@@ -1967,15 +1967,16 @@ Cyan OS Lite
       {/* Tech Grid Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/75 via-cyan-100/25 to-white/28 dark:from-slate-900/0 dark:via-slate-900/0 dark:to-slate-950/0"></div>
-        <div className="absolute top-0 left-0 w-[36rem] h-[36rem] bg-gradient-to-br from-emerald-100/58 via-cyan-100/28 to-transparent dark:from-emerald-500/20 dark:via-cyan-500/14 dark:to-transparent blur-3xl"></div>
+        <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-gradient-to-br from-emerald-100/78 via-cyan-100/42 to-transparent dark:from-emerald-400/30 dark:via-cyan-400/22 dark:to-transparent blur-3xl animate-[pulse_2.4s_ease-in-out_infinite]"></div>
+        <div className="absolute -top-12 -left-24 w-[34rem] h-[34rem] rounded-full bg-emerald-300/55 dark:bg-emerald-300/35 blur-3xl animate-[pulse_1.9s_ease-in-out_infinite]"></div>
         <div className="absolute inset-0 bg-grid-pattern opacity-15 sm:opacity-20 dark:opacity-30 dark:sm:opacity-40"></div>
         <div className="absolute inset-0 hidden sm:block">
-          <div className="absolute -top-10 -left-24 w-[40rem] h-[40rem] bg-emerald-200/48 dark:bg-emerald-500/30 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -top-10 -left-24 w-[44rem] h-[44rem] bg-emerald-100/74 dark:bg-emerald-400/38 rounded-full blur-3xl animate-[pulse_2.2s_ease-in-out_infinite]"></div>
           <div className="absolute top-1/3 -right-20 w-[32rem] h-[32rem] bg-cyan-400/35 dark:bg-cyan-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
           <div className="absolute bottom-0 left-1/3 w-[30rem] h-[30rem] bg-teal-400/25 dark:bg-teal-600/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
         </div>
         <div className="absolute inset-0 sm:hidden">
-          <div className="absolute -top-16 -left-10 w-64 h-64 bg-emerald-200/30 rounded-full blur-2xl"></div>
+          <div className="absolute -top-16 -left-10 w-72 h-72 bg-emerald-100/64 rounded-full blur-2xl animate-[pulse_2.1s_ease-in-out_infinite]"></div>
           <div className="absolute bottom-12 -right-10 w-52 h-52 bg-cyan-300/20 rounded-full blur-2xl"></div>
         </div>
       </div>
@@ -2011,7 +2012,7 @@ Cyan OS Lite
               setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
             }
           }}
-          className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 py-3 rounded-full font-semibold shadow-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 hover:shadow-cyan-600/50 transition-all duration-300 flex items-center gap-2 hover:scale-105 pointer-events-auto"
+          className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
           style={{ pointerEvents: 'auto' }}
         >
           Get Started Free <ArrowRight className="w-4 h-4" />
@@ -2025,11 +2026,11 @@ Cyan OS Lite
             });
             // TODO: cập nhật link download khi desktop app sẵn sàng
           }}
-          className="bg-slate-900/95 dark:bg-slate-900/95 text-cyan-100 border border-cyan-500/70 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-cyan-600 hover:text-yellow-300 hover:border-cyan-400 hover:shadow-cyan-600/50 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
+          className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
           style={{ pointerEvents: 'auto' }}
         >
           <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
-          <span className="leading-tight text-[10px] text-cyan-200">
+          <span className="leading-tight text-[10px] text-cyan-200/90">
             Currently in Private Beta. Sign up to request early access.
           </span>
         </button>
@@ -2068,7 +2069,6 @@ Cyan OS Lite
             </div>
             <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
             <a href="#pricing" onClick={(e) => { e.preventDefault(); const pricingSection = document.getElementById('pricing'); if (pricingSection) { pricingSection.classList.remove('hidden'); pricingSection.style.display = 'block'; setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
-            
             {/* Email CTA in Navigation - Desktop only */}
             <div className="relative group hidden lg:block">
               <button 
@@ -2562,19 +2562,19 @@ Cyan OS Lite
               </a>
             </div>
           </div>
-          <div className="mt-12 sm:mt-16">
+          <div className="mt-6 sm:mt-10">
             <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
               <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-3 h-3 sm:w-4 sm:h-4 inline mr-2 rounded" />
               Powered by Cyan OS
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent leading-tight">
               ULTRA-LOW LATENCY<br />AI TRANSLATOR
             </h1>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto font-light leading-relaxed px-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-5 sm:mb-8 max-w-3xl mx-auto font-light leading-relaxed px-2">
               Break Language Barriers in Real-time<br />Meetings with Impeccable Clarity<br />and Natural Voice.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+            <div className="flex flex-wrap gap-1.5 sm:gap-3 justify-center items-center px-2 sm:px-4">
               <button 
                 onClick={() => {
                   trackEvent('cta_click', {
@@ -2584,7 +2584,7 @@ Cyan OS Lite
                   });
                   setView('video');
                 }}
-                className="w-full sm:w-auto bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all hover:scale-105 min-h-[48px]"
+                className="w-auto max-w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-2.5 sm:px-5 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-semibold text-[11px] sm:text-sm hover:from-emerald-700 hover:to-teal-700 transition-all hover:scale-105 min-h-[30px] sm:min-h-[40px]"
               >
                 Experience Natural Voice
               </button>
@@ -2598,9 +2598,38 @@ Cyan OS Lite
                   setView('about');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
-                className="w-full sm:w-auto bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg border border-cyan-200/60 dark:border-cyan-300/40 hover:brightness-105 transition-all backdrop-blur-sm min-h-[48px] shadow-lg shadow-cyan-500/20"
+                className="w-auto max-w-full bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white px-2.5 sm:px-5 py-1 sm:py-2.5 rounded-full font-semibold text-[11px] sm:text-sm border border-cyan-200/60 dark:border-cyan-300/40 hover:brightness-105 transition-all backdrop-blur-sm min-h-[30px] sm:min-h-[40px] shadow-lg shadow-cyan-500/20"
               >
                 Learn More
+              </button>
+              <button
+                onClick={() => {
+                  trackEvent('cta_click', {
+                    button_name: 'hero_get_started',
+                    location: 'hero_section'
+                  });
+                  const pricingSection = document.getElementById('pricing');
+                  if (pricingSection) {
+                    pricingSection.classList.remove('hidden');
+                    pricingSection.style.display = 'block';
+                    setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                  }
+                }}
+                className="w-auto max-w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 px-2.5 sm:px-6 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-bold text-[11px] sm:text-sm shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 transition-all hover:scale-105 min-h-[30px] sm:min-h-[40px]"
+              >
+                Get Started Free
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent('cta_click', {
+                    button_name: 'hero_download_cyan',
+                    location: 'hero_section'
+                  });
+                }}
+                className="w-auto max-w-full border border-cyan-500/50 text-cyan-700 dark:text-cyan-300 px-2.5 sm:px-5 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-semibold text-[11px] sm:text-sm hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-all min-h-[30px] sm:min-h-[40px]"
+              >
+                Download CYAN Beta
               </button>
             </div>
 

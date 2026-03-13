@@ -77,7 +77,7 @@ trackEvent('purchase', {
 
 ### **Marketing Campaign Tracking**
 ```
-https://cyan-ai.com?utm_source=google&utm_medium=cpc&utm_campaign=launch
+https://cyan-os.cc?utm_source=google&utm_medium=cpc&utm_campaign=launch
 ```
 
 ### **Custom Campaigns:**
