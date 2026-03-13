@@ -1625,7 +1625,8 @@ function App() {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
-    const oauthError = urlParams.get('error');
+    const oauthError = urlParams.get('error') || hashParams.get('error');
+    const oauthErrorDescription = urlParams.get('error_description') || hashParams.get('error_description');
     const oauthCode = urlParams.get('code');
     const oauthState = urlParams.get('state');
     const accessToken = hashParams.get('access_token');
@@ -1635,13 +1636,15 @@ function App() {
     };
 
     const completeCodeFlow = async () => {
-      const storedVerifier = window.sessionStorage.getItem('cyan_google_oauth_verifier') || '';
-      const storedState = window.sessionStorage.getItem('cyan_google_oauth_state') || '';
-      window.sessionStorage.removeItem('cyan_google_oauth_verifier');
-      window.sessionStorage.removeItem('cyan_google_oauth_state');
+      const storedVerifier = window.localStorage.getItem('cyan_google_oauth_verifier') || '';
+      const storedState = window.localStorage.getItem('cyan_google_oauth_state') || '';
+      window.localStorage.removeItem('cyan_google_oauth_verifier');
+      window.localStorage.removeItem('cyan_google_oauth_state');
 
       if (!storedVerifier || !storedState || !oauthState || storedState !== oauthState) {
         trackEvent('oauth_error', { provider: 'google', error: 'state_mismatch' });
+        setCheckoutMessage('Google login failed. Please try again.');
+        setShowLoginModal(true);
         clearUrl();
         return;
       }
@@ -1665,6 +1668,8 @@ function App() {
         const token = String(tokenData?.access_token || '');
         if (!token) {
           trackEvent('oauth_error', { provider: 'google', error: 'token_exchange_failed' });
+          setCheckoutMessage(String(tokenData?.error_description || tokenData?.error || 'Google login failed. Please try again.'));
+          setShowLoginModal(true);
           clearUrl();
           return;
         }
@@ -1673,6 +1678,8 @@ function App() {
         clearUrl();
       } catch {
         trackEvent('oauth_error', { provider: 'google', error: 'token_exchange_failed' });
+        setCheckoutMessage('Google login failed. Please try again.');
+        setShowLoginModal(true);
         clearUrl();
       }
     };
@@ -1690,6 +1697,8 @@ function App() {
 
     if (oauthError) {
       trackEvent('oauth_error', { provider: 'google', error: oauthError });
+      setCheckoutMessage(String(oauthErrorDescription || oauthError));
+      setShowLoginModal(true);
       clearUrl();
     }
   }, [handleGoogleCallback, trackEvent]);
@@ -3724,8 +3733,8 @@ Cyan OS Lite
                   const challengeBase = btoa(String.fromCharCode(...new Uint8Array(digest)));
                   const challenge = challengeBase.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
 
-                  window.sessionStorage.setItem('cyan_google_oauth_verifier', verifier);
-                  window.sessionStorage.setItem('cyan_google_oauth_state', state);
+                  window.localStorage.setItem('cyan_google_oauth_verifier', verifier);
+                  window.localStorage.setItem('cyan_google_oauth_state', state);
 
                   const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
                   url.searchParams.set('client_id', '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com');
