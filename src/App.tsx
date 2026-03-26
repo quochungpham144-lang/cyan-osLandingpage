@@ -173,7 +173,7 @@ function App() {
       id: `guest-${Date.now()}`,
       email: `guest-${Date.now()}@cyan.local`,
       name: 'Guest User',
-      picture: '/logoCyan.jpg',
+      picture: '/logoCYAN.png',
       provider: 'guest',
       plan: 'free',
       subscriptions: []
@@ -257,7 +257,7 @@ function App() {
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm font-semibold text-cyan-300">CYAN AI TRANSLATOR</div>
@@ -399,7 +399,7 @@ function App() {
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
@@ -570,7 +570,7 @@ function App() {
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm font-semibold text-cyan-300">CYAN AI</div>
@@ -752,7 +752,7 @@ function App() {
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
@@ -894,7 +894,7 @@ function App() {
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
@@ -948,7 +948,7 @@ function App() {
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <div className="text-sm font-semibold text-cyan-300">CYAN OS LITE</div>
@@ -1488,7 +1488,7 @@ function App() {
       id: `email-${email.toLowerCase()}`,
       email,
       name: displayName,
-      picture: '/logoCyan.jpg',
+      picture: '/logoCYAN.png',
       provider: 'email',
       plan: 'free',
       subscriptions: []
@@ -2188,7 +2188,7 @@ Cyan OS Lite
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div className="text-left sm:text-center">
               <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
@@ -2291,7 +2291,7 @@ Cyan OS Lite
                       className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
                     >
                       <img 
-                        src={userInfo.picture || '/logoCyan.jpg'} 
+                        src={userInfo.picture || '/logoCYAN.png'} 
                         alt={userInfo.name}
                         className="w-6 h-6 rounded-full object-cover"
                       />
@@ -2368,7 +2368,7 @@ Cyan OS Lite
                 className="w-8 h-8 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-700 flex items-center justify-center"
               >
                 <img 
-                  src={userInfo.picture || '/logoCyan.jpg'} 
+                  src={userInfo.picture || '/logoCYAN.png'} 
                   alt={userInfo.name}
                   className="w-full h-full object-cover"
                 />
@@ -2711,7 +2711,7 @@ Cyan OS Lite
           </div>
           <div className="mt-6 sm:mt-10">
             <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
-              <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-3 h-3 sm:w-4 sm:h-4 inline mr-2 rounded" />
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-3 h-3 sm:w-4 sm:h-4 inline mr-2 rounded" />
               Powered by Cyan OS
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent leading-tight">
@@ -3784,7 +3784,7 @@ Cyan OS Lite
             {/* Logo */}
             <div className="text-center mb-6">
               <div className="w-12 h-12 bg-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover rounded" />
+                <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover rounded" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 {isLoginMode ? 'Welcome Back' : 'Create Account'}
@@ -3976,7 +3976,7 @@ Cyan OS Lite
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img src="/logoCyan.jpg" alt="CYAN Logo" className="w-full h-full object-cover" />
+                  <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <span className="text-xl font-bold">CYAN</span>
