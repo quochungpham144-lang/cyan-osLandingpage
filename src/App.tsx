@@ -120,7 +120,7 @@ function App() {
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
-  const [showRoiSection, setShowRoiSection] = useState(true);
+  const [showRoiSection, setShowRoiSection] = useState(false);
   const [showPricingSection, setShowPricingSection] = useState(false);
   const [showTeamContactForm, setShowTeamContactForm] = useState(false);
   const [teamFormSubmitted, setTeamFormSubmitted] = useState(false);
@@ -1093,6 +1093,7 @@ function App() {
 
   const openRoiSection = useCallback(() => {
     setShowRoiSection(true);
+    setIsVisible((prev) => ({ ...prev, roi: true }));
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         document.getElementById('roi')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
