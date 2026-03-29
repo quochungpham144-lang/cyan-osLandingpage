@@ -2758,9 +2758,9 @@ CYAN OS Lite
             </div>
           </div>
           {/* Mobile quick actions */}
-          <div className="mobile-quick-actions sm:hidden fixed bottom-14 left-2 z-[120] flex items-center gap-2">
+          <div className="mobile-quick-actions sm:hidden flex items-center gap-2">
             <form
-              className="mobile-email-access-form max-w-[180px] flex items-center gap-1 bg-slate-900/95 border border-slate-700 rounded-full px-1.5 py-0.5 shadow-lg"
+              className="mobile-email-access-form w-full max-w-[180px] flex items-center gap-1 bg-slate-900/90 border border-slate-700 rounded-full px-1.5 py-0.5"
               action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
               method="POST"
               target="_blank"

@@ -24,6 +24,12 @@
   }
 }
 
+/* Ensure Join button always visible */
+.mobile-email-access-form button {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 @media (orientation: landscape) and (max-width: 980px) {
   .desktop-nav-links {
     display: none !important;
