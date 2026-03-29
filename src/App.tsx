@@ -1876,7 +1876,7 @@ function App() {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <div className="mobile-fixed-controls sm:hidden fixed top-3 left-28 z-[130] flex items-center gap-2">
+      <div className="mobile-fixed-controls sm:hidden fixed top-3 left-1/2 -translate-x-1/2 z-[130] flex items-center gap-2">
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
           className="p-2 rounded-full bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-700 shadow-md text-gray-700 dark:text-white"
@@ -1901,7 +1901,7 @@ function App() {
             </button>
 
             {mobileAccountOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-2.5 z-[135]">
+              <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-2.5 z-[135]">
                 <div className="px-3 pb-2 border-b border-gray-100 dark:border-slate-800">
                   <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
                   <div className="mt-1 flex items-center justify-between">
@@ -2760,7 +2760,7 @@ CYAN OS Lite
           {/* Mobile quick actions */}
           <div className="mobile-quick-actions sm:hidden flex items-center gap-2">
             <form
-              className="mobile-email-access-form w-full max-w-[290px] flex items-center gap-1.5 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
+              className="mobile-email-access-form w-full max-w-[180px] flex items-center gap-1 bg-slate-900/90 border border-slate-700 rounded-full px-1.5 py-0.5"
               action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
               method="POST"
               target="_blank"
