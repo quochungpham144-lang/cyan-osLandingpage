@@ -26,20 +26,46 @@
 
 @media (orientation: landscape) and (max-width: 980px) {
   .mobile-fixed-controls {
-    top: 3.75rem;
-    left: auto;
-    right: 0.5rem;
-    transform: scale(0.92);
-    transform-origin: top right;
+    top: 0.45rem;
+    left: 0.5rem;
+    right: auto;
+    transform: none;
+    transform-origin: top left;
+    gap: 0.35rem;
+  }
+
+  .mobile-fixed-controls > button {
+    padding: 0.35rem !important;
+  }
+
+  .mobile-fixed-controls .w-9.h-9 {
+    width: 2rem !important;
+    height: 2rem !important;
   }
 
   .mobile-quick-actions {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
+    position: fixed;
+    top: 0.45rem;
+    left: 6.2rem;
+    right: 0.45rem;
+    z-index: 129;
+    margin: 0;
+    padding: 0;
   }
 
   .mobile-email-access-form {
-    max-width: 220px;
+    max-width: 200px;
+    gap: 0.35rem;
+    padding: 0.15rem 0.35rem;
+  }
+
+  .mobile-email-access-form input {
+    font-size: 10px;
+  }
+
+  .mobile-email-access-form button {
+    font-size: 10px;
+    padding: 0.2rem 0.5rem;
   }
 
   #hero {
