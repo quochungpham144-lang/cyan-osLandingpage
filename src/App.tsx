@@ -144,6 +144,7 @@ function App() {
   const googleTokenClientRef = useRef<GoogleTokenClient | null>(null);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
+  const [midDevMenuOpen, setMidDevMenuOpen] = useState(false);
   const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
@@ -2299,16 +2300,53 @@ CYAN OS Lite
           </div>
           <div className="hidden sm:flex items-center gap-3 sm:gap-4 flex-wrap lg:flex-nowrap">
             <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
-            <a
-              href="#developers"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2 lg:hidden"
-            >
-              Developers
-            </a>
+            <div className="relative lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMidDevMenuOpen((open) => !open)}
+                className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2 flex items-center gap-1"
+              >
+                Developers <ArrowRight className={`w-3 h-3 transition-transform ${midDevMenuOpen ? 'rotate-180' : 'rotate-90'}`} />
+              </button>
+              {midDevMenuOpen && (
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                  <a
+                    href="#api"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMidDevMenuOpen(false);
+                      setShowApiSection(true);
+                      setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                    }}
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    API
+                  </a>
+                  <a
+                    href="#developers"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMidDevMenuOpen(false);
+                      document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    Developer Docs
+                  </a>
+                  <a
+                    href="#roi"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMidDevMenuOpen(false);
+                      openRoiSection();
+                    }}
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    ROI Calculator
+                  </a>
+                </div>
+              )}
+            </div>
             <div className="relative group hidden lg:block">
               <button className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 flex items-center gap-1 px-2">
                 Developers <ArrowRight className="w-3 h-3 rotate-90" />
