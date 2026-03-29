@@ -1803,23 +1803,19 @@ function App() {
   }, [checkBackendConnection, trackPageView]);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
     const observer = new IntersectionObserver(
       (entries) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          const updates: { [key: string]: boolean } = {};
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              updates[entry.target.id] = true;
-            }
-          });
-          if (Object.keys(updates).length > 0) {
-            setIsVisible((prev) => ({ ...prev, ...updates }));
+        const updates: { [key: string]: boolean } = {};
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            updates[entry.target.id] = true;
           }
-        }, 50);
+        });
+        if (Object.keys(updates).length > 0) {
+          setIsVisible((prev) => ({ ...prev, ...updates }));
+        }
       },
-      { threshold: 0.1, rootMargin: '50px' }
+      { threshold: 0.01, rootMargin: '220px' }
     );
 
     Object.values(sectionsRef.current).forEach((ref) => {
@@ -1827,7 +1823,6 @@ function App() {
     });
 
     return () => {
-      clearTimeout(timeoutId);
       observer.disconnect();
     };
   }, []);
@@ -2759,7 +2754,7 @@ Cyan OS Lite
                 className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
               >
                 <img
-                  src="https://devhub.best/images/badges/top1-dark.svg"
+                  src="/devhub-top1-dark.svg"
                   alt="DevHub Top 1 Daily Winner"
                   loading="eager"
                   decoding="async"
@@ -2862,7 +2857,7 @@ Cyan OS Lite
       <section
         id="problem"
         ref={setRef('problem')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/40 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-200 ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/40 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-300 ${
           isVisible.problem ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -2912,7 +2907,7 @@ Cyan OS Lite
       <section
         id="solution"
         ref={setRef('solution')}
-        className={`py-20 px-6 bg-gradient-to-b from-cyan-50/35 via-white/45 to-blue-50/30 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-300 ${
+        className={`py-20 px-6 bg-gradient-to-b from-cyan-50/35 via-white/45 to-blue-50/30 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-300 ${
           isVisible.solution ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -3131,7 +3126,7 @@ Cyan OS Lite
       <section
         id="engine"
         ref={setRef('engine')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-400 ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-320 ${
           isVisible.engine ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -3216,7 +3211,7 @@ Cyan OS Lite
       <section
         id="developers"
         ref={setRef('developers')}
-        className={`py-20 px-6 bg-gradient-to-b from-emerald-50/70 via-cyan-100/45 to-white/55 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-1000 delay-500 ${
+        className={`py-20 px-6 bg-gradient-to-b from-emerald-50/70 via-cyan-100/45 to-white/55 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-320 ${
           isVisible.developers ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -3304,7 +3299,7 @@ Cyan OS Lite
       <section
         id="roi"
         ref={setRef('roi')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-1000 delay-600 hidden ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-320 hidden ${
           isVisible.roi ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
@@ -3546,7 +3541,7 @@ Cyan OS Lite
       <section
         id="pricing"
         ref={setRef('pricing')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-1000 delay-700 hidden ${
+        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-320 hidden ${
           isVisible.pricing ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}
       >
