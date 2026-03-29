@@ -2298,7 +2298,7 @@ CYAN OS Lite
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
           </div>
-          <div className="hidden sm:flex items-center gap-3 sm:gap-4 flex-wrap lg:flex-nowrap">
+          <div className="desktop-nav-links hidden sm:flex items-center gap-3 sm:gap-4 flex-wrap lg:flex-nowrap">
             <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
             <div className="relative lg:hidden">
               <button
@@ -2683,7 +2683,7 @@ CYAN OS Lite
       )}
           </div>
         </div>
-        <div className="sm:hidden border-t border-cyan-500/50 bg-slate-900 text-white shadow-md">
+        <div className="mobile-bottom-nav sm:hidden border-t border-cyan-500/50 bg-slate-900 text-white shadow-md">
           <div className="max-w-7xl mx-auto px-2 py-2 overflow-x-auto">
             <div className="flex items-center gap-2 text-xs whitespace-nowrap">
               <button

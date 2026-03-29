@@ -25,7 +25,16 @@
 }
 
 @media (orientation: landscape) and (max-width: 980px) {
+  .desktop-nav-links {
+    display: none !important;
+  }
+
+  .mobile-bottom-nav {
+    display: block !important;
+  }
+
   .mobile-fixed-controls {
+    display: flex !important;
     top: 0.45rem;
     left: 0.5rem;
     right: auto;
@@ -44,6 +53,7 @@
   }
 
   .mobile-quick-actions {
+    display: flex !important;
     position: fixed;
     top: 0.45rem;
     left: 6.2rem;
