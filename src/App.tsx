@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FormEvent, lazy, memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Zap,
   Globe,
@@ -251,7 +251,13 @@ function App() {
     }
   }, []);
 
-  const privacyView = (
+  const LoadingFallback = memo(() => (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black flex items-center justify-center">
+      <div className="text-cyan-400 text-lg">Loading...</div>
+    </div>
+  ));
+
+  const privacyView = useMemo(() => (
     <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
@@ -391,9 +397,9 @@ function App() {
         </main>
       </div>
     </div>
-  );
+  ), [isDarkMode]);
 
-  const termsView = (
+  const termsView = useMemo(() => (
     <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
@@ -562,9 +568,9 @@ function App() {
         </main>
       </div>
     </div>
-  );
+  ), [isDarkMode]);
 
-  const securityView = (
+  const securityView = useMemo(() => (
     <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
@@ -744,9 +750,9 @@ function App() {
         </main>
       </div>
     </div>
-  );
+  ), [isDarkMode]);
 
-  const howItWorksView = (
+  const howItWorksView = useMemo(() => (
     <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
@@ -886,9 +892,9 @@ function App() {
         </main>
       </div>
     </div>
-  );
+  ), [isDarkMode]);
 
-  const videoView = (
+  const videoView = useMemo(() => (
     <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-slate-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-5xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
@@ -940,9 +946,9 @@ function App() {
         </main>
       </div>
     </div>
-  );
+  ), [isDarkMode]);
 
-  const aboutView = (
+  const aboutView = useMemo(() => (
     <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
@@ -1040,7 +1046,7 @@ function App() {
         </main>
       </div>
     </div>
-  );
+  ), [isDarkMode]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1834,11 +1840,11 @@ function App() {
     }
   }, [isDarkMode]);
 
-  const setRef = (id: string) => (el: HTMLElement | null) => {
+  const setRef = useCallback((id: string) => (el: HTMLElement | null) => {
     sectionsRef.current[id] = el;
-  };
+  }, []);
 
-  function goToMainView() {
+  const goToMainView = useCallback(() => {
     setView('main');
     window.history.replaceState({}, document.title, `${window.location.pathname}${window.location.search}`);
     window.requestAnimationFrame(() => {
@@ -1848,22 +1854,24 @@ function App() {
       window.scrollTo(0, 0);
       html.style.scrollBehavior = previous;
     });
-  }
+  }, []);
 
-  return view === 'privacy'
-    ? privacyView
-    : view === 'terms'
-      ? termsView
-      : view === 'security'
-        ? securityView
-        : view === 'features'
-          ? howItWorksView
-          : view === 'video'
-            ? videoView
-            : view === 'about'
-              ? aboutView
-              : view === 'docs'
-                ? (
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      {view === 'privacy'
+        ? privacyView
+        : view === 'terms'
+          ? termsView
+          : view === 'security'
+            ? securityView
+            : view === 'features'
+              ? howItWorksView
+              : view === 'video'
+                ? videoView
+                : view === 'about'
+                  ? aboutView
+                  : view === 'docs'
+                    ? (
                   <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100">
                     <div className="relative max-w-6xl mx-auto px-4 py-8 lg:py-12">
                       <div className="absolute inset-0 -z-10 opacity-40 pointer-events-none">
@@ -2184,7 +2192,7 @@ Cyan OS Lite
       </div>
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 z-40">
+      <nav className="fixed top-0 w-full bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 z-[100] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
@@ -2196,7 +2204,7 @@ Cyan OS Lite
             </div>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+              className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white z-[101]"
               aria-label="Toggle dark mode"
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -2278,7 +2286,7 @@ Cyan OS Lite
             <div className="hidden sm:flex items-center gap-3">
               <button 
                 onClick={() => setIsDarkMode(!isDarkMode)}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white z-[101]"
               >
                 {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
@@ -2301,19 +2309,40 @@ Cyan OS Lite
                     </button>
 
                     {accountMenuOpen && (
-                      <div className="absolute right-0 top-11 min-w-[220px] rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-2 z-40">
-                        <div className="px-3 pb-2">
-                          <p className="text-xs text-gray-500 dark:text-gray-400">Current plan</p>
-                          <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2.5 py-1">
-                            <span className="text-[11px] font-semibold uppercase tracking-wide">
-                              {userInfo.plan || 'free'}
+                      <div className="absolute right-0 top-11 min-w-[280px] rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-3 z-[110]">
+                        <div className="px-4 pb-3 border-b border-gray-100 dark:border-slate-800">
+                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Account</p>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userInfo.email}</p>
+                        </div>
+                        <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
+                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Current Plan</p>
+                          <div className="flex items-center justify-between">
+                            <span className="inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5">
+                              <span className="text-xs font-bold uppercase tracking-wide">
+                                {userInfo.plan || 'free'}
+                              </span>
                             </span>
-                            <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-white">
                               {PLAN_PRICE[userInfo.plan || 'free']}
                             </span>
-                          </p>
+                          </div>
                         </div>
-                        <div className="px-3 pt-2 border-t border-gray-100 dark:border-slate-800 flex justify-end">
+                        <div className="px-4 pt-3 flex justify-between items-center">
+                          <a 
+                            href="#pricing"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setAccountMenuOpen(false);
+                              const pricingSection = document.getElementById('pricing');
+                              if (pricingSection) {
+                                pricingSection.scrollIntoView({ behavior: 'smooth' });
+                              }
+                            }}
+                            className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
+                          >
+                            Upgrade Plan
+                          </a>
                           <button 
                             type="button"
                             onClick={() => {
@@ -2323,7 +2352,7 @@ Cyan OS Lite
                               });
                               setAccountMenuOpen(false);
                             }}
-                            className="text-[11px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                            className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                           >
                             Logout
                           </button>
@@ -2374,19 +2403,40 @@ Cyan OS Lite
                 />
               </button>
               {accountMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-2 z-50">
-                  <div className="px-3 pb-2">
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Current plan</p>
-                    <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2.5 py-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wide">
-                        {userInfo.plan || 'free'}
+                <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-3 z-[110]">
+                  <div className="px-4 pb-3 border-b border-gray-100 dark:border-slate-800">
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Account</p>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userInfo.email}</p>
+                  </div>
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Current Plan</p>
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5">
+                        <span className="text-xs font-bold uppercase tracking-wide">
+                          {userInfo.plan || 'free'}
+                        </span>
                       </span>
-                      <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
                         {PLAN_PRICE[userInfo.plan || 'free']}
                       </span>
-                    </p>
+                    </div>
                   </div>
-                  <div className="px-3 pt-2 border-t border-gray-100 dark:border-slate-800 flex justify-end">
+                  <div className="px-4 pt-3 flex justify-between items-center">
+                    <a 
+                      href="#pricing"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setAccountMenuOpen(false);
+                        const pricingSection = document.getElementById('pricing');
+                        if (pricingSection) {
+                          pricingSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
+                    >
+                      Upgrade Plan
+                    </a>
                     <button 
                       type="button"
                       onClick={() => {
@@ -2396,7 +2446,7 @@ Cyan OS Lite
                         });
                         setAccountMenuOpen(false);
                       }}
-                      className="text-[11px] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                      className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                     >
                       Logout
                     </button>
@@ -4133,6 +4183,9 @@ Cyan OS Lite
         </div>
       </footer>
     </div>
+    )
+      }
+    </Suspense>
   );
 }
 
