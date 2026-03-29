@@ -290,7 +290,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">1. ZERO-RETENTION POLICY</div>
               <p className="mt-1 text-gray-300">
-                Given the real-time nature of Cyan&apos;s translation services, we adhere to the highest security standards:
+                Given the real-time nature of CYAN&apos;s translation services, we adhere to the highest security standards:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Audio Data: We do not record, store, or monitor any of your audio data.</li>
@@ -312,7 +312,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">3. THIRD-PARTY DATA PROVIDERS</div>
               <p className="mt-1 text-gray-300">
-                To deliver high-quality services, Cyan integrates with leading AI infrastructures. By using Cyan, you also agree to the privacy policies of these partners:
+                To deliver high-quality services, CYAN integrates with leading AI infrastructures. By using CYAN, you also agree to the privacy policies of these partners:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>ElevenLabs: For high-quality speech synthesis processing.</li>
@@ -323,13 +323,13 @@ function App() {
             <div>
               <div className="font-semibold text-white">4. PAYMENT SECURITY</div>
               <p className="mt-1 text-gray-300">
-                We utilize PayPal for payment processing. Cyan never accesses or stores your credit card numbers, CVV codes, or bank account information. All transactions are conducted directly on PayPal&apos;s secure infrastructure.
+                We utilize PayPal for payment processing. CYAN never accesses or stores your credit card numbers, CVV codes, or bank account information. All transactions are conducted directly on PayPal&apos;s secure infrastructure.
               </p>
             </div>
             <div>
               <div className="font-semibold text-white">5. USER RIGHTS (GDPR &amp; CCPA COMPLIANCE)</div>
               <p className="mt-1 text-gray-300">
-                Regardless of your location, Cyan is committed to complying with international security standards:
+                Regardless of your location, CYAN is committed to complying with international security standards:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Right to be Forgotten: You may request the deletion of your entire account and associated data at any time.</li>
@@ -339,7 +339,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">6. CATEGORIES OF DATA WE PROCESS</div>
               <p className="mt-1 text-gray-300">
-                In addition to audio and translated text, Cyan may process limited categories of personal data necessary to operate the Service:
+                In addition to audio and translated text, CYAN may process limited categories of personal data necessary to operate the Service:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Account Information: Email address, name, and authentication identifiers used to create and manage your account.</li>
@@ -350,7 +350,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">7. LEGAL BASES FOR PROCESSING</div>
               <p className="mt-1 text-gray-300">
-                Where applicable privacy laws such as GDPR or CCPA apply, Cyan relies on the following legal bases:
+                Where applicable privacy laws such as GDPR or CCPA apply, CYAN relies on the following legal bases:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Performance of a Contract: To provide and maintain the translation and voice cloning services you have requested.</li>
@@ -379,13 +379,13 @@ function App() {
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>International Transfers: Where data is transferred across borders, we rely on appropriate safeguards such as contractual clauses or equivalent mechanisms.</li>
                 <li>Policy Updates: We may update this Privacy Policy from time to time; material changes will be communicated through the Service or by email where appropriate.</li>
-                <li>Contact: For privacy-related questions or requests, you may contact our team via the support channel provided on the Cyan website.</li>
+                <li>Contact: For privacy-related questions or requests, you may contact our team via the support channel provided on the CYAN website.</li>
               </ul>
             </div>
             <div>
               <div className="font-semibold text-white">10. REGION-SPECIFIC RIGHTS (EU/US/OTHER)</div>
               <p className="mt-1 text-gray-300">
-                Cyan is based in Vietnam and offers services globally in multiple languages. Depending on where you live,
+                CYAN is based in Vietnam and offers services globally in multiple languages. Depending on where you live,
                 additional data protection rights may apply on top of this Policy:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -432,7 +432,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">1. ACCEPTANCE OF TERMS</div>
               <p className="mt-1 text-gray-300">
-                By accessing and using the Cyan AI utility (hereinafter referred to as the &quot;Service&quot;), you
+                By accessing and using the CYAN AI utility (hereinafter referred to as the &quot;Service&quot;), you
                 agree to be bound by these Terms. If you are using the Service on behalf of an organization, you agree
                 to these Terms on behalf of that organization.
               </p>
@@ -440,7 +440,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">2. DESCRIPTION OF SERVICE</div>
               <p className="mt-1 text-gray-300">
-                Cyan provides an ultra-low latency, real-time AI translation solution, utilizing third-party API
+                CYAN provides an ultra-low latency, real-time AI translation solution, utilizing third-party API
                 infrastructures including ElevenLabs, Microsoft Azure, and Google Cloud AI through our decentralized
                 proxy network.
               </p>
@@ -486,11 +486,11 @@ function App() {
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
                   Voice Cloning: Users represent and warrant that they hold legal ownership or have obtained written
-                  consent from the voice owner before using the cloning feature. Cyan assumes no liability for
+                  consent from the voice owner before using the cloning feature. CYAN assumes no liability for
                   unauthorized impersonation.
                 </li>
                 <li>
-                  Prohibitions: Using Cyan to create fraudulent content (Deepfakes), hate speech, or content that
+                  Prohibitions: Using CYAN to create fraudulent content (Deepfakes), hate speech, or content that
                   violates current laws is strictly prohibited.
                 </li>
               </ul>
@@ -505,7 +505,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">8. LIMITATION OF LIABILITY</div>
               <p className="mt-1 text-gray-300">
-                Cyan does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
+                CYAN does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
                 We shall not be held liable for any business losses arising from the use of the service.
               </p>
             </div>
@@ -524,18 +524,18 @@ function App() {
             <div>
               <div className="font-semibold text-white">10. LICENSE GRANT &amp; OWNERSHIP</div>
               <p className="mt-1 text-gray-300">
-                Subject to your compliance with these Terms, Cyan grants you a limited, non-exclusive, non-transferable,
+                Subject to your compliance with these Terms, CYAN grants you a limited, non-exclusive, non-transferable,
                 and revocable license to access and use the Service for lawful business or personal purposes.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Ownership: All rights, title, and interest in and to the Service, including software, models, and branding, remain with Cyan and its licensors.</li>
+                <li>Ownership: All rights, title, and interest in and to the Service, including software, models, and branding, remain with CYAN and its licensors.</li>
                 <li>No Reverse Engineering: You may not reverse engineer, decompile, or attempt to extract source code or underlying models except where permitted by law.</li>
               </ul>
             </div>
             <div>
               <div className="font-semibold text-white">11. SERVICE AVAILABILITY &amp; MODIFICATIONS</div>
               <p className="mt-1 text-gray-300">
-                Cyan aims to provide a stable, high-availability translation service but does not guarantee uninterrupted
+                CYAN aims to provide a stable, high-availability translation service but does not guarantee uninterrupted
                 or error-free operation.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -549,9 +549,9 @@ function App() {
                 To the maximum extent permitted by law, the Service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis, without warranties of any kind, whether express or implied.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Exclusions: Cyan disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
-                <li>Liability Cap: To the extent permitted by law, Cyan&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
-                <li>Indirect Damages: Cyan is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
+                <li>Exclusions: CYAN disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
+                <li>Liability Cap: To the extent permitted by law, CYAN&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
+                <li>Indirect Damages: CYAN is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
               </ul>
             </div>
             <div>
@@ -605,7 +605,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">1. LEGAL OWNERSHIP OF VOICE DATA</div>
               <p className="mt-1 text-gray-300">
-                Cyan AI (the &quot;Company&quot;) recognizes that a person&apos;s voice is a core part of their
+                CYAN AI (the &quot;Company&quot;) recognizes that a person&apos;s voice is a core part of their
                 personal identity and intellectual property.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -615,7 +615,7 @@ function App() {
                   and notarized consent from the owner of the voice.
                 </li>
                 <li>
-                  Cyan’s Role: Cyan acts strictly as a Service Provider and a neutral processing platform. We do not
+                  CYAN’s Role: CYAN acts strictly as a Service Provider and a neutral processing platform. We do not
                   claim ownership over any voice models generated through our Service.
                 </li>
               </ul>
@@ -637,7 +637,7 @@ function App() {
                   the source material is publicly available.
                 </li>
                 <li>
-                  Verification Rights: Cyan reserves the right, at its sole discretion, to request proof of consent or
+                  Verification Rights: CYAN reserves the right, at its sole discretion, to request proof of consent or
                   identity verification before activating a Customized Voice Clone.
                 </li>
               </ul>
@@ -650,7 +650,7 @@ function App() {
                   translated audio output generated by the Service.
                 </li>
                 <li>
-                  Model Training Data: Cyan does not use User-provided voice samples to train its core proprietary AI
+                  Model Training Data: CYAN does not use User-provided voice samples to train its core proprietary AI
                   models. Voice samples are used exclusively to generate a temporary or permanent voice profile for that
                   specific User&apos;s account.
                 </li>
@@ -659,7 +659,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">4. PROHIBITED USES &amp; &quot;DEEPFAKE&quot; PREVENTION</div>
               <p className="mt-1 text-gray-300">
-                Cyan maintains a Zero-Tolerance Policy regarding the following activities:
+                CYAN maintains a Zero-Tolerance Policy regarding the following activities:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
@@ -684,7 +684,7 @@ function App() {
               <div className="font-semibold text-white">5. MONITORING AND ENFORCEMENT</div>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
-                  Automated Detection: Cyan utilizes advanced audio watermarking and metadata tracking (in
+                  Automated Detection: CYAN utilizes advanced audio watermarking and metadata tracking (in
                   collaboration with providers like ElevenLabs) to identify synthetic speech generated by our platform.
                 </li>
                 <li>
@@ -692,7 +692,7 @@ function App() {
                   permanent ban from the Service without a refund.
                 </li>
                 <li>
-                  Legal Cooperation: Cyan will cooperate fully with law enforcement agencies in any investigation
+                  Legal Cooperation: CYAN will cooperate fully with law enforcement agencies in any investigation
                   involving the misuse of our voice cloning technology for illegal activities.
                 </li>
               </ul>
@@ -700,7 +700,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">6. INDEMNIFICATION</div>
               <p className="mt-1 text-gray-300">
-                The User agrees to indemnify, defend, and hold harmless Cyan AI, its founders, and its technology
+                The User agrees to indemnify, defend, and hold harmless CYAN AI, its founders, and its technology
                 partners (ElevenLabs, Azure, Google) from any and all claims, damages, or legal fees arising from the
                 User’s unauthorized use of a third party’s voice.
               </p>
@@ -708,7 +708,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">7. LIMITATION OF LIABILITY REGARDING THIRD-PARTY MODELS</div>
               <p className="mt-1 text-gray-300">
-                Cyan utilizes third-party AI models (e.g., ElevenLabs) for voice synthesis. While Cyan implements its
+                CYAN utilizes third-party AI models (e.g., ElevenLabs) for voice synthesis. While CYAN implements its
                 own safety layers, the User also agrees to be bound by the ElevenLabs Terms of Service regarding
                 acceptable voice use. Any changes in third-party policies that restrict certain voices will be passed on
                 to the User immediately.
@@ -717,34 +717,34 @@ function App() {
             <div>
               <div className="font-semibold text-white">8. INCIDENT RESPONSE &amp; INVESTIGATION</div>
               <p className="mt-1 text-gray-300">
-                If Cyan reasonably suspects that the voice cloning capabilities of the Service are being misused,
+                If CYAN reasonably suspects that the voice cloning capabilities of the Service are being misused,
                 we may take immediate steps to protect affected individuals and the integrity of the platform.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Initial Action: We may temporarily suspend or restrict access to specific voice models or user accounts while an investigation is conducted.</li>
-                <li>Investigation: Cyan may review technical logs, consult with technology partners, and request additional information from the User.</li>
-                <li>Outcome: Following investigation, Cyan may restore access, impose additional restrictions, or permanently terminate the account in line with this Policy and applicable law.</li>
+                <li>Investigation: CYAN may review technical logs, consult with technology partners, and request additional information from the User.</li>
+                <li>Outcome: Following investigation, CYAN may restore access, impose additional restrictions, or permanently terminate the account in line with this Policy and applicable law.</li>
               </ul>
             </div>
             <div>
               <div className="font-semibold text-white">9. USER COOPERATION &amp; APPEALS</div>
               <p className="mt-1 text-gray-300">
-                Users agree to cooperate in good faith with Cyan&apos;s efforts to prevent abuse of voice technologies.
+                Users agree to cooperate in good faith with CYAN&apos;s efforts to prevent abuse of voice technologies.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Information Requests: Cyan may request documentation or clarification to verify rights to a specific voice or use case.</li>
+                <li>Information Requests: CYAN may request documentation or clarification to verify rights to a specific voice or use case.</li>
                 <li>Appeal Process: If you believe your account or voice model has been restricted in error, you may contact support with relevant evidence for review.</li>
               </ul>
             </div>
             <div>
               <div className="font-semibold text-white">10. RELATIONSHIP TO PRIVACY &amp; SECURITY POLICIES</div>
               <p className="mt-1 text-gray-300">
-                This Dedicated Voice Copyright &amp; Cloning Policy operates alongside Cyan&apos;s general Privacy
+                This Dedicated Voice Copyright &amp; Cloning Policy operates alongside CYAN&apos;s general Privacy
                 Policy and Terms of Service.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Zero-Retention: Except where required for security or legal reasons, audio processed through the Service is subject to Cyan&apos;s zero-retention commitments described in the Privacy Policy.</li>
-                <li>Policy Updates: Cyan may update this Policy periodically to reflect evolving legal, ethical, and technological standards in synthetic media and voice AI.</li>
+                <li>Zero-Retention: Except where required for security or legal reasons, audio processed through the Service is subject to CYAN&apos;s zero-retention commitments described in the Privacy Policy.</li>
+                <li>Policy Updates: CYAN may update this Policy periodically to reflect evolving legal, ethical, and technological standards in synthetic media and voice AI.</li>
               </ul>
             </div>
           </div>
@@ -785,7 +785,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">1. REAL-TIME TRANSLATION PIPELINE</div>
               <p className="mt-1 text-gray-300">
-                Cyan is designed to sit next to your meetings, calls, and webinars as a low-latency translation layer.
+                CYAN is designed to sit next to your meetings, calls, and webinars as a low-latency translation layer.
                 The high-level pipeline is:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -798,7 +798,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">2. AUDIO CAPTURE AND INPUT</div>
               <p className="mt-1 text-gray-300">
-                The Cyan desktop client captures audio in real time:
+                The CYAN desktop client captures audio in real time:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Input sources can be your microphone, system audio, or a virtual cable from Zoom, Meet, or Teams.</li>
@@ -809,7 +809,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">3. SPEECH RECOGNITION AND TRANSLATION</div>
               <p className="mt-1 text-gray-300">
-                Inside the backend, Cyan coordinates multiple AI services:
+                Inside the backend, CYAN coordinates multiple AI services:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Speech recognition turns your source-language audio into text.</li>
@@ -820,7 +820,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">4. TEXT-TO-SPEECH AND STREAMING OUTPUT</div>
               <p className="mt-1 text-gray-300">
-                After translation, Cyan turns the text back into speech and streams it:
+                After translation, CYAN turns the text back into speech and streams it:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Partner engines such as ElevenLabs and Azure are used for high-quality voices.</li>
@@ -831,7 +831,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">5. VOICE CLONING AND PERSONALIZATION</div>
               <p className="mt-1 text-gray-300">
-                For Executive Pro users, Cyan supports customized voice cloning:
+                For Executive Pro users, CYAN supports customized voice cloning:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>You provide a short, legally compliant audio sample of your own voice.</li>
@@ -853,7 +853,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">7. PRIVACY, SECURITY, AND COMPLIANCE</div>
               <p className="mt-1 text-gray-300">
-                Cyan was built with privacy-first constraints:
+                CYAN was built with privacy-first constraints:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Zero-retention design for live translation sessions.</li>
@@ -867,7 +867,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">8. TYPICAL USE CASES</div>
               <p className="mt-1 text-gray-300">
-                Cyan is optimized for real-world, high-stakes communication where human interpreters are expensive or unavailable:
+                CYAN is optimized for real-world, high-stakes communication where human interpreters are expensive or unavailable:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Founders pitching to international investors in a different language.</li>
@@ -878,7 +878,7 @@ function App() {
             <div>
               <div className="font-semibold text-white">9. TECHNICAL EXPECTATIONS FOR DEVELOPERS</div>
               <p className="mt-1 text-gray-300">
-                For engineering teams integrating Cyan into production workflows, it is important to treat the numbers on the landing page as realistic targets, not hard SLAs:
+                For engineering teams integrating CYAN into production workflows, it is important to treat the numbers on the landing page as realistic targets, not hard SLAs:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Latency: Typical end-to-end response from speech input to first translated audio is in the 200–400ms range, depending on network conditions, provider routing, and language pairs.</li>
@@ -886,7 +886,7 @@ function App() {
                 <li>Cost: The “up to 80% cost reduction” figure assumes a comparison with traditional human voiceover or manual translation workflows; actual savings vary by usage pattern and provider mix.</li>
               </ul>
               <p className="mt-2 text-gray-300">
-                When building on Cyan OS or the public API, we recommend instrumenting your own latency and error metrics so you can tune timeouts, backoff strategies, and user experience for your specific region and infrastructure.
+                When building on CYAN OS or the public API, we recommend instrumenting your own latency and error metrics so you can tune timeouts, backoff strategies, and user experience for your specific region and infrastructure.
               </p>
             </div>
           </div>
@@ -924,7 +924,7 @@ function App() {
               <div>
                 <div className="text-base md:text-lg font-semibold text-white">DEMO: ULTRA-LOW LATENCY AI TRANSLATION</div>
                 <div className="mt-1 text-xs text-gray-400">
-                  Electron Cyan – Experience natural voice translation without leaving this site
+                  Electron CYAN – Experience natural voice translation without leaving this site
                 </div>
               </div>
             </div>
@@ -932,7 +932,7 @@ function App() {
               <div className="relative pt-[56.25%]">
                 <iframe
                   src="https://www.youtube.com/embed/zffQKk-tCpo?autoplay=1&rel=0"
-                  title="Electron Cyan - ULTRA-LOW LATENCY AI TRANSLATOR"
+                  title="Electron CYAN - ULTRA-LOW LATENCY AI TRANSLATOR"
                   className="absolute inset-0 w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
@@ -981,18 +981,18 @@ function App() {
           </div>
           <div className="space-y-5 text-sm leading-relaxed">
             <div>
-              <div className="font-semibold text-white">What is Cyan OS Lite?</div>
+              <div className="font-semibold text-white">What is CYAN OS Lite?</div>
               <p className="mt-1 text-gray-300">
-                Cyan OS Lite is a real-time AI translator that sits next to your calls, meetings, and webinars and turns
+                CYAN OS Lite is a real-time AI translator that sits next to your calls, meetings, and webinars and turns
                 your voice into another language in well under a second. It is built on top of a lightweight runtime
-                layer we call Cyan OS, which orchestrates providers such as ElevenLabs, Microsoft Azure, and Google
+                layer we call CYAN OS, which orchestrates providers such as ElevenLabs, Microsoft Azure, and Google
                 Wavenet to keep latency in the 200–400ms range while staying cost-efficient.
               </p>
             </div>
             <div>
               <div className="font-semibold text-white">Why we focus on natural voice</div>
               <p className="mt-1 text-gray-300">
-                Most translation tools are optimised for captions, not for how human conversations actually feel. Cyan
+                Most translation tools are optimised for captions, not for how human conversations actually feel. CYAN
                 OS Lite is tuned for voice-first experiences where tone, pacing, and micro-pauses matter: negotiations,
                 investor calls, sales demos, and high-stakes one-on-ones. Partner engines such as ElevenLabs are used so
                 that translated speech sounds warm and expressive instead of robotic.
@@ -1001,30 +1001,30 @@ function App() {
             <div>
               <div className="font-semibold text-white">Built for negotiation and live meetings</div>
               <p className="mt-1 text-gray-300">
-                In a real negotiation, a 2–3 second delay can kill the flow of trust. Cyan OS Lite streams translation
+                In a real negotiation, a 2–3 second delay can kill the flow of trust. CYAN OS Lite streams translation
                 in very small chunks so that your counterpart hears the first words in under half a second. This makes
                 cross-language calls, board meetings, and customer support sessions feel closer to a native
                 conversation, not a relay race between you and a distant interpreter.
               </p>
               <p className="mt-2 text-gray-300">
                 The desktop client integrates with existing tools: you can route audio from Zoom, Meet, or Teams into
-                Cyan and send translated speech back to headphones, speakers, or a virtual microphone that remote
+                CYAN and send translated speech back to headphones, speakers, or a virtual microphone that remote
                 participants can select as their audio source.
               </p>
             </div>
             <div>
-              <div className="font-semibold text-white">Cyan OS Lite vs. full Cyan OS</div>
+              <div className="font-semibold text-white">CYAN OS Lite vs. full CYAN OS</div>
               <p className="mt-1 text-gray-300">
-                Cyan OS Lite focuses on a streamlined, opinionated path: ultra-low latency voice translation with
+                CYAN OS Lite focuses on a streamlined, opinionated path: ultra-low latency voice translation with
                 sensible defaults. It exposes the same real-time pipeline we use internally, but without requiring
-                teams to manage complex routing, watermarking, or multi-region deployments. The full Cyan OS stack
+                teams to manage complex routing, watermarking, or multi-region deployments. The full CYAN OS stack
                 extends these ideas for enterprise deployments and deeper integrations.
               </p>
             </div>
             <div>
               <div className="font-semibold text-white">Who is it for?</div>
               <p className="mt-1 text-gray-300">
-                Cyan OS Lite is built for founders, operators, and teams who need to sound like themselves in another
+                CYAN OS Lite is built for founders, operators, and teams who need to sound like themselves in another
                 language when it matters most. Typical scenarios include:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -1037,8 +1037,8 @@ function App() {
             <div>
               <div className="font-semibold text-white">Voice, privacy, and control</div>
               <p className="mt-1 text-gray-300">
-                Cyan follows a zero-retention philosophy for live sessions: audio is streamed for processing and then
-                discarded rather than archived. For users on higher tiers, Cyan OS Lite can be combined with customised
+                CYAN follows a zero-retention philosophy for live sessions: audio is streamed for processing and then
+                discarded rather than archived. For users on higher tiers, CYAN OS Lite can be combined with customised
                 voices so that translated speech still feels like your own, subject to strict consent and copyright
                 rules around voice cloning.
               </p>
@@ -1890,13 +1890,13 @@ function App() {
                         <div>
                           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
                             <Code className="w-3.5 h-3.5" />
-                            <span>CYAN & Cyan OS Lite Documentation</span>
+                            <span>CYAN & CYAN OS Lite Documentation</span>
                           </div>
                           <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
                             Streaming Architecture & Integration Guide
                           </h1>
                           <p className="mt-2 text-sm md:text-base text-slate-300 max-w-2xl">
-                            This page describes how Cyan&apos;s realtime translator and Cyan OS Lite gateway work together:
+                            This page describes how CYAN&apos;s realtime translator and CYAN OS Lite gateway work together:
                             from microphone capture, to AI routing, to audio watermarking and external marketplaces.
                           </p>
                         </div>
@@ -1917,11 +1917,11 @@ function App() {
                         <div className="space-y-6">
                           <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
                             <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              1. End-to-End Streaming Flow (Client ⇄ Cyan OS Lite ⇄ Providers)
+                              1. End-to-End Streaming Flow (Client ⇄ CYAN OS Lite ⇄ Providers)
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
                               CYAN desktop client and browser extension stream raw audio to a local Electron core, which
-                              bridges to Cyan OS Lite running in the cloud. Cyan OS Lite then orchestrates provider calls
+                              bridges to CYAN OS Lite running in the cloud. CYAN OS Lite then orchestrates provider calls
                               (STT, translation, TTS) while keeping latency under 400ms whenever possible.
                             </p>
                             <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 font-mono text-[10px] md:text-xs text-slate-200 overflow-x-auto">
@@ -1930,9 +1930,9 @@ function App() {
 {`Mic / Virtual Device
   ↓  PCM chunks (48kHz → 16kHz noise-gated)
 Electron Core
-  ↓  /api/stt/stream (Cyan OS Lite)
+  ↓  /api/stt/stream (CYAN OS Lite)
   ↓  Provider STT (Google/Azure) → partial + final transcripts
-  ↓  /api/translate (Cyan OS Lite with glossary & caching)
+  ↓  /api/translate (CYAN OS Lite with glossary & caching)
   ↓  /api/tts/speak-stream (chunked TTS)
   ↓  PCM / MPEG chunks → local player
 
@@ -1946,7 +1946,7 @@ Typical one-way latency: 200–400ms (network + provider + local render).`}
                               2. TTS Routing: Local ONNX Piper vs Cloud Voices
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              For text-to-speech, Cyan uses a hybrid strategy: a local ONNX model (Piper) for instant
+                              For text-to-speech, CYAN uses a hybrid strategy: a local ONNX model (Piper) for instant
                               preview, and high-quality cloud voices (Google WaveNet, Azure Neural, ElevenLabs) for the
                               main stream. This keeps the experience responsive while still delivering natural voices.
                             </p>
@@ -1977,12 +1977,12 @@ elif plan == "pro":
 
 /api/tts/speak-stream(engine, language, text)
   ↓  provider streams audio chunks
-  ↓  Cyan OS Lite forwards chunks to client
+  ↓  CYAN OS Lite forwards chunks to client
   ↓  audio watermark injected before output`}
                                 </pre>
                                 <p className="mt-2 text-[10px] text-slate-400">
                                   The gateway chooses the engine based on plan, language, and health checks. If a cloud
-                                  provider fails, Cyan OS Lite can fall back or temporarily rely more on ONNX voices.
+                                  provider fails, CYAN OS Lite can fall back or temporarily rely more on ONNX voices.
                                 </p>
                               </div>
                             </div>
@@ -1993,7 +1993,7 @@ elif plan == "pro":
                               3. Audio Watermarking for Realtime Streams
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              To protect generated audio, Cyan inserts a lightweight PCM watermark before it reaches the
+                              To protect generated audio, CYAN inserts a lightweight PCM watermark before it reaches the
                               virtual microphone / output device. The watermark is designed to be inaudible to humans but
                               detectable offline for compliance checks and abuse investigation.
                             </p>
@@ -2027,7 +2027,7 @@ elif plan == "pro":
                               4. RapidAPI & Ocean / Blockchain Gateways
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              Cyan OS Lite is also exposed as a standalone API product via RapidAPI and blockchain-based
+                              CYAN OS Lite is also exposed as a standalone API product via RapidAPI and blockchain-based
                               marketplaces such as Ocean. This lets developers integrate the same infrastructure you see
                               in the desktop client directly into their own apps.
                             </p>
@@ -2055,12 +2055,12 @@ Body:
   ↓  buys access token / data NFT
 Ocean Gateway
   ↓  attaches usage token to request
-Cyan OS Lite
+CYAN OS Lite
   ↓  validates token → routes to providers
   ↓  streams audio back to consumer`}
                               </pre>
                               <p className="mt-2 text-[10px] text-slate-400">
-                                This pattern allows usage-based pricing and on-chain revenue splits, while Cyan OS Lite
+                                This pattern allows usage-based pricing and on-chain revenue splits, while CYAN OS Lite
                                 remains the high-performance execution layer.
                               </p>
                             </div>
@@ -2082,11 +2082,11 @@ Cyan OS Lite
                             <h3 className="text-sm font-semibold text-slate-100 mb-2">When to use what</h3>
                             <ul className="text-[11px] text-slate-300 space-y-1.5">
                               <li>
-                                <span className="font-semibold text-cyan-300">Cyan Desktop:</span> quickest way to use
+                                <span className="font-semibold text-cyan-300">CYAN Desktop:</span> quickest way to use
                                 realtime translation in meetings.
                               </li>
                               <li>
-                                <span className="font-semibold text-cyan-300">Cyan OS Lite API:</span> when you need
+                                <span className="font-semibold text-cyan-300">CYAN OS Lite API:</span> when you need
                                 backend-only integration with your own UI.
                               </li>
                               <li>
@@ -2762,7 +2762,7 @@ Cyan OS Lite
           <div className="mt-6 sm:mt-10">
             <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-3 h-3 sm:w-4 sm:h-4 inline mr-2 rounded" />
-              Powered by Cyan OS
+              Powered by CYAN OS
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent leading-tight">
               ULTRA-LOW LATENCY<br />AI TRANSLATOR
@@ -2952,7 +2952,7 @@ Cyan OS Lite
         </div>
       </section>
 
-      {/* Cyan OS Lite API Section - Hidden by default */}
+      {/* CYAN OS Lite API Section - Hidden by default */}
       <section
         id="api"
         ref={setRef('api')}
@@ -2965,7 +2965,7 @@ Cyan OS Lite
           <div className="text-center mb-16 relative">
             <div className="inline-flex items-center gap-2 bg-cyan-600/10 dark:bg-cyan-600/20 border border-cyan-600/30 dark:border-cyan-600/40 rounded-full px-4 py-2 mb-4 backdrop-blur-sm">
               <Code className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">Cyan OS Lite API</span>
+              <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">CYAN OS Lite API</span>
             </div>
             <button
               onClick={() => setShowApiSection(false)}
@@ -2973,7 +2973,7 @@ Cyan OS Lite
             >
               ✕
             </button>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Cyan OS Lite API Overview</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN OS Lite API Overview</h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
               Powerful Text-to-Speech API with Voice Cloning and Real-time Streaming
             </p>
@@ -3102,7 +3102,7 @@ Cyan OS Lite
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400 mb-1">$0.10/1000 chars</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Cyan OS API</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">CYAN OS API</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">Up to 80%</div>
@@ -3297,7 +3297,7 @@ Cyan OS Lite
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Unmatched ROI</h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              See how much you save by switching to Cyan-OS
+              See how much you save by switching to CYAN-OS
             </p>
           </div>
 
@@ -3334,7 +3334,7 @@ Cyan OS Lite
               </div>
             </div>
 
-            {/* Cyan-OS Method */}
+            {/* CYAN-OS Method */}
             <div className="bg-cyan-glow/10 dark:bg-cyan-glow/20 backdrop-blur-md border-2 border-cyan-glow rounded-2xl p-8 relative overflow-hidden shadow-lg shadow-cyan-glow/10">
               <div className="absolute top-4 right-4 bg-cyan-glow dark:bg-cyan-glow text-gray-900 dark:text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
                 SAVE up to 80%
@@ -3387,16 +3387,16 @@ Cyan OS Lite
                 For Platforms
               </div>
               <h3 className="mt-4 text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                Drop Cyan into the tools you already use
+                Drop CYAN into the tools you already use
               </h3>
               <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl">
-                Cyan plugs straight into your existing meeting, streaming and collaboration tools via a
+                CYAN plugs straight into your existing meeting, streaming and collaboration tools via a
                 lightweight extension, so you do not have to change your workflow.
               </p>
             </div>
             <div className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
               <p className="inline-block rounded-2xl bg-gradient-to-r from-cyan-500/15 to-blue-500/15 dark:from-cyan-500/20 dark:to-blue-500/20 border border-cyan-400/40 dark:border-cyan-300/30 px-4 py-3 text-gray-700 dark:text-cyan-100 shadow-sm">
-                Most everyday platforms work out of the box through the Cyan extension. For more advanced
+                Most everyday platforms work out of the box through the CYAN extension. For more advanced
                 setups, you can still route audio via virtual devices when you need to.
               </p>
             </div>
@@ -3408,7 +3408,7 @@ Cyan OS Lite
                 icon: Layers,
                 title: 'Desktop & OS',
                 subtitle: 'Windows, macOS',
-                description: 'Use Cyan alongside any desktop app. The audio engine runs on your machine, not only in the browser.',
+                description: 'Use CYAN alongside any desktop app. The audio engine runs on your machine, not only in the browser.',
                 bgClass: 'bg-gradient-to-br from-slate-900 to-slate-800',
                 borderClass: 'border-slate-700/80',
                 titleClass: 'text-white',
@@ -3419,7 +3419,7 @@ Cyan OS Lite
                 icon: Globe,
                 title: 'Video Meetings',
                 subtitle: 'Zoom, Google Meet, Microsoft Teams, Gather, Whereby',
-                description: 'Drop Cyan into your daily standups, customer calls and webinars without changing your meeting links.',
+                description: 'Drop CYAN into your daily standups, customer calls and webinars without changing your meeting links.',
                 bgClass: 'bg-gradient-to-br from-cyan-600 to-sky-500',
                 borderClass: 'border-cyan-400/80',
                 titleClass: 'text-white',
@@ -3430,7 +3430,7 @@ Cyan OS Lite
                 icon: Mic,
                 title: 'Streaming & Creators',
                 subtitle: 'Twitch and local recording tools',
-                description: 'Feed Cyan into Twitch or your recording pipeline using the Cyan extension or optional system routing.',
+                description: 'Feed CYAN into Twitch or your recording pipeline using the CYAN extension or optional system routing.',
                 bgClass: 'bg-gradient-to-br from-purple-600 to-pink-500',
                 borderClass: 'border-pink-400/80',
                 titleClass: 'text-white',
@@ -3441,7 +3441,7 @@ Cyan OS Lite
                 icon: Shield,
                 title: 'Contact Centers',
                 subtitle: 'Call center, BPO and SIP tools',
-                description: 'Use Cyan as a translation layer on top of your existing voice infrastructure and call flows.',
+                description: 'Use CYAN as a translation layer on top of your existing voice infrastructure and call flows.',
                 bgClass: 'bg-gradient-to-br from-emerald-600 to-teal-500',
                 borderClass: 'border-emerald-400/80',
                 titleClass: 'text-white',
@@ -4166,7 +4166,7 @@ Cyan OS Lite
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            &copy; 2024 Cyan ULTRA-LOW LATENCY AI TRANSLATOR. All rights reserved.
+            &copy; 2024 CYAN ULTRA-LOW LATENCY AI TRANSLATOR. All rights reserved.
           </div>
         </div>
       </footer>
