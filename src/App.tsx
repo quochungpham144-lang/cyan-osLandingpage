@@ -120,7 +120,7 @@ function App() {
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
-  const [showRoiSection, setShowRoiSection] = useState(false);
+  const [showRoiSection, setShowRoiSection] = useState(true);
   const [showPricingSection, setShowPricingSection] = useState(false);
   const [showTeamContactForm, setShowTeamContactForm] = useState(false);
   const [teamFormSubmitted, setTeamFormSubmitted] = useState(false);
@@ -2298,7 +2298,7 @@ CYAN OS Lite
           </div>
           <div className="hidden sm:flex items-center gap-4 sm:gap-6">
             <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
-            <div className="relative group">
+            <div className="relative group hidden lg:block">
               <button className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 flex items-center gap-1 px-2">
                 Developers <ArrowRight className="w-3 h-3 rotate-90" />
               </button>
@@ -2324,13 +2324,13 @@ CYAN OS Lite
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                 </svg>
-                Access
+                Early Access
               </button>
               
               {/* Hover Email Form */}
               <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Get Access</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Get Early Access</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Join our waitlist for exclusive updates!</p>
                   
                   {/* Custom Email Form */}
@@ -2711,7 +2711,7 @@ CYAN OS Lite
           {/* Mobile quick actions */}
           <div className="sm:hidden flex items-center gap-2">
             <form
-              className="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
+              className="w-full flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
               action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
               method="POST"
               target="_blank"
@@ -2733,14 +2733,14 @@ CYAN OS Lite
                 value={mobileEarlyEmail}
                 onChange={(e) => setMobileEarlyEmail(e.target.value)}
                 required
-                placeholder="Email for access"
-                className="w-40 text-[11px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
+                placeholder="Email for early access"
+                className="flex-1 min-w-0 text-[11px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
               />
               <button
                 type="submit"
-                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
+                className="shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
               >
-                Access
+                Join
               </button>
             </form>
             {mobileEarlySubmitted && (
