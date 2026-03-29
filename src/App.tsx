@@ -142,6 +142,7 @@ function App() {
   const googleIdentityLoaderRef = useRef<Promise<void> | null>(null);
   const googleTokenClientRef = useRef<GoogleTokenClient | null>(null);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
   const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
@@ -1863,6 +1864,84 @@ function App() {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
+      <div className="sm:hidden fixed top-3 right-3 z-[130] flex items-center gap-2">
+        <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          className="p-2 rounded-full bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-700 shadow-md text-gray-700 dark:text-white"
+          aria-label="Toggle dark mode"
+        >
+          {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        </button>
+
+        {isLoggedIn && userInfo ? (
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setMobileAccountOpen((open) => !open)}
+              className="w-9 h-9 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-md"
+              aria-label="Open account menu"
+            >
+              <img
+                src={userInfo.picture || '/logoCYAN.png'}
+                alt={userInfo.name}
+                className="w-full h-full object-cover"
+              />
+            </button>
+
+            {mobileAccountOpen && (
+              <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-3 z-[135]">
+                <div className="px-4 pb-3 border-b border-gray-100 dark:border-slate-800">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Account</p>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userInfo.email}</p>
+                </div>
+                <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
+                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Current Plan</p>
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5">
+                      <span className="text-xs font-bold uppercase tracking-wide">{userInfo.plan || 'free'}</span>
+                    </span>
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                      {PLAN_PRICE[userInfo.plan || 'free']}
+                    </span>
+                  </div>
+                </div>
+                <div className="px-4 pt-3 flex justify-between items-center">
+                  <a
+                    href="#pricing"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setMobileAccountOpen(false);
+                      openPricingSection();
+                    }}
+                    className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
+                  >
+                    Upgrade Plan
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      saveSession(null);
+                      setMobileAccountOpen(false);
+                    }}
+                    className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowLoginModal(true)}
+            className="px-3 py-2 rounded-full bg-cyan-600 text-yellow-300 text-xs font-semibold shadow-md"
+          >
+            Login
+          </button>
+        )}
+      </div>
+
       <div key={view} className="page-fade-in">
       {view === 'privacy'
         ? privacyView
@@ -2206,7 +2285,7 @@ CYAN OS Lite
             </div>
             <button
               onClick={() => setIsDarkMode(!isDarkMode)}
-              className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white z-[101]"
+              className="hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white z-[101]"
               aria-label="Toggle dark mode"
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -2387,7 +2466,7 @@ CYAN OS Lite
                 </button>
               )}
         </div>
-        <div className="flex sm:hidden items-center gap-2">
+        <div className="hidden items-center gap-2">
           {isLoggedIn && userInfo ? (
             <div className="relative">
               <button
