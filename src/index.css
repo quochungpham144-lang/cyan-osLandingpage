@@ -41,6 +41,8 @@
     transform: none;
     transform-origin: top right;
     gap: 0.35rem;
+    flex-direction: row;
+    align-items: center;
   }
 
   .mobile-fixed-controls > button {
@@ -54,13 +56,13 @@
 
   .mobile-quick-actions {
     display: flex !important;
-    position: relative;
-    top: auto;
+    position: fixed;
+    top: 0.4rem;
     left: auto;
-    right: auto;
-    z-index: auto;
-    margin-top: 0.35rem;
-    padding: 0 0.25rem 0.35rem;
+    right: 5rem;
+    z-index: 130;
+    margin-top: 0;
+    padding: 0;
     justify-content: flex-end;
   }
 
