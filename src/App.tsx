@@ -1889,19 +1889,14 @@ function App() {
             </button>
 
             {mobileAccountOpen && (
-              <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-3 z-[135]">
-                <div className="px-4 pb-3 border-b border-gray-100 dark:border-slate-800">
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Account</p>
+              <div className="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-2.5 z-[135]">
+                <div className="px-3 pb-2 border-b border-gray-100 dark:border-slate-800">
                   <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userInfo.email}</p>
-                </div>
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
-                  <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Current Plan</p>
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5">
-                      <span className="text-xs font-bold uppercase tracking-wide">{userInfo.plan || 'free'}</span>
+                  <div className="mt-1 flex items-center justify-between">
+                    <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                      {userInfo.plan || 'free'}
                     </span>
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                       {PLAN_PRICE[userInfo.plan || 'free']}
                     </span>
                   </div>
@@ -2710,29 +2705,6 @@ CYAN OS Lite
           </div>
           {/* Mobile quick actions */}
           <div className="sm:hidden flex items-center gap-2">
-            {isLoggedIn ? (
-              <button
-                type="button"
-                onClick={() => {
-                  saveSession(null);
-                  trackEvent('logout', { provider: userInfo?.provider || 'unknown' });
-                }}
-                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-900 text-gray-100 border border-slate-700 hover:bg-slate-800 transition-colors"
-              >
-                Logout
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setShowLoginModal(true);
-                  trackEvent('cta_click', { button_name: 'mobile_login' });
-                }}
-                className="px-3 py-1 rounded-full text-[11px] font-semibold bg-white text-cyan-700 border border-cyan-500 shadow-sm hover:bg-cyan-50 transition-colors"
-              >
-                Login
-              </button>
-            )}
             <form
               className="flex items-center gap-2 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
               action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
