@@ -26,7 +26,7 @@
 
 @media (orientation: landscape) and (max-height: 540px) {
   .mobile-fixed-controls {
-    top: 0.5rem;
+    top: 3.75rem;
     left: auto;
     right: 0.5rem;
     transform: scale(0.92);
