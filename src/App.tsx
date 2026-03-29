@@ -120,6 +120,7 @@ function App() {
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
+  const [showRoiSection, setShowRoiSection] = useState(false);
   const [showPricingSection, setShowPricingSection] = useState(false);
   const [showTeamContactForm, setShowTeamContactForm] = useState(false);
   const [teamFormSubmitted, setTeamFormSubmitted] = useState(false);
@@ -1086,6 +1087,15 @@ function App() {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }, []);
+
+  const openRoiSection = useCallback(() => {
+    setShowRoiSection(true);
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        document.getElementById('roi')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
   }, []);
@@ -2295,13 +2305,13 @@ CYAN OS Lite
               <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">API</a>
                 <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Developer Docs</a>
-                <a href="#roi" onClick={(e) => { e.preventDefault(); const roiSection = document.getElementById('roi'); if (roiSection) { roiSection.classList.remove('hidden'); roiSection.style.display = 'block'; setTimeout(() => roiSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">ROI Calculator</a>
+                <a href="#roi" onClick={(e) => { e.preventDefault(); openRoiSection(); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">ROI Calculator</a>
               </div>
             </div>
             <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
             <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
             {/* Email CTA in Navigation - Desktop only */}
-            <div className="relative group hidden lg:block">
+            <div className="relative group">
               <button 
                 onClick={() => {
                   trackEvent('cta_click', {
@@ -2314,13 +2324,13 @@ CYAN OS Lite
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                 </svg>
-                Early Access
+                Access
               </button>
               
               {/* Hover Email Form */}
               <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Get Early Access</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Get Access</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Join our waitlist for exclusive updates!</p>
                   
                   {/* Custom Email Form */}
@@ -2675,12 +2685,7 @@ CYAN OS Lite
               <button
                 type="button"
                 onClick={() => {
-                  const roiSection = document.getElementById('roi');
-                  if (roiSection) {
-                    roiSection.classList.remove('hidden');
-                    roiSection.style.display = 'block';
-                    setTimeout(() => roiSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-                  }
+                  openRoiSection();
                 }}
                 className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
               >
@@ -2728,14 +2733,14 @@ CYAN OS Lite
                 value={mobileEarlyEmail}
                 onChange={(e) => setMobileEarlyEmail(e.target.value)}
                 required
-                placeholder="Email for early access"
+                placeholder="Email for access"
                 className="w-40 text-[11px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
               />
               <button
                 type="submit"
                 className="px-3 py-1 rounded-full text-[11px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
               >
-                Join
+                Access
               </button>
             </form>
             {mobileEarlySubmitted && (
@@ -3336,13 +3341,18 @@ CYAN OS Lite
         </div>
       </section>
 
-      {/* ROI Section - Hidden */}
+      {/* ROI Section */}
       <section
         id="roi"
         ref={setRef('roi')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-320 hidden ${
-          isVisible.roi ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-320 ${
+          showRoiSection
+            ? isVisible.roi
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-10'
+            : 'opacity-0 translate-y-8 pointer-events-none'
         }`}
+        style={{ display: showRoiSection ? 'block' : 'none' }}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
