@@ -1115,6 +1115,7 @@ function App() {
       const session = ensureSession();
       saveSession({ ...session, plan: 'free' });
       setCheckoutMessage('Free plan activated. You can start immediately.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
