@@ -23,3 +23,37 @@
     animation: none;
   }
 }
+
+@media (orientation: landscape) and (max-height: 540px) {
+  .mobile-fixed-controls {
+    top: 0.5rem;
+    right: 0.5rem;
+    transform: scale(0.92);
+    transform-origin: top right;
+  }
+
+  .mobile-quick-actions {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .mobile-email-access-form {
+    max-width: 220px;
+  }
+
+  #hero {
+    padding-top: 5.5rem !important;
+    padding-bottom: 2.75rem !important;
+  }
+
+  #problem,
+  #solution,
+  #engine,
+  #developers,
+  #roi,
+  #pricing,
+  #api {
+    padding-top: 2.75rem !important;
+    padding-bottom: 2.75rem !important;
+  }
+}
