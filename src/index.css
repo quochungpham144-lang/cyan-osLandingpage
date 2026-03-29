@@ -24,10 +24,15 @@
   }
 }
 
-/* Ensure Join button always visible */
+/* Ensure email form and Join button always visible */
+.mobile-quick-actions,
+.mobile-email-access-form,
 .mobile-email-access-form button {
   opacity: 1 !important;
   visibility: visible !important;
+  display: flex !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 @media (orientation: landscape) and (max-width: 980px) {
