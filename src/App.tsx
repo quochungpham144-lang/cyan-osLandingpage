@@ -1876,13 +1876,48 @@ function App() {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <div className="mobile-fixed-controls sm:hidden fixed top-3 left-1/2 -translate-x-1/2 z-[130] flex items-center gap-2">
+      <div className="mobile-fixed-controls sm:hidden fixed top-14 left-1/2 -translate-x-1/2 z-[130] flex items-center gap-1.5">
+        {/* Join button - always visible */}
+        <form
+          className="flex items-center gap-1 bg-slate-900/95 border border-slate-700 rounded-full px-1.5 py-0.5"
+          action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+          method="POST"
+          target="_blank"
+          onSubmit={(e) => {
+            if (!mobileEarlyEmail.trim()) {
+              e.preventDefault();
+              return;
+            }
+            trackEvent('cta_click', { button_name: 'mobile_fixed_join', email: mobileEarlyEmail });
+            setMobileEarlySubmitted(true);
+            setMobileEarlyEmail('');
+          }}
+        >
+          <input type="hidden" name="FIRSTNAME" value="Mobile" />
+          <input type="hidden" name="FORM_TYPE" value="MOBILE_EARLY" />
+          <input
+            type="email"
+            name="EMAIL"
+            value={mobileEarlyEmail}
+            onChange={(e) => setMobileEarlyEmail(e.target.value)}
+            required
+            placeholder="Email"
+            className="w-20 text-[9px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
+          />
+          <button
+            type="submit"
+            className="shrink-0 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
+          >
+            Join
+          </button>
+        </form>
+
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-2 rounded-full bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-700 shadow-md text-gray-700 dark:text-white"
+          className="p-1.5 rounded-full bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-700 shadow-md text-gray-700 dark:text-white"
           aria-label="Toggle dark mode"
         >
-          {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {isDarkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
         </button>
 
         {isLoggedIn && userInfo ? (
@@ -1890,7 +1925,7 @@ function App() {
             <button
               type="button"
               onClick={() => setMobileAccountOpen((open) => !open)}
-              className="w-9 h-9 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-md"
+              className="w-7 h-7 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-md"
               aria-label="Open account menu"
             >
               <img
@@ -1901,19 +1936,19 @@ function App() {
             </button>
 
             {mobileAccountOpen && (
-              <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-2.5 z-[135]">
-                <div className="px-3 pb-2 border-b border-gray-100 dark:border-slate-800">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                  <div className="mt-1 flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+              <div className="absolute right-0 mt-2 w-44 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-2 z-[135]">
+                <div className="px-2.5 pb-1.5 border-b border-gray-100 dark:border-slate-800">
+                  <p className="text-xs font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                  <div className="mt-0.5 flex items-center gap-1.5">
+                    <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-1.5 py-0.5 text-[8px] font-bold uppercase">
                       {userInfo.plan || 'free'}
                     </span>
-                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                    <span className="text-[9px] text-gray-600 dark:text-gray-300">
                       {PLAN_PRICE[userInfo.plan || 'free']}
                     </span>
                   </div>
                 </div>
-                <div className="px-4 pt-3 flex justify-between items-center">
+                <div className="px-2.5 pt-1.5 flex justify-between items-center">
                   <a
                     href="#pricing"
                     onClick={(e) => {
@@ -1921,9 +1956,9 @@ function App() {
                       setMobileAccountOpen(false);
                       openPricingSection();
                     }}
-                    className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
+                    className="text-[9px] text-cyan-600 dark:text-cyan-400 font-medium"
                   >
-                    Upgrade Plan
+                    Upgrade
                   </a>
                   <button
                     type="button"
@@ -1931,7 +1966,7 @@ function App() {
                       saveSession(null);
                       setMobileAccountOpen(false);
                     }}
-                    className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                    className="text-[9px] text-gray-500 dark:text-gray-400"
                   >
                     Logout
                   </button>
@@ -1942,7 +1977,7 @@ function App() {
         ) : (
           <button
             onClick={() => setShowLoginModal(true)}
-            className="px-3 py-2 rounded-full bg-cyan-600 text-yellow-300 text-xs font-semibold shadow-md"
+            className="px-2 py-1 rounded-full bg-cyan-600 text-yellow-300 text-[9px] font-semibold shadow-md"
           >
             Login
           </button>
