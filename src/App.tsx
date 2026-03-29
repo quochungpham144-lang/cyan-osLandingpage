@@ -1844,7 +1844,7 @@ function App() {
     sectionsRef.current[id] = el;
   }, []);
 
-  const goToMainView = useCallback(() => {
+  function goToMainView() {
     setView('main');
     window.history.replaceState({}, document.title, `${window.location.pathname}${window.location.search}`);
     window.requestAnimationFrame(() => {
@@ -1854,7 +1854,7 @@ function App() {
       window.scrollTo(0, 0);
       html.style.scrollBehavior = previous;
     });
-  }, []);
+  }
 
   return (
     <Suspense fallback={<LoadingFallback />}>
