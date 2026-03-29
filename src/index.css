@@ -56,13 +56,13 @@
 
   .mobile-quick-actions {
     display: flex !important;
-    position: fixed;
-    top: 0.4rem;
+    position: relative;
+    top: auto;
     left: auto;
-    right: 5rem;
-    z-index: 130;
-    margin-top: 0;
-    padding: 0;
+    right: auto;
+    z-index: auto;
+    margin-top: 0.35rem;
+    padding: 0 0.25rem 0.35rem;
     justify-content: flex-end;
   }
 
