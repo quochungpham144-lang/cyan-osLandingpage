@@ -35,7 +35,7 @@
 
   .mobile-fixed-controls {
     display: flex !important;
-    top: 6.1rem;
+    top: 0.4rem;
     left: auto;
     right: 0.5rem;
     transform: none;
@@ -80,7 +80,7 @@
   }
 
   #hero {
-    padding-top: 8.4rem !important;
+    padding-top: 11rem !important;
     padding-bottom: 2.75rem !important;
   }
 
