@@ -1858,6 +1858,7 @@ function App() {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
+      <div key={view} className="page-fade-in">
       {view === 'privacy'
         ? privacyView
         : view === 'terms'
@@ -3140,7 +3141,7 @@ Cyan OS Lite
                   {
                     icon: Layers,
                     title: 'Multi-Provider TTS',
-                    desc: 'Intelligent routing across ElevenLabs, OpenAI, and Azure for maximum reliability',
+                    desc: 'Intelligent routing across ElevenLabs, GoogleWavenet, and Azure for maximum reliability',
                     pillClass: 'from-cyan-500/20 to-sky-500/20 border-cyan-400/50 text-cyan-700 dark:text-cyan-200 dark:border-cyan-300/40',
                     cardBorderClass: 'border-cyan-300/70 dark:border-cyan-400/40'
                   },
@@ -4185,6 +4186,7 @@ Cyan OS Lite
     </div>
                 )
       }
+      </div>
     </Suspense>
   );
 }
