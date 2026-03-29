@@ -1876,7 +1876,7 @@ function App() {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <div className="mobile-fixed-controls sm:hidden fixed top-3 right-3 z-[130] flex items-center gap-2">
+      <div className="mobile-fixed-controls sm:hidden fixed top-3 left-28 z-[130] flex items-center gap-2">
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
           className="p-2 rounded-full bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-700 shadow-md text-gray-700 dark:text-white"
@@ -2760,7 +2760,7 @@ CYAN OS Lite
           {/* Mobile quick actions */}
           <div className="mobile-quick-actions sm:hidden flex items-center gap-2">
             <form
-              className="mobile-email-access-form w-full max-w-[250px] flex items-center gap-1.5 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
+              className="mobile-email-access-form w-full max-w-[290px] flex items-center gap-1.5 bg-slate-900/90 border border-slate-700 rounded-full px-2 py-1"
               action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
               method="POST"
               target="_blank"
@@ -2782,7 +2782,7 @@ CYAN OS Lite
                 value={mobileEarlyEmail}
                 onChange={(e) => setMobileEarlyEmail(e.target.value)}
                 required
-                placeholder="Email"
+                placeholder="Email early access"
                 className="flex-1 min-w-0 text-[10px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
               />
               <button
