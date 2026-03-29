@@ -2731,6 +2731,9 @@ Cyan OS Lite
                 <img 
                   src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1136748&theme=light" 
                   alt="CYAN&#0058;&#0032;Ultra&#0045;Low&#0032;Latency&#0032;AI&#0032;Translator - Secure&#0032;your&#0032;&#0036;699ExecutiveProAnnual&#0032;spot&#0032;now&#0046;MinimalLatencyAI | Product Hunt" 
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                   className="h-6 sm:h-7 w-auto"
                 />
               </a>
@@ -2743,6 +2746,9 @@ Cyan OS Lite
                 <img
                   src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
                   alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                   className="h-6 sm:h-7 w-auto"
                 />
               </a>
@@ -2755,6 +2761,9 @@ Cyan OS Lite
                 <img
                   src="https://devhub.best/images/badges/top1-dark.svg"
                   alt="DevHub Top 1 Daily Winner"
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                   className="h-6 sm:h-7 w-auto"
                 />
               </a>
