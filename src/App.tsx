@@ -1872,7 +1872,7 @@ function App() {
                   ? aboutView
                   : view === 'docs'
                     ? (
-                  <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100">
+                      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100">
                     <div className="relative max-w-6xl mx-auto px-4 py-8 lg:py-12">
                       <div className="absolute inset-0 -z-10 opacity-40 pointer-events-none">
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.12),_transparent_60%)]" />
@@ -4183,7 +4183,7 @@ Cyan OS Lite
         </div>
       </footer>
     </div>
-    )
+                )
       }
     </Suspense>
   );
