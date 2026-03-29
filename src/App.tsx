@@ -120,6 +120,7 @@ function App() {
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
+  const [showPricingSection, setShowPricingSection] = useState(false);
   const [showTeamContactForm, setShowTeamContactForm] = useState(false);
   const [teamFormSubmitted, setTeamFormSubmitted] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -1078,6 +1079,15 @@ function App() {
     setTeamFormSubmitted(true);
     setTimeout(() => form.reset(), 100);
   };
+
+  const openPricingSection = useCallback(() => {
+    setShowPricingSection(true);
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -2154,14 +2164,10 @@ Cyan OS Lite
           onClick={() => {
             trackEvent('cta_click', {
               button_name: 'floating_get_started',
-              location: 'floating_button'
+              location: 'floating_button',
+              destination: 'pricing_section'
             });
-            const pricingSection = document.getElementById('pricing');
-            if (pricingSection) {
-              pricingSection.classList.remove('hidden');
-              pricingSection.style.display = 'block';
-              setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-            }
+            openPricingSection();
           }}
           className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
           style={{ pointerEvents: 'auto' }}
@@ -2219,7 +2225,7 @@ Cyan OS Lite
               </div>
             </div>
             <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
-            <a href="#pricing" onClick={(e) => { e.preventDefault(); const pricingSection = document.getElementById('pricing'); if (pricingSection) { pricingSection.classList.remove('hidden'); pricingSection.style.display = 'block'; setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); } }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
+            <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
             {/* Email CTA in Navigation - Desktop only */}
             <div className="relative group hidden lg:block">
               <button 
@@ -2330,10 +2336,7 @@ Cyan OS Lite
                             onClick={(e) => {
                               e.preventDefault();
                               setAccountMenuOpen(false);
-                              const pricingSection = document.getElementById('pricing');
-                              if (pricingSection) {
-                                pricingSection.scrollIntoView({ behavior: 'smooth' });
-                              }
+                              openPricingSection();
                             }}
                             className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
                           >
@@ -2424,10 +2427,7 @@ Cyan OS Lite
                       onClick={(e) => {
                         e.preventDefault();
                         setAccountMenuOpen(false);
-                        const pricingSection = document.getElementById('pricing');
-                        if (pricingSection) {
-                          pricingSection.scrollIntoView({ behavior: 'smooth' });
-                        }
+                        openPricingSection();
                       }}
                       className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
                     >
@@ -2615,12 +2615,7 @@ Cyan OS Lite
               <button
                 type="button"
                 onClick={() => {
-                  const pricingSection = document.getElementById('pricing');
-                  if (pricingSection) {
-                    pricingSection.classList.remove('hidden');
-                    pricingSection.style.display = 'block';
-                    setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-                  }
+                  openPricingSection();
                 }}
                 className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
               >
@@ -2810,12 +2805,7 @@ Cyan OS Lite
                     button_name: 'hero_get_started',
                     location: 'hero_section'
                   });
-                  const pricingSection = document.getElementById('pricing');
-                  if (pricingSection) {
-                    pricingSection.classList.remove('hidden');
-                    pricingSection.style.display = 'block';
-                    setTimeout(() => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
-                  }
+                  openPricingSection();
                 }}
                 className="w-auto max-w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 px-2.5 sm:px-6 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-bold text-[11px] sm:text-sm shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 transition-all hover:scale-105 min-h-[30px] sm:min-h-[40px]"
               >
@@ -3541,9 +3531,10 @@ Cyan OS Lite
       <section
         id="pricing"
         ref={setRef('pricing')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-320 hidden ${
-          isVisible.pricing ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-320 ${
+          showPricingSection ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
         }`}
+        style={{ display: showPricingSection ? 'block' : 'none' }}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -4061,15 +4052,7 @@ Cyan OS Lite
                   <button
                     type="button"
                     onClick={() => {
-                      const pricingSection = document.getElementById('pricing');
-                      if (pricingSection) {
-                        pricingSection.classList.remove('hidden');
-                        pricingSection.style.display = 'block';
-                        setTimeout(
-                          () => pricingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }),
-                          50
-                        );
-                      }
+                      openPricingSection();
                     }}
                     className="hover:text-cyan-400 transition-colors"
                   >
