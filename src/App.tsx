@@ -1837,7 +1837,7 @@ function App() {
           setIsVisible((prev) => ({ ...prev, ...updates }));
         }
       },
-      { threshold: 0.01, rootMargin: '220px' }
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
     );
 
     Object.values(sectionsRef.current).forEach((ref) => {
