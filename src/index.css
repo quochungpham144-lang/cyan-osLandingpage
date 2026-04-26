@@ -108,3 +108,23 @@
     padding-bottom: 2.75rem !important;
   }
 }
+
+@keyframes speed-streak {
+  0% { transform: translateX(-100%); opacity: 0; }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.8; }
+  100% { transform: translateX(200%); opacity: 0; }
+}
+
+.animate-speed-streak {
+  animation: speed-streak 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}

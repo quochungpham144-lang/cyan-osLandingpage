@@ -1,18 +1,31 @@
-import { FormEvent, lazy, memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { DocsView } from './components/DocsView';
+import { Footer } from './components/Footer';
+import { PrivacyView } from './components/PrivacyView';
+import { TermsView } from './components/TermsView';
+import { SecurityView } from './components/SecurityView';
+import { HowItWorksView } from './components/HowItWorksView';
+import { VideoView } from './components/VideoView';
+import { AboutView } from './components/AboutView';
+import { HeroSection } from './components/HeroSection';
+import { ProblemSection } from './components/ProblemSection';
+import { SolutionSection } from './components/SolutionSection';
+import { ApiSection } from './components/ApiSection';
+import { EngineSection } from './components/EngineSection';
+import { DevelopersSection } from './components/DevelopersSection';
+import { RoiSection } from './components/RoiSection';
+import { PlatformsSection } from './components/PlatformsSection';
+import { ListingsSection } from './components/ListingsSection';
+import { PricingSection } from './components/PricingSection';
+import { FormEvent, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Zap,
-  Globe,
-  Clock,
-  Code,
-  Mic,
-  CheckCircle,
   ArrowRight,
-  Shield,
-  Layers,
-  TrendingDown,
+  ArrowUp,
   Sun,
   Moon,
-  Copy
+  Menu,
+  X
 } from 'lucide-react';
 
 // Simple type declaration for Google Analytics
@@ -23,8 +36,9 @@ declare global {
   }
 }
 
-type PlanKey = 'free' | 'basic' | 'standard' | 'pro' | 'team' | 'executive_pro_annual'
-type PaymentMethod = 'paypal' | 'crypto'
+export type PlanKey = 'free' | 'basic' | 'standard' | 'pro' | 'team' | 'executive_pro_annual'
+export type PaymentMethod = 'paypal' | 'crypto'
+export type AppView = 'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'
 
 type GoogleTokenResponse = {
   access_token?: string
@@ -118,6 +132,7 @@ function App() {
 
   const initialSession = getStoredSession();
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showApiSection, setShowApiSection] = useState(false);
   const [showRoiSection, setShowRoiSection] = useState(false);
@@ -145,11 +160,18 @@ function App() {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
   const [midDevMenuOpen, setMidDevMenuOpen] = useState(false);
-  const [view, setView] = useState<'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'>('main');
+  const [view, setView] = useState<AppView>('main');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
   const [mobileEarlySubmitted, setMobileEarlySubmitted] = useState(false);
   const [clickPulse, setClickPulse] = useState<{ x: number; y: number; id: number } | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (!clickPulse) return;
@@ -261,796 +283,17 @@ function App() {
     </div>
   ));
 
-  const privacyView = useMemo(() => (
-    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI TRANSLATOR</div>
-              <div className="text-xs text-gray-400">Ultra-low latency AI translation</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={goToMainView}
-            className="text-xs font-medium text-gray-400 hover:text-gray-100"
-          >
-            Back to site
-          </button>
-        </header>
-        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
-          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
-            <div>
-              <div className="text-base md:text-lg font-semibold text-white">PRIVACY POLICY: CYAN AI TRANSLATOR</div>
-              <div className="mt-1 text-xs text-gray-400">Effective Date: January 28, 2026</div>
-            </div>
-          </div>
-          <div className="space-y-5 text-sm leading-relaxed">
-            <div>
-              <div className="font-semibold text-white">1. ZERO-RETENTION POLICY</div>
-              <p className="mt-1 text-gray-300">
-                Given the real-time nature of CYAN&apos;s translation services, we adhere to the highest security standards:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Audio Data: We do not record, store, or monitor any of your audio data.</li>
-                <li>Streaming Mechanism: Audio is streamed to partner APIs (ElevenLabs/Azure) and is immediately deleted after conversion into translated text/voice.</li>
-                <li>Text Data: Translated text content exists only temporarily in volatile memory (RAM) for display purposes and is cleared once the session ends.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">2. VOICE CLONING DATA</div>
-              <p className="mt-1 text-gray-300">
-                For customers utilizing the Customized Voice Cloning feature:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Sample Data: Audio files uploaded for voice training are encrypted using military-grade standards (AES-256).</li>
-                <li>User Control: You maintain full authority to delete your Voice Clone at any time via the Dashboard.</li>
-                <li>Permanent Deletion: Upon deletion, all associated data is permanently removed from our servers and partner APIs.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">3. THIRD-PARTY DATA PROVIDERS</div>
-              <p className="mt-1 text-gray-300">
-                To deliver high-quality services, CYAN integrates with leading AI infrastructures. By using CYAN, you also agree to the privacy policies of these partners:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>ElevenLabs: For high-quality speech synthesis processing.</li>
-                <li>Microsoft Azure &amp; Google Cloud: For Speech-to-Text (STT) and Neural Machine Translation (NMT) processing.</li>
-                <li>Anonymization: We ensure that only anonymized data (excluding personal information such as names or emails) is transmitted to these APIs.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">4. PAYMENT SECURITY</div>
-              <p className="mt-1 text-gray-300">
-                We utilize PayPal for payment processing. CYAN never accesses or stores your credit card numbers, CVV codes, or bank account information. All transactions are conducted directly on PayPal&apos;s secure infrastructure.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">5. USER RIGHTS (GDPR &amp; CCPA COMPLIANCE)</div>
-              <p className="mt-1 text-gray-300">
-                Regardless of your location, CYAN is committed to complying with international security standards:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Right to be Forgotten: You may request the deletion of your entire account and associated data at any time.</li>
-                <li>Right of Access: You may request an export of your payment history and account configuration data.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">6. CATEGORIES OF DATA WE PROCESS</div>
-              <p className="mt-1 text-gray-300">
-                In addition to audio and translated text, CYAN may process limited categories of personal data necessary to operate the Service:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Account Information: Email address, name, and authentication identifiers used to create and manage your account.</li>
-                <li>Billing &amp; Transaction Data: Subscription plan information, invoices, and payment status (processed via PayPal or crypto providers).</li>
-                <li>Technical &amp; Usage Data: Device information, IP address, timestamps, and basic analytics used to secure and improve the Service.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">7. LEGAL BASES FOR PROCESSING</div>
-              <p className="mt-1 text-gray-300">
-                Where applicable privacy laws such as GDPR or CCPA apply, CYAN relies on the following legal bases:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Performance of a Contract: To provide and maintain the translation and voice cloning services you have requested.</li>
-                <li>Legitimate Interests: To secure the platform, prevent abuse, and improve product performance, balanced against your privacy rights.</li>
-                <li>Consent: For specific optional features or marketing communications where we explicitly request your consent.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">8. COOKIES, ANALYTICS &amp; THIRD-PARTY SERVICES</div>
-              <p className="mt-1 text-gray-300">
-                Our web properties may use cookies, local storage, and similar technologies to remember your preferences,
-                secure access to the Service, and measure product performance.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Authentication &amp; Sessions: We may use cookies and browser storage to keep you signed in, manage session security, and support OAuth-based login flows (including sign-in with Google).</li>
-                <li>Analytics: We may use analytics providers (such as Google Analytics) to collect aggregated, pseudonymous usage statistics about how users from different regions interact with the Service.</li>
-                <li>Cookie Control: You can control or disable cookies through your browser settings; however, some core features (such as login and personalization) may not function correctly without them.</li>
-                <li>Service Providers: Hosting, logging, monitoring, and authentication providers may process limited technical data solely on our behalf and under contractual data protection terms.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">9. DATA RETENTION, INTERNATIONAL TRANSFERS &amp; CONTACT</div>
-              <p className="mt-1 text-gray-300">
-                Non-audio account and billing information is retained only for as long as necessary to provide the Service, comply with legal obligations, and resolve disputes.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>International Transfers: Where data is transferred across borders, we rely on appropriate safeguards such as contractual clauses or equivalent mechanisms.</li>
-                <li>Policy Updates: We may update this Privacy Policy from time to time; material changes will be communicated through the Service or by email where appropriate.</li>
-                <li>Contact: For privacy-related questions or requests, you may contact our team via the support channel provided on the CYAN website.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">10. REGION-SPECIFIC RIGHTS (EU/US/OTHER)</div>
-              <p className="mt-1 text-gray-300">
-                CYAN is based in Vietnam and offers services globally in multiple languages. Depending on where you live,
-                additional data protection rights may apply on top of this Policy:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>EU/EEA &amp; UK: Where GDPR or equivalent laws apply, you may have rights to access, rectify, erase, restrict, or object to certain processing, as well as data portability and the right to lodge a complaint with your local supervisory authority.</li>
-                <li>US Residents: In certain US states, you may have rights to access, delete, or opt out of specific types of data processing, subject to applicable state privacy laws.</li>
-                <li>Other Regions: We will honor any mandatory data protection rights granted to you under the laws of your country or region, in addition to the commitments stated in this Policy.</li>
-              </ul>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  ), [isDarkMode]);
+  const privacyView = <PrivacyView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
-  const termsView = useMemo(() => (
-    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
-              <div className="text-xs text-gray-400">Terms of Service</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={goToMainView}
-            className="text-xs font-medium text-gray-400 hover:text-gray-100"
-          >
-            Back to site
-          </button>
-        </header>
-        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
-          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
-            <div>
-              <div className="text-base md:text-lg font-semibold text-white">TERMS OF SERVICE: CYAN AI REAL-TIME TRANSLATOR</div>
-              <div className="mt-1 text-xs text-gray-400">Version: 1.02 – Updated: January 28, 2026</div>
-            </div>
-          </div>
-          <div className="space-y-5 text-sm leading-relaxed">
-            <div>
-              <div className="font-semibold text-white">1. ACCEPTANCE OF TERMS</div>
-              <p className="mt-1 text-gray-300">
-                By accessing and using the CYAN AI utility (hereinafter referred to as the &quot;Service&quot;), you
-                agree to be bound by these Terms. If you are using the Service on behalf of an organization, you agree
-                to these Terms on behalf of that organization.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">2. DESCRIPTION OF SERVICE</div>
-              <p className="mt-1 text-gray-300">
-                CYAN provides an ultra-low latency, real-time AI translation solution, utilizing third-party API
-                infrastructures including ElevenLabs, Microsoft Azure, and Google Cloud AI through our decentralized
-                proxy network.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">3. FAIR USE POLICY</div>
-              <p className="mt-1 text-gray-300">
-                To manage high API costs and maintain system stability:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Executive Pro Plan Limit ($699): Each account is granted 200 hours of audio processing per year.</li>
-                <li>Technology Allocation: Customers receive priority access for up to 40 hours of ElevenLabs Premium technology (including voice cloning).</li>
-                <li>Fallback Mechanism: Upon exceeding the 40-hour Premium limit, the system will automatically switch to High-Quality Standard models (Azure/Google) for the remaining duration to ensure uninterrupted service.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">4. PAYMENT TERMS (PAYPAL &amp; CRYPTOCURRENCY)</div>
-              <p className="mt-1 text-gray-300">
-                We offer two primary payment methods:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>PayPal/Credit Card: Payments are processed in compliance with PayPal&apos;s security regulations.</li>
-                <li>
-                  Cryptocurrency (Stablecoins - USDT/USDC): Transactions are processed via Blockchain networks (Solana,
-                  Polygon, Ethereum). Users are responsible for network fees (Gas fees) and ensuring the correct wallet
-                  address and network are used as required by the system.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">5. REFUND POLICY - CRITICAL NOTICE</div>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>PayPal/Credit Card: Refunds will only be considered within 24 hours of purchase, provided the total translation usage time does not exceed 30 minutes.</li>
-                <li>
-                  Cryptocurrency (Crypto/Stablecoin): Due to the irreversible nature of Blockchain transactions, all
-                  Crypto payments are NON-REFUNDABLE under any circumstances. By choosing to pay via Crypto, you
-                  acknowledge and accept this risk.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">6. VOICE COPYRIGHT &amp; CONTENT</div>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>
-                  Voice Cloning: Users represent and warrant that they hold legal ownership or have obtained written
-                  consent from the voice owner before using the cloning feature. CYAN assumes no liability for
-                  unauthorized impersonation.
-                </li>
-                <li>
-                  Prohibitions: Using CYAN to create fraudulent content (Deepfakes), hate speech, or content that
-                  violates current laws is strictly prohibited.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">7. DATA PRIVACY</div>
-              <p className="mt-1 text-gray-300">
-                We implement a Zero-Retention policy: Conversation content is neither stored nor recorded after the
-                translation session concludes. Cloned voice data is encrypted and remains the sole property of the user.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">8. LIMITATION OF LIABILITY</div>
-              <p className="mt-1 text-gray-300">
-                CYAN does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
-                We shall not be held liable for any business losses arising from the use of the service.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">9. ACCOUNT REGISTRATION &amp; ELIGIBILITY</div>
-              <p className="mt-1 text-gray-300">
-                By creating an account, you represent that you are at least 18 years old, or are otherwise legally
-                capable of entering into binding contracts in your jurisdiction, and that all registration information
-                you provide is accurate and kept up to date.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Organizational Use: If you register on behalf of a company or entity, you confirm that you have authority to bind that entity to these Terms.</li>
-                <li>Account Security: You are responsible for safeguarding your login credentials and for all activities that occur under your account.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">10. LICENSE GRANT &amp; OWNERSHIP</div>
-              <p className="mt-1 text-gray-300">
-                Subject to your compliance with these Terms, CYAN grants you a limited, non-exclusive, non-transferable,
-                and revocable license to access and use the Service for lawful business or personal purposes.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Ownership: All rights, title, and interest in and to the Service, including software, models, and branding, remain with CYAN and its licensors.</li>
-                <li>No Reverse Engineering: You may not reverse engineer, decompile, or attempt to extract source code or underlying models except where permitted by law.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">11. SERVICE AVAILABILITY &amp; MODIFICATIONS</div>
-              <p className="mt-1 text-gray-300">
-                CYAN aims to provide a stable, high-availability translation service but does not guarantee uninterrupted
-                or error-free operation.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Changes: We may modify, suspend, or discontinue parts of the Service (including plans and features) with reasonable notice where practicable.</li>
-                <li>Abuse &amp; Misuse: We reserve the right to suspend or terminate accounts involved in abuse, fraud, or violations of these Terms or applicable law.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">12. DISCLAIMERS &amp; LIMITATION OF LIABILITY</div>
-              <p className="mt-1 text-gray-300">
-                To the maximum extent permitted by law, the Service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis, without warranties of any kind, whether express or implied.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Exclusions: CYAN disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
-                <li>Liability Cap: To the extent permitted by law, CYAN&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
-                <li>Indirect Damages: CYAN is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">13. GOVERNING LAW, DISPUTES &amp; CHANGES TO TERMS</div>
-              <p className="mt-1 text-gray-300">
-                These Terms are governed by the laws of the Socialist Republic of Vietnam, without regard to conflict of
-                laws principles, while respecting any mandatory consumer protection rights that apply in your own country.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Dispute Resolution: Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the competent courts in Vietnam, unless otherwise required by mandatory local law.</li>
-                <li>Changes to Terms: We may update these Terms from time to time. Material changes will be communicated via the Service or by email where appropriate, and your continued use of the Service after such changes constitutes acceptance of the updated Terms.</li>
-              </ul>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  ), [isDarkMode]);
+  const termsView = <TermsView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
-  const securityView = useMemo(() => (
-    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI</div>
-              <div className="text-xs text-gray-400">Dedicated Voice Copyright &amp; Cloning Policy</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={goToMainView}
-            className="text-xs font-medium text-gray-400 hover:text-gray-100"
-          >
-            Back to site
-          </button>
-        </header>
-        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
-          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
-            <div>
-              <div className="text-base md:text-lg font-semibold text-white">
-                CYAN AI: DEDICATED VOICE COPYRIGHT &amp; CLONING POLICY
-              </div>
-              <div className="mt-1 text-xs text-gray-400">Effective Date: January 28, 2026</div>
-            </div>
-          </div>
-          <div className="space-y-5 text-sm leading-relaxed">
-            <div>
-              <div className="font-semibold text-white">1. LEGAL OWNERSHIP OF VOICE DATA</div>
-              <p className="mt-1 text-gray-300">
-                CYAN AI (the &quot;Company&quot;) recognizes that a person&apos;s voice is a core part of their
-                personal identity and intellectual property.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>
-                  User-Provided Content: By uploading audio for the purpose of &quot;Voice Cloning,&quot; the User
-                  represents and warrants that they are the legal owner of the voice or have obtained express, written,
-                  and notarized consent from the owner of the voice.
-                </li>
-                <li>
-                  CYAN’s Role: CYAN acts strictly as a Service Provider and a neutral processing platform. We do not
-                  claim ownership over any voice models generated through our Service.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">2. VOICE CLONING COMPLIANCE &amp; CONSENT (VCC)</div>
-              <p className="mt-1 text-gray-300">
-                The use of the Customized Voice Cloning capability (available in the Executive Pro Plan) is strictly
-                subject to the following conditions:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>
-                  The &quot;Self-Cloning&quot; Rule: Users are encouraged to clone only their own voices for
-                  professional use in meetings and webinars.
-                </li>
-                <li>
-                  Prohibition of Celebrity/Public Figure Cloning: Users are strictly prohibited from uploading audio of
-                  celebrities, politicians, or any public figure for the purpose of voice cloning, regardless of whether
-                  the source material is publicly available.
-                </li>
-                <li>
-                  Verification Rights: CYAN reserves the right, at its sole discretion, to request proof of consent or
-                  identity verification before activating a Customized Voice Clone.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">3. INTELLECTUAL PROPERTY RIGHTS (IPR)</div>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>
-                  Output Rights: Subject to the User’s compliance with these terms, the User owns the rights to the
-                  translated audio output generated by the Service.
-                </li>
-                <li>
-                  Model Training Data: CYAN does not use User-provided voice samples to train its core proprietary AI
-                  models. Voice samples are used exclusively to generate a temporary or permanent voice profile for that
-                  specific User&apos;s account.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">4. PROHIBITED USES &amp; &quot;DEEPFAKE&quot; PREVENTION</div>
-              <p className="mt-1 text-gray-300">
-                CYAN maintains a Zero-Tolerance Policy regarding the following activities:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>
-                  Impersonation with Malicious Intent: Using a cloned voice to commit fraud, gain unauthorized access
-                  to financial accounts (Voice Biometrics fraud), or mislead any third party.
-                </li>
-                <li>
-                  Defamation: Creating content that harms the reputation of any individual through synthetic voice
-                  output.
-                </li>
-                <li>
-                  Electoral Interference: Using the Service to create deceptive content related to elections or
-                  political processes.
-                </li>
-                <li>
-                  Violation of Publicity Rights: Any use that violates the &quot;Right of Publicity&quot; under
-                  international laws.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">5. MONITORING AND ENFORCEMENT</div>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>
-                  Automated Detection: CYAN utilizes advanced audio watermarking and metadata tracking (in
-                  collaboration with providers like ElevenLabs) to identify synthetic speech generated by our platform.
-                </li>
-                <li>
-                  Account Termination: Any violation of this Voice Copyright Policy will result in an immediate and
-                  permanent ban from the Service without a refund.
-                </li>
-                <li>
-                  Legal Cooperation: CYAN will cooperate fully with law enforcement agencies in any investigation
-                  involving the misuse of our voice cloning technology for illegal activities.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">6. INDEMNIFICATION</div>
-              <p className="mt-1 text-gray-300">
-                The User agrees to indemnify, defend, and hold harmless CYAN AI, its founders, and its technology
-                partners (ElevenLabs, Azure, Google) from any and all claims, damages, or legal fees arising from the
-                User’s unauthorized use of a third party’s voice.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">7. LIMITATION OF LIABILITY REGARDING THIRD-PARTY MODELS</div>
-              <p className="mt-1 text-gray-300">
-                CYAN utilizes third-party AI models (e.g., ElevenLabs) for voice synthesis. While CYAN implements its
-                own safety layers, the User also agrees to be bound by the ElevenLabs Terms of Service regarding
-                acceptable voice use. Any changes in third-party policies that restrict certain voices will be passed on
-                to the User immediately.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">8. INCIDENT RESPONSE &amp; INVESTIGATION</div>
-              <p className="mt-1 text-gray-300">
-                If CYAN reasonably suspects that the voice cloning capabilities of the Service are being misused,
-                we may take immediate steps to protect affected individuals and the integrity of the platform.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Initial Action: We may temporarily suspend or restrict access to specific voice models or user accounts while an investigation is conducted.</li>
-                <li>Investigation: CYAN may review technical logs, consult with technology partners, and request additional information from the User.</li>
-                <li>Outcome: Following investigation, CYAN may restore access, impose additional restrictions, or permanently terminate the account in line with this Policy and applicable law.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">9. USER COOPERATION &amp; APPEALS</div>
-              <p className="mt-1 text-gray-300">
-                Users agree to cooperate in good faith with CYAN&apos;s efforts to prevent abuse of voice technologies.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Information Requests: CYAN may request documentation or clarification to verify rights to a specific voice or use case.</li>
-                <li>Appeal Process: If you believe your account or voice model has been restricted in error, you may contact support with relevant evidence for review.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">10. RELATIONSHIP TO PRIVACY &amp; SECURITY POLICIES</div>
-              <p className="mt-1 text-gray-300">
-                This Dedicated Voice Copyright &amp; Cloning Policy operates alongside CYAN&apos;s general Privacy
-                Policy and Terms of Service.
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Zero-Retention: Except where required for security or legal reasons, audio processed through the Service is subject to CYAN&apos;s zero-retention commitments described in the Privacy Policy.</li>
-                <li>Policy Updates: CYAN may update this Policy periodically to reflect evolving legal, ethical, and technological standards in synthetic media and voice AI.</li>
-              </ul>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  ), [isDarkMode]);
+  const securityView = <SecurityView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
-  const howItWorksView = useMemo(() => (
-    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
-              <div className="text-xs text-gray-400">How it works</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={goToMainView}
-            className="text-xs font-medium text-gray-400 hover:text-gray-100"
-          >
-            Back to site
-          </button>
-        </header>
-        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
-          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
-            <div>
-              <div className="text-base md:text-lg font-semibold text-white">HOW CYAN AI REAL-TIME TRANSLATOR WORKS</div>
-              <div className="mt-1 text-xs text-gray-400">From your microphone to translated speech in under a second</div>
-            </div>
-          </div>
-          <div className="space-y-5 text-sm leading-relaxed">
-            <div>
-              <div className="font-semibold text-white">1. REAL-TIME TRANSLATION PIPELINE</div>
-              <p className="mt-1 text-gray-300">
-                CYAN is designed to sit next to your meetings, calls, and webinars as a low-latency translation layer.
-                The high-level pipeline is:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Your voice is captured from microphone or virtual audio device.</li>
-                <li>Audio is streamed in small chunks to our secure backend and partner models.</li>
-                <li>Speech is recognized, translated, and converted into the target language text.</li>
-                <li>Translated text is synthesized back into natural speech and streamed to your output.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">2. AUDIO CAPTURE AND INPUT</div>
-              <p className="mt-1 text-gray-300">
-                The CYAN desktop client captures audio in real time:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Input sources can be your microphone, system audio, or a virtual cable from Zoom, Meet, or Teams.</li>
-                <li>Audio is chunked into very short segments so we do not wait for entire sentences.</li>
-                <li>Each chunk is immediately forwarded for processing to keep latency low.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">3. SPEECH RECOGNITION AND TRANSLATION</div>
-              <p className="mt-1 text-gray-300">
-                Inside the backend, CYAN coordinates multiple AI services:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Speech recognition turns your source-language audio into text.</li>
-                <li>Machine translation converts that text into the target language you selected.</li>
-                <li>Quality and latency are tuned per language pair so that meetings remain natural.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">4. TEXT-TO-SPEECH AND STREAMING OUTPUT</div>
-              <p className="mt-1 text-gray-300">
-                After translation, CYAN turns the text back into speech and streams it:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Partner engines such as ElevenLabs and Azure are used for high-quality voices.</li>
-                <li>Audio is streamed as soon as the first words are ready, not after the whole sentence finishes.</li>
-                <li>You can route the translated audio to speakers, headphones, or a virtual output device for remote participants.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">5. VOICE CLONING AND PERSONALIZATION</div>
-              <p className="mt-1 text-gray-300">
-                For Executive Pro users, CYAN supports customized voice cloning:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>You provide a short, legally compliant audio sample of your own voice.</li>
-                <li>A dedicated model is created so the translated output sounds like you, not a generic voice.</li>
-                <li>We enforce strict rules against cloning public figures and require proof of consent where needed.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">6. LATENCY AND QUALITY OPTIMIZATION</div>
-              <p className="mt-1 text-gray-300">
-                The entire system is tuned for ultra-low latency while staying stable in real meetings:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Streaming instead of batch requests to avoid long pauses in conversation.</li>
-                <li>Fallback models and routing logic keep the service running even under heavy load.</li>
-                <li>Adaptive chunking balances responsiveness with natural-sounding speech.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">7. PRIVACY, SECURITY, AND COMPLIANCE</div>
-              <p className="mt-1 text-gray-300">
-                CYAN was built with privacy-first constraints:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Zero-retention design for live translation sessions.</li>
-                <li>No call recording or long-term storage of conversation content.</li>
-                <li>Region-aware policies to respect users in Vietnam, EU, US, and other jurisdictions.</li>
-              </ul>
-              <p className="mt-2 text-gray-300">
-                For full details, please review the dedicated Privacy Policy and Security pages in the footer.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">8. TYPICAL USE CASES</div>
-              <p className="mt-1 text-gray-300">
-                CYAN is optimized for real-world, high-stakes communication where human interpreters are expensive or unavailable:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Founders pitching to international investors in a different language.</li>
-                <li>Live webinars and online courses reaching audiences across multiple regions.</li>
-                <li>Remote teams running daily standups or support calls across time zones and languages.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">9. TECHNICAL EXPECTATIONS FOR DEVELOPERS</div>
-              <p className="mt-1 text-gray-300">
-                For engineering teams integrating CYAN into production workflows, it is important to treat the numbers on the landing page as realistic targets, not hard SLAs:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Latency: Typical end-to-end response from speech input to first translated audio is in the 200–400ms range, depending on network conditions, provider routing, and language pairs.</li>
-                <li>Reliability: Success rate is designed to stay around 99% in normal conditions, but you should still implement retries and fallbacks in your client.</li>
-                <li>Cost: The “up to 80% cost reduction” figure assumes a comparison with traditional human voiceover or manual translation workflows; actual savings vary by usage pattern and provider mix.</li>
-              </ul>
-              <p className="mt-2 text-gray-300">
-                When building on CYAN OS or the public API, we recommend instrumenting your own latency and error metrics so you can tune timeouts, backoff strategies, and user experience for your specific region and infrastructure.
-              </p>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  ), [isDarkMode]);
+  const howItWorksView = <HowItWorksView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
-  const videoView = useMemo(() => (
-    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-slate-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
-              <div className="text-xs text-gray-400">Experience Natural Voice</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={goToMainView}
-            className="text-xs font-medium text-gray-400 hover:text-gray-100"
-          >
-            Back to site
-          </button>
-        </header>
-        <main className="relative bg-gray-900/80 border border-cyan-500/40 rounded-2xl shadow-[0_0_45px_rgba(34,255,200,0.35)] px-6 py-6 md:px-8 md:py-8 overflow-hidden">
-          <div className="pointer-events-none absolute -top-40 -left-32 w-80 h-80 bg-cyan-500/40 rounded-full blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-40 -right-32 w-96 h-96 bg-blue-500/40 rounded-full blur-3xl" />
-          <div className="relative">
-            <div className="flex items-start justify-between gap-4 pb-4 mb-6">
-              <div>
-                <div className="text-base md:text-lg font-semibold text-white">DEMO: ULTRA-LOW LATENCY AI TRANSLATION</div>
-                <div className="mt-1 text-xs text-gray-400">
-                  Electron CYAN – Experience natural voice translation without leaving this site
-                </div>
-              </div>
-            </div>
-            <div className="relative rounded-2xl overflow-hidden border border-cyan-400/40 bg-black/90 shadow-[0_0_60px_rgba(34,255,200,0.4)]">
-              <div className="relative pt-[56.25%]">
-                <iframe
-                  src="https://www.youtube.com/embed/zffQKk-tCpo?autoplay=1&rel=0"
-                  title="Electron CYAN - ULTRA-LOW LATENCY AI TRANSLATOR"
-                  className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-            <p className="mt-4 text-xs md:text-sm text-gray-300">
-              This video runs in an embedded player so visitors stay on cyan.ai while exploring how ultra-low
-              latency translation works in real meetings.
-            </p>
-          </div>
-        </main>
-      </div>
-    </div>
-  ), [isDarkMode]);
+  const videoView = <VideoView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
-  const aboutView = useMemo(() => (
-    <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
-      <div className="max-w-4xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN OS LITE</div>
-              <div className="text-xs text-gray-400">About the ultra-low latency voice translator</div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={goToMainView}
-            className="text-xs font-medium text-gray-400 hover:text-gray-100"
-          >
-            Back to site
-          </button>
-        </header>
-        <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
-          <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
-            <div>
-              <div className="text-base md:text-lg font-semibold text-white">ABOUT CYAN OS LITE</div>
-              <div className="mt-1 text-xs text-gray-400">
-                Real-time AI voice translation designed for natural negotiation and live meetings
-              </div>
-            </div>
-          </div>
-          <div className="space-y-5 text-sm leading-relaxed">
-            <div>
-              <div className="font-semibold text-white">What is CYAN OS Lite?</div>
-              <p className="mt-1 text-gray-300">
-                CYAN OS Lite is a real-time AI translator that sits next to your calls, meetings, and webinars and turns
-                your voice into another language in well under a second. It is built on top of a lightweight runtime
-                layer we call CYAN OS, which orchestrates providers such as ElevenLabs, Microsoft Azure, and Google
-                Wavenet to keep latency in the 200–400ms range while staying cost-efficient.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">Why we focus on natural voice</div>
-              <p className="mt-1 text-gray-300">
-                Most translation tools are optimised for captions, not for how human conversations actually feel. CYAN
-                OS Lite is tuned for voice-first experiences where tone, pacing, and micro-pauses matter: negotiations,
-                investor calls, sales demos, and high-stakes one-on-ones. Partner engines such as ElevenLabs are used so
-                that translated speech sounds warm and expressive instead of robotic.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">Built for negotiation and live meetings</div>
-              <p className="mt-1 text-gray-300">
-                In a real negotiation, a 2–3 second delay can kill the flow of trust. CYAN OS Lite streams translation
-                in very small chunks so that your counterpart hears the first words in under half a second. This makes
-                cross-language calls, board meetings, and customer support sessions feel closer to a native
-                conversation, not a relay race between you and a distant interpreter.
-              </p>
-              <p className="mt-2 text-gray-300">
-                The desktop client integrates with existing tools: you can route audio from Zoom, Meet, or Teams into
-                CYAN and send translated speech back to headphones, speakers, or a virtual microphone that remote
-                participants can select as their audio source.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">CYAN OS Lite vs. full CYAN OS</div>
-              <p className="mt-1 text-gray-300">
-                CYAN OS Lite focuses on a streamlined, opinionated path: ultra-low latency voice translation with
-                sensible defaults. It exposes the same real-time pipeline we use internally, but without requiring
-                teams to manage complex routing, watermarking, or multi-region deployments. The full CYAN OS stack
-                extends these ideas for enterprise deployments and deeper integrations.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">Who is it for?</div>
-              <p className="mt-1 text-gray-300">
-                CYAN OS Lite is built for founders, operators, and teams who need to sound like themselves in another
-                language when it matters most. Typical scenarios include:
-              </p>
-              <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Negotiating with international partners or suppliers without a human interpreter on the call.</li>
-                <li>Pitching to investors in a language you are not fully fluent in.</li>
-                <li>Running support or success calls where empathy and tone of voice are critical.</li>
-                <li>Hosting webinars and live trainings for audiences across multiple regions.</li>
-              </ul>
-            </div>
-            <div>
-              <div className="font-semibold text-white">Voice, privacy, and control</div>
-              <p className="mt-1 text-gray-300">
-                CYAN follows a zero-retention philosophy for live sessions: audio is streamed for processing and then
-                discarded rather than archived. For users on higher tiers, CYAN OS Lite can be combined with customised
-                voices so that translated speech still feels like your own, subject to strict consent and copyright
-                rules around voice cloning.
-              </p>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  ), [isDarkMode]);
+  const aboutView = <AboutView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1244,7 +487,8 @@ function App() {
     try {
       await navigator.clipboard.writeText(text);
       return true;
-    } catch (e) { void e
+    } catch (e) {
+      void e
       try {
         const el = document.createElement('textarea');
         el.value = text;
@@ -1375,16 +619,16 @@ function App() {
       const activateEndpoint = hasPaymentId ? 'activate' : 'activate-order'
       const body = hasPaymentId
         ? {
-            user_id: pending.userId,
-            plan_key: pending.planKey,
-            payment_id: pending.paymentId,
-            order_id: pending.orderId
-          }
+          user_id: pending.userId,
+          plan_key: pending.planKey,
+          payment_id: pending.paymentId,
+          order_id: pending.orderId
+        }
         : {
-            user_id: pending.userId,
-            plan_key: pending.planKey,
-            order_id: pending.orderId
-          }
+          user_id: pending.userId,
+          plan_key: pending.planKey,
+          order_id: pending.orderId
+        }
 
       const response = await fetch(`${BACKEND_URL}/api/payment/now/${activateEndpoint}`, {
         method: 'POST',
@@ -1692,7 +936,7 @@ function App() {
     const drag = (e: MouseEvent | TouchEvent) => {
       if (isDragging) {
         e.preventDefault();
-        
+
         let clientX, clientY;
         if (e.type === 'touchmove') {
           clientX = (e as TouchEvent).touches[0].clientX;
@@ -1712,7 +956,7 @@ function App() {
         const rect = floatingButtons.getBoundingClientRect();
         const maxX = window.innerWidth - rect.width - 32; // 32px padding from right
         const maxY = window.innerHeight - rect.height - 32; // 32px padding from bottom
-        
+
         const constrainedX = Math.max(0, Math.min(currentX, maxX));
         const constrainedY = Math.max(0, Math.min(currentY, maxY));
 
@@ -1877,2414 +1121,941 @@ function App() {
 
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <div className="mobile-fixed-controls sm:hidden fixed top-3 right-3 z-[130] flex items-center gap-2">
-        <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-2 rounded-full bg-white/95 dark:bg-slate-800/95 border border-gray-200 dark:border-slate-700 shadow-md text-gray-700 dark:text-white"
-          aria-label="Toggle dark mode"
-        >
-          {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
-
-        {isLoggedIn && userInfo ? (
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setMobileAccountOpen((open) => !open)}
-              className="w-9 h-9 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 shadow-md"
-              aria-label="Open account menu"
-            >
-              <img
-                src={userInfo.picture || '/logoCYAN.png'}
-                alt={userInfo.name}
-                className="w-full h-full object-cover"
-              />
-            </button>
-
-            {mobileAccountOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-2.5 z-[135]">
-                <div className="px-3 pb-2 border-b border-gray-100 dark:border-slate-800">
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                  <div className="mt-1 flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                      {userInfo.plan || 'free'}
-                    </span>
-                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
-                      {PLAN_PRICE[userInfo.plan || 'free']}
-                    </span>
-                  </div>
-                </div>
-                <div className="px-4 pt-3 flex justify-between items-center">
-                  <a
-                    href="#pricing"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setMobileAccountOpen(false);
-                      openPricingSection();
-                    }}
-                    className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
-                  >
-                    Upgrade Plan
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      saveSession(null);
-                      setMobileAccountOpen(false);
-                    }}
-                    className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                  >
-                    Logout
-                  </button>
-                </div>
+      <>
+        {/* Navigation */}
+        <nav className={`fixed top-0 w-full transition-all duration-300 z-[100] ${scrolled
+          ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3'
+          : 'bg-transparent py-4 sm:py-6 border-b-2 border-gray-200/60 dark:border-slate-700/50'
+          }`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+                <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
               </div>
-            )}
-          </div>
-        ) : (
-          <button
-            onClick={() => setShowLoginModal(true)}
-            className="px-3 py-2 rounded-full bg-cyan-600 text-yellow-300 text-xs font-semibold shadow-md"
-          >
-            Login
-          </button>
-        )}
-      </div>
+              <div className="text-left">
+                <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+              </div>
+            </div>
 
-      <div key={view} className="page-fade-in">
-      {view === 'privacy'
-        ? privacyView
-        : view === 'terms'
-          ? termsView
-          : view === 'security'
-            ? securityView
-            : view === 'features'
-              ? howItWorksView
-              : view === 'video'
-                ? videoView
-                : view === 'about'
-                  ? aboutView
-                  : view === 'docs'
-                    ? (
-                      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100">
-                    <div className="relative max-w-6xl mx-auto px-4 py-8 lg:py-12">
-                      <div className="absolute inset-0 -z-10 opacity-40 pointer-events-none">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.12),_transparent_60%)]" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(59,130,246,0.12),_transparent_60%)]" />
-                        <div className="absolute inset-0 bg-[linear-gradient(115deg,_rgba(15,23,42,0.9),_transparent)]" />
-                      </div>
+            <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
+              <a href="#hero" onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
+              <a href="#solution" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
+              <a href="#engine" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
+              <a href="#platforms" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
+              <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
+              <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
+              <a href="#roi" onClick={(e) => { e.preventDefault(); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
+              <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
+              <a href="#footer" onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
 
-                      <div className="flex justify-between items-center mb-8">
-                        <div>
-                          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
-                            <Code className="w-3.5 h-3.5" />
-                            <span>CYAN & CYAN OS Lite Documentation</span>
-                          </div>
-                          <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
-                            Streaming Architecture & Integration Guide
-                          </h1>
-                          <p className="mt-2 text-sm md:text-base text-slate-300 max-w-2xl">
-                            This page describes how CYAN&apos;s realtime translator and CYAN OS Lite gateway work together:
-                            from microphone capture, to AI routing, to audio watermarking and external marketplaces.
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setView('main');
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          className="hidden sm:inline-flex items-center gap-2 rounded-full border border-slate-600 bg-slate-900/70 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:border-cyan-400 hover:text-cyan-200 transition-colors"
-                        >
-                          <ArrowRight className="w-3 h-3 rotate-180" />
-                          <span>Back to site</span>
-                        </button>
-                      </div>
+              <div className="ml-4 flex items-center gap-4">
+                <button
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                  aria-label="Toggle dark mode"
+                >
+                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </button>
 
-                      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)] gap-6 lg:gap-8">
-                        <div className="space-y-6">
-                          <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
-                            <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              1. End-to-End Streaming Flow (Client ⇄ CYAN OS Lite ⇄ Providers)
-                            </h2>
-                            <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              CYAN desktop client and browser extension stream raw audio to a local Electron core, which
-                              bridges to CYAN OS Lite running in the cloud. CYAN OS Lite then orchestrates provider calls
-                              (STT, translation, TTS) while keeping latency under 400ms whenever possible.
-                            </p>
-                            <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 font-mono text-[10px] md:text-xs text-slate-200 overflow-x-auto">
-                              <div className="text-cyan-400 mb-1">Streaming pipeline</div>
-                              <pre className="whitespace-pre leading-relaxed">
-{`Mic / Virtual Device
-  ↓  PCM chunks (48kHz → 16kHz noise-gated)
-Electron Core
-  ↓  /api/stt/stream (CYAN OS Lite)
-  ↓  Provider STT (Google/Azure) → partial + final transcripts
-  ↓  /api/translate (CYAN OS Lite with glossary & caching)
-  ↓  /api/tts/speak-stream (chunked TTS)
-  ↓  PCM / MPEG chunks → local player
+                <div className="relative group">
+                  <button
+                    onClick={() => {
+                      trackEvent('cta_click', { button_name: 'early_access_nav', location: 'navigation' });
+                    }}
+                    className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
+                  >
+                    Early Access
+                  </button>
 
-Typical one-way latency: 200–400ms (network + provider + local render).`}
-                              </pre>
-                            </div>
-                          </section>
-
-                          <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
-                            <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              2. TTS Routing: Local ONNX Piper vs Cloud Voices
-                            </h2>
-                            <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              For text-to-speech, CYAN uses a hybrid strategy: a local ONNX model (Piper) for instant
-                              preview, and high-quality cloud voices (Google WaveNet, Azure Neural, ElevenLabs) for the
-                              main stream. This keeps the experience responsive while still delivering natural voices.
-                            </p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
-                                <div className="text-cyan-400 mb-1">Preview vs full stream</div>
-                                <pre className="whitespace-pre leading-relaxed">
-{`text = user_message
-snippet = first_5_words(text)
-
-Piper (local ONNX)
-  ↓  synthesize(snippet)
-  ↓  22.05kHz → 16kHz PCM
-  ↓  play instantly in ear`}
-                                </pre>
-                                <p className="mt-2 text-[10px] text-slate-400">
-                                  Piper is optimized for low CPU and fast startup. It gives the user an immediate sense
-                                  of the target voice and language while the cloud stream is being prepared.
-                                </p>
-                              </div>
-                              <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
-                                <div className="text-cyan-400 mb-1">Cloud TTS routing (WaveNet, Azure, ElevenLabs)</div>
-                                <pre className="whitespace-pre leading-relaxed">
-{`if plan == "free":
-  engine = "google_wavenet"
-elif plan == "pro":
-  engine = "azure_neural" or "elevenlabs"
-
-/api/tts/speak-stream(engine, language, text)
-  ↓  provider streams audio chunks
-  ↓  CYAN OS Lite forwards chunks to client
-  ↓  audio watermark injected before output`}
-                                </pre>
-                                <p className="mt-2 text-[10px] text-slate-400">
-                                  The gateway chooses the engine based on plan, language, and health checks. If a cloud
-                                  provider fails, CYAN OS Lite can fall back or temporarily rely more on ONNX voices.
-                                </p>
-                              </div>
-                            </div>
-                          </section>
-
-                          <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
-                            <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              3. Audio Watermarking for Realtime Streams
-                            </h2>
-                            <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              To protect generated audio, CYAN inserts a lightweight PCM watermark before it reaches the
-                              virtual microphone / output device. The watermark is designed to be inaudible to humans but
-                              detectable offline for compliance checks and abuse investigation.
-                            </p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
-                                <div className="text-cyan-400 mb-1">Watermark injection (concept)</div>
-                                <pre className="whitespace-pre leading-relaxed">
-{`for each PCM16 frame:
-  base = tts_frame[i]
-  mark = watermark_pattern[i % pattern_len]
-  output[i] = clamp16(base + mark)`}
-                                </pre>
-                                <p className="mt-2 text-[10px] text-slate-400">
-                                  Pattern is short, pseudo-random, and repeated so it survives resampling and light
-                                  compression. Detection happens server-side when needed.
-                                </p>
-                              </div>
-                              <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs text-slate-200">
-                                <div className="text-cyan-400 mb-1">Security goals</div>
-                                <ul className="space-y-1 list-disc list-inside">
-                                  <li>Make AI-generated audio traceable without hurting UX.</li>
-                                  <li>Keep overhead &lt; 1% CPU on typical machines.</li>
-                                  <li>Survive common transformations (volume, resample, trimming).</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </section>
-
-                          <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
-                            <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              4. RapidAPI & Ocean / Blockchain Gateways
-                            </h2>
-                            <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              CYAN OS Lite is also exposed as a standalone API product via RapidAPI and blockchain-based
-                              marketplaces such as Ocean. This lets developers integrate the same infrastructure you see
-                              in the desktop client directly into their own apps.
-                            </p>
-                            <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200 mb-3">
-                              <div className="text-cyan-400 mb-1">RapidAPI (REST gateway)</div>
-                              <pre className="whitespace-pre leading-relaxed">
-{`POST https://cyan-os-lite.p.rapidapi.com/api/tts/speak-stream
-Headers:
-  X-RapidAPI-Key: YOUR_KEY
-  Content-Type: application/json
-
-Body:
-  {
-    "text": "Hello world",
-    "language": "en-US",
-    "voice_id": "default",
-    "streaming": true
-  }`}
-                              </pre>
-                            </div>
-                            <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
-                              <div className="text-cyan-400 mb-1">Ocean / blockchain integration (concept)</div>
-                              <pre className="whitespace-pre leading-relaxed">
-{`Consumer dApp
-  ↓  buys access token / data NFT
-Ocean Gateway
-  ↓  attaches usage token to request
-CYAN OS Lite
-  ↓  validates token → routes to providers
-  ↓  streams audio back to consumer`}
-                              </pre>
-                              <p className="mt-2 text-[10px] text-slate-400">
-                                This pattern allows usage-based pricing and on-chain revenue splits, while CYAN OS Lite
-                                remains the high-performance execution layer.
-                              </p>
-                            </div>
-                          </section>
-                        </div>
-
-                        <aside className="space-y-4">
-                          <div className="rounded-2xl border border-cyan-500/50 bg-slate-900/80 p-4 shadow-xl shadow-cyan-900/50">
-                            <h3 className="text-sm font-semibold text-cyan-300 mb-2">CYAN Runtime Snapshot</h3>
-                            <div className="text-[10px] md:text-xs font-mono text-slate-200 space-y-1">
-                              <div>Latency: &lt;400ms p50 (target)</div>
-                              <div>Languages: 36+ (STT + TTS)</div>
-                              <div>Routing: Google, Azure, ElevenLabs, local ONNX</div>
-                              <div>Caching: semantic + session glossary</div>
-                              <div>Watermark: PCM-level, inaudible</div>
-                            </div>
-                          </div>
-                          <div className="rounded-2xl border border-slate-700 bg-slate-900/80 p-4">
-                            <h3 className="text-sm font-semibold text-slate-100 mb-2">When to use what</h3>
-                            <ul className="text-[11px] text-slate-300 space-y-1.5">
-                              <li>
-                                <span className="font-semibold text-cyan-300">CYAN Desktop:</span> quickest way to use
-                                realtime translation in meetings.
-                              </li>
-                              <li>
-                                <span className="font-semibold text-cyan-300">CYAN OS Lite API:</span> when you need
-                                backend-only integration with your own UI.
-                              </li>
-                              <li>
-                                <span className="font-semibold text-cyan-300">RapidAPI / Ocean:</span> when you want
-                                marketplace billing, keys, and usage dashboards managed externally.
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="rounded-2xl border border-slate-700 bg-slate-900/80 p-4 flex flex-col gap-2">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setView('main');
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                              }}
-                              className="inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-600 px-3 py-2 text-xs font-semibold text-black hover:bg-cyan-500 transition-colors"
-                            >
-                              <ArrowRight className="w-3 h-3 rotate-180" />
-                              <span>Back to main site</span>
-                            </button>
-                            <p className="text-[11px] text-slate-400">
-                              All information on this page is a high-level overview. Implementation details may change as
-                              providers and routing logic evolve.
-                            </p>
-                          </div>
-                        </aside>
-                      </div>
+                  <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="p-4">
+                      <h3 className="font-bold text-gray-900 dark:text-white mb-1">Join the Waitlist</h3>
+                      <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">Get exclusive updates and priority access.</p>
+                      <form action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg==" method="POST" className="space-y-3">
+                        <input type="text" name="FIRSTNAME" placeholder="Your Name" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
+                        <input type="email" name="EMAIL" placeholder="Your Email" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
+                        <button type="submit" className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20">Join Waitlist</button>
+                        <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">500+ members • No spam</div>
+                      </form>
                     </div>
                   </div>
-                )
-                : (
-    <div
-      className="min-h-screen bg-gradient-to-b from-emerald-50 via-emerald-50/25 to-cyan-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden"
-      onMouseDown={(event) => {
-        if (typeof window !== 'undefined' && !window.matchMedia('(pointer:fine)').matches) return;
-        setClickPulse({ x: event.clientX, y: event.clientY, id: Date.now() });
-      }}
-    >
-      {/* Tech Grid Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/75 via-cyan-100/25 to-white/28 dark:from-slate-900/0 dark:via-slate-900/0 dark:to-slate-950/0"></div>
-        <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-gradient-to-br from-emerald-100/78 via-cyan-100/42 to-transparent dark:from-emerald-400/30 dark:via-cyan-400/22 dark:to-transparent blur-3xl animate-[pulse_2.4s_ease-in-out_infinite]"></div>
-        <div className="absolute -top-12 -left-24 w-[34rem] h-[34rem] rounded-full bg-emerald-300/55 dark:bg-emerald-300/35 blur-3xl animate-[pulse_1.9s_ease-in-out_infinite]"></div>
-        <div className="absolute inset-0 bg-grid-pattern opacity-15 sm:opacity-20 dark:opacity-30 dark:sm:opacity-40"></div>
-        <div className="absolute inset-0 hidden sm:block">
-          <div className="absolute -top-10 -left-24 w-[44rem] h-[44rem] bg-emerald-100/74 dark:bg-emerald-400/38 rounded-full blur-3xl animate-[pulse_2.2s_ease-in-out_infinite]"></div>
-          <div className="absolute top-1/3 -right-20 w-[32rem] h-[32rem] bg-cyan-400/35 dark:bg-cyan-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-0 left-1/3 w-[30rem] h-[30rem] bg-teal-400/25 dark:bg-teal-600/15 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        </div>
-        <div className="absolute inset-0 sm:hidden">
-          <div className="absolute -top-16 -left-10 w-72 h-72 bg-emerald-100/64 rounded-full blur-2xl animate-[pulse_2.1s_ease-in-out_infinite]"></div>
-          <div className="absolute bottom-12 -right-10 w-52 h-52 bg-cyan-300/20 rounded-full blur-2xl"></div>
-        </div>
-      </div>
-      {clickPulse && (
-        <div key={clickPulse.id} className="fixed inset-0 pointer-events-none z-20">
-          <span
-            className="absolute w-20 h-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/35 dark:bg-cyan-400/25 animate-ping"
-            style={{ left: clickPulse.x, top: clickPulse.y }}
-          />
-          <span
-            className="absolute w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/70 dark:border-cyan-300/60"
-            style={{ left: clickPulse.x, top: clickPulse.y }}
-          />
-        </div>
-      )}
-      {/* Draggable Floating CTA Buttons */}
-      <div 
-        id="floating-buttons"
-        className="fixed bottom-20 sm:bottom-10 right-4 sm:right-8 z-30 flex flex-col items-end gap-3 cursor-move select-none"
-        style={{ touchAction: 'none' }}
-      >
-        <a
-          href="#pricing"
-          onClick={() => {
-            trackEvent('cta_click', {
-              button_name: 'floating_get_started',
-              location: 'floating_button',
-              destination: 'pricing_section'
-            });
-            openPricingSection();
-          }}
-          className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
-          style={{ pointerEvents: 'auto' }}
-        >
-          Get Started Free <ArrowRight className="w-4 h-4" />
-        </a>
-        <button
-          type="button"
-          onClick={() => {
-            trackEvent('cta_click', {
-              button_name: 'download_cyan',
-              location: 'floating_button'
-            });
-            // TODO: cập nhật link download khi desktop app sẵn sàng
-          }}
-          className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
-          style={{ pointerEvents: 'auto' }}
-        >
-          <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
-          <span className="leading-tight text-[10px] text-cyan-200/90">
-            Currently in Private Beta. Sign up to request early access.
-          </span>
-        </button>
-      </div>
+                </div>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 z-[100] shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-            </div>
-            <div className="text-left sm:text-center">
-              <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
-              <div className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">ULTRA-LOW LATENCY AI TRANSLATOR</div>
-            </div>
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white z-[101]"
-              aria-label="Toggle dark mode"
-            >
-              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </button>
-          </div>
-          <div className="desktop-nav-links hidden sm:flex items-center gap-3 sm:gap-4 flex-wrap lg:flex-nowrap">
-            <a href="#solution" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Solution</a>
-            <div className="relative lg:hidden">
-              <button
-                type="button"
-                onClick={() => setMidDevMenuOpen((open) => !open)}
-                className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2 flex items-center gap-1"
-              >
-                Developers <ArrowRight className={`w-3 h-3 transition-transform ${midDevMenuOpen ? 'rotate-180' : 'rotate-90'}`} />
-              </button>
-              {midDevMenuOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
-                  <a
-                    href="#api"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setMidDevMenuOpen(false);
-                      setShowApiSection(true);
-                      setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100);
-                    }}
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    API
-                  </a>
-                  <a
-                    href="#developers"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setMidDevMenuOpen(false);
-                      document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    Developer Docs
-                  </a>
-                  <a
-                    href="#roi"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setMidDevMenuOpen(false);
-                      openRoiSection();
-                    }}
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    ROI Calculator
-                  </a>
-                </div>
-              )}
-            </div>
-            <div className="relative group hidden lg:block">
-              <button className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 flex items-center gap-1 px-2">
-                Developers <ArrowRight className="w-3 h-3 rotate-90" />
-              </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">API</a>
-                <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Developer Docs</a>
-                <a href="#roi" onClick={(e) => { e.preventDefault(); openRoiSection(); }} className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">ROI Calculator</a>
-              </div>
-            </div>
-            <a href="#engine" className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Engine</a>
-            <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-sm hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-2">Pricing</a>
-            {/* Email CTA in Navigation - Desktop only */}
-            <div className="relative group">
-              <button 
-                onClick={() => {
-                  trackEvent('cta_click', {
-                    button_name: 'early_access_nav',
-                    location: 'navigation'
-                  });
-                }}
-                className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all flex items-center gap-2 text-sm"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                </svg>
-                Early Access
-              </button>
-              
-              {/* Hover Email Form */}
-              <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                <div className="p-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Get Early Access</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Join our waitlist for exclusive updates!</p>
-                  
-                  {/* Custom Email Form */}
-                  <form 
-                    action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
-                    method="POST"
-                    className="space-y-3"
-                  >
-                    <input
-                      type="text"
-                      name="FIRSTNAME"
-                      placeholder="Your Name"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
-                    />
-                    <input
-                      type="email"
-                      name="EMAIL"
-                      placeholder="Your Email"
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
-                    />
-                    <button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white py-2 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all text-sm"
-                    >
-                      Join Waitlist
-                    </button>
-                  </form>
-                  
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
-                    500+ members • No spam
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            {/* Desktop Login/User Buttons */}
-            <div className="hidden sm:flex items-center gap-3">
-              <button 
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white z-[101]"
-              >
-                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-              {isLoggedIn && userInfo ? (
-                <div className="flex items-center gap-3">
+                {isLoggedIn && userInfo ? (
                   <div className="relative">
                     <button
                       type="button"
                       onClick={() => setAccountMenuOpen((open) => !open)}
                       className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
                     >
-                      <img 
-                        src={userInfo.picture || '/logoCYAN.png'} 
-                        alt={userInfo.name}
-                        className="w-6 h-6 rounded-full object-cover"
-                      />
-                      <span className="text-gray-700 dark:text-gray-300 font-medium text-sm">
-                        {userInfo.name}
-                      </span>
+                      <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
+                      <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
                     </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400 px-2"
+                  >
+                    Join
+                  </button>
+                )}
+              </div>
+            </div>
 
-                    {accountMenuOpen && (
-                      <div className="absolute right-0 top-11 min-w-[280px] rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-3 z-[110]">
-                        <div className="px-4 pb-3 border-b border-gray-100 dark:border-slate-800">
-                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Account</p>
-                          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userInfo.email}</p>
-                        </div>
-                        <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
-                          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Current Plan</p>
-                          <div className="flex items-center justify-between">
-                            <span className="inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5">
-                              <span className="text-xs font-bold uppercase tracking-wide">
-                                {userInfo.plan || 'free'}
-                              </span>
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                              {PLAN_PRICE[userInfo.plan || 'free']}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="px-4 pt-3 flex justify-between items-center">
-                          <a 
-                            href="#pricing"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setAccountMenuOpen(false);
-                              openPricingSection();
-                            }}
-                            className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
-                          >
-                            Upgrade Plan
-                          </a>
-                          <button 
-                            type="button"
-                            onClick={() => {
-                              saveSession(null);
-                              trackEvent('logout', {
-                                provider: userInfo.provider
-                              });
-                              setAccountMenuOpen(false);
-                            }}
-                            className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                          >
-                            Logout
-                          </button>
+            <div className="flex items-center gap-2">
+              {/* Mobile Account/Login Button */}
+              {isLoggedIn && userInfo ? (
+                <div className="relative sm:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setMobileAccountOpen((open) => !open)}
+                    className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-slate-700 shadow-sm"
+                    aria-label="Open account menu"
+                  >
+                    <img
+                      src={userInfo.picture || '/logoCYAN.png'}
+                      alt={userInfo.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+
+                  {mobileAccountOpen && (
+                    <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2.5 z-[135]">
+                      <div className="px-4 pb-2 border-b border-gray-100 dark:border-slate-800">
+                        <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                        <div className="mt-1 flex items-center justify-between">
+                          <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                            {userInfo.plan || 'free'}
+                          </span>
+                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                            {PLAN_PRICE[userInfo.plan || 'free']}
+                          </span>
                         </div>
                       </div>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
-                      window.location.href = deepLink;
-                      trackEvent('open_in_app', { userId: userInfo.id });
-                    }}
-                    className="ml-2 bg-gradient-to-r from-gray-800 to-black border border-gray-700 text-white px-2.5 py-1 rounded-md text-xs font-medium hover:border-cyan-500 transition-all flex items-center gap-1.5"
-                  >
-                    <Zap className="w-3 h-3 text-yellow-400" />
-                    Open in App
-                  </button>
+                      <div className="px-4 pt-3 flex flex-col gap-2">
+                        <a
+                          href="#pricing"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setMobileAccountOpen(false);
+                            openPricingSection();
+                          }}
+                          className="text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700"
+                        >
+                          Upgrade Plan
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            saveSession(null);
+                            setMobileAccountOpen(false);
+                          }}
+                          className="text-left text-sm text-red-500 font-bold"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <button 
-                  onClick={() => {
-                    trackEvent('cta_click', {
-                      button_name: 'login',
-                      location: 'navigation'
-                    });
-                    setShowLoginModal(true);
-                  }}
-                  className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-4 py-2 rounded-lg font-semibold hover:bg-cyan-700 dark:hover:bg-cyan-700 transition-all"
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="sm:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
                 >
                   Login
                 </button>
               )}
-        </div>
-        <div className="hidden items-center gap-2">
-          {isLoggedIn && userInfo ? (
-            <div className="relative">
+
               <button
-                type="button"
-                onClick={() => setAccountMenuOpen((open) => !open)}
-                className="w-8 h-8 rounded-full overflow-hidden border border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-700 flex items-center justify-center"
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                aria-label="Toggle dark mode"
               >
-                <img 
-                  src={userInfo.picture || '/logoCYAN.png'} 
-                  alt={userInfo.name}
-                  className="w-full h-full object-cover"
-                />
+                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               </button>
-              {accountMenuOpen && (
-                <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xl py-3 z-[110]">
-                  <div className="px-4 pb-3 border-b border-gray-100 dark:border-slate-800">
-                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Account</p>
-                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{userInfo.email}</p>
-                  </div>
-                  <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
-                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Current Plan</p>
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5">
-                        <span className="text-xs font-bold uppercase tracking-wide">
-                          {userInfo.plan || 'free'}
-                        </span>
-                      </span>
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                        {PLAN_PRICE[userInfo.plan || 'free']}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="px-4 pt-3 flex justify-between items-center">
-                    <a 
-                      href="#pricing"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setAccountMenuOpen(false);
-                        openPricingSection();
-                      }}
-                      className="text-xs text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium transition-colors"
-                    >
-                      Upgrade Plan
-                    </a>
-                    <button 
-                      type="button"
-                      onClick={() => {
-                        saveSession(null);
-                        trackEvent('logout', {
-                          provider: userInfo.provider
-                        });
-                        setAccountMenuOpen(false);
-                      }}
-                      className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <button 
-              onClick={() => {
-                trackEvent('cta_click', {
-                  button_name: 'login',
-                  location: 'navigation_mobile'
-                });
-                setShowLoginModal(true);
-              }}
-              className="w-8 h-8 rounded-full bg-cyan-600 text-yellow-300 flex items-center justify-center text-xs font-semibold"
-              aria-label="Login"
-            >
-              Login
-            </button>
-          )}
-        </div>
-
-      {(checkoutBusy || checkoutMessage) && (
-        <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-xl border border-cyan-500/40 bg-white/95 dark:bg-slate-900/95 px-4 py-3 shadow-2xl backdrop-blur">
-          {checkoutBusy ? (
-            <p className="text-sm font-medium text-cyan-700 dark:text-cyan-300">Creating checkout session...</p>
-          ) : (
-            <p className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap break-words">{checkoutMessage}</p>
-          )}
-          {checkoutMessage && (
-            <button
-              onClick={() => setCheckoutMessage(null)}
-              className="mt-2 text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400"
-            >
-              Dismiss
-            </button>
-          )}
-        </div>
-      )}
-
-      {cryptoCheckout && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
-          <div className="w-full max-w-lg rounded-2xl border border-cyan-500/30 bg-white dark:bg-slate-900 shadow-2xl">
-            <div className="flex items-start justify-between gap-4 border-b border-cyan-500/20 px-5 py-4">
-              <div>
-                <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Thanh toán Crypto</div>
-                <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">Mạng: BSC • Coin: {cryptoCheckout.payCurrency.toUpperCase()}</div>
-              </div>
               <button
-                onClick={() => setCryptoCheckout(null)}
-                className="text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
               >
-                Đóng
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
+          </div>
 
-            <div className="px-5 py-4 space-y-4">
-              <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
-                <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">Số tiền cần gửi</div>
-                <div className="mt-1 flex items-center justify-between gap-3">
-                  <div className="text-lg font-bold text-gray-900 dark:text-white break-all">{cryptoCheckout.payAmount}</div>
-                  <button
-                    onClick={async () => {
-                      const ok = await copyToClipboard(cryptoCheckout.payAmount);
-                      setCheckoutMessage(ok ? 'Đã copy số tiền.' : 'Copy thất bại.');
-                    }}
-                    className="text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300"
-                  >
-                    Copy
-                  </button>
+          {/* Mobile Sidebar */}
+          <div
+            className={`sm:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          >
+            <div className="flex flex-col h-full">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+                    <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+                  </div>
+                  <span className="text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
                 </div>
-              </div>
-
-              <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
-                <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">Địa chỉ nhận</div>
-                <div className="mt-1 flex items-start justify-between gap-3">
-                  <div className="text-sm font-mono text-gray-900 dark:text-white break-all">{cryptoCheckout.payAddress}</div>
-                  <button
-                    onClick={async () => {
-                      const ok = await copyToClipboard(cryptoCheckout.payAddress);
-                      setCheckoutMessage(ok ? 'Đã copy địa chỉ.' : 'Copy thất bại.');
-                    }}
-                    className="text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300"
-                  >
-                    Copy
-                  </button>
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-cyan-500/20 bg-white dark:bg-slate-900 p-4">
-                <div className="text-xs text-gray-600 dark:text-gray-300">Sau khi gửi xong, bấm nút bên dưới để hệ thống kiểm tra và kích hoạt gói.</div>
                 <button
-                  onClick={checkAndActivateCryptoPayment}
-                  disabled={cryptoActivationBusy}
-                  className="mt-3 w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all disabled:opacity-60"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-white"
                 >
-                  {cryptoActivationBusy ? 'Đang kiểm tra thanh toán...' : 'Tôi đã thanh toán'}
+                  <X className="w-6 h-6" />
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-          </div>
-        </div>
-        <div className="mobile-bottom-nav sm:hidden border-t border-cyan-500/50 bg-slate-900 text-white shadow-md">
-          <div className="max-w-7xl mx-auto px-2 py-2 overflow-x-auto">
-            <div className="flex items-center gap-2 text-xs whitespace-nowrap">
-              <button
-                type="button"
-                onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-cyan-500 text-black font-semibold shadow-sm"
-              >
-                Home
-              </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Solution
-              </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Engine
-              </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Platforms
-              </button>
-              <button
-                type="button"
-                onClick={() => document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Developers
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setShowApiSection(true);
-                  setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100);
-                }}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                API
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  openRoiSection();
-                }}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                ROI
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  openPricingSection();
-                }}
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Pricing
-              </button>
-              <a
-                href="mailto:contact@cyan-os.cc"
-                className="px-3 py-1.5 rounded-full bg-slate-800 text-gray-100 border border-slate-600 hover:bg-slate-700 transition-colors"
-              >
-                Contact
-              </a>
-            </div>
-          </div>
-          {/* Mobile quick actions */}
-          <div className="mobile-quick-actions sm:hidden flex items-center gap-2">
-            <form
-              className="mobile-email-access-form w-full max-w-[180px] flex items-center gap-1 bg-slate-900/90 border border-slate-700 rounded-full px-1.5 py-0.5"
-              action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
-              method="POST"
-              target="_blank"
-              onSubmit={(e) => {
-                if (!mobileEarlyEmail.trim()) {
-                  e.preventDefault();
-                  return;
-                }
-                trackEvent('cta_click', { button_name: 'mobile_early_access_submit', email: mobileEarlyEmail });
-                setMobileEarlySubmitted(true);
-                setMobileEarlyEmail('');
-              }}
-            >
-              <input type="hidden" name="FIRSTNAME" value="Mobile" />
-              <input type="hidden" name="FORM_TYPE" value="MOBILE_EARLY" />
-              <input
-                type="email"
-                name="EMAIL"
-                value={mobileEarlyEmail}
-                onChange={(e) => setMobileEarlyEmail(e.target.value)}
-                required
-                placeholder="Email early access"
-                className="flex-1 min-w-0 text-[10px] bg-transparent text-gray-100 placeholder:text-gray-400 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-cyan-600 text-black hover:bg-cyan-500 transition-colors"
-              >
-                Join
-              </button>
-            </form>
-            {mobileEarlySubmitted && (
-              <div className="mt-2 w-full rounded-lg border border-cyan-700/70 bg-slate-900/80 px-3 py-2 text-[11px] text-cyan-100">
-                Thank you! Your email has been sent. A Brevo confirmation page opened.
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
 
-      {/* Hero Section */}
-      <section
-        id="hero"
-        ref={setRef('hero')}
-        className="pt-36 sm:pt-40 pb-20 px-4 sm:px-6"
-      >
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="sm:hidden h-10" />
-          <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 mb-4">
-            <div
-              className="text-sm sm:text-base font-mono font-semibold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[#22ff66]"
-              style={{ textShadow: '0 0 10px rgba(34, 255, 102, 0.7)' }}
-            >
-              FEATURED IN
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5">
-              <a
-                href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?utm_source=badge-follow&utm_medium=badge&utm_source=badge-cyan&#0045;ultra&#0045;low&#0045;latency&#0045;ai&#0045;translator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <img 
-                  src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1136748&theme=light" 
-                  alt="CYAN&#0058;&#0032;Ultra&#0045;Low&#0032;Latency&#0032;AI&#0032;Translator - Secure&#0032;your&#0032;&#0036;699ExecutiveProAnnual&#0032;spot&#0032;now&#0046;MinimalLatencyAI | Product Hunt" 
-                  loading="eager"
-                  decoding="async"
-                  fetchPriority="high"
-                  className="h-6 sm:h-7 w-auto"
-                />
-              </a>
-              <a
-                href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
-                target="_blank"
-                rel="noopener"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <img
-                  src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
-                  alt="NextGen Tools Badge - The #1 AI Tools Directory & Launch Platform"
-                  loading="eager"
-                  decoding="async"
-                  fetchPriority="high"
-                  className="h-6 sm:h-7 w-auto"
-                />
-              </a>
-              <a
-                href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center rounded-lg overflow-hidden bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <img
-                  src="/devhub-top1-dark.svg"
-                  alt="DevHub Top 1 Daily Winner"
-                  loading="eager"
-                  decoding="async"
-                  fetchPriority="high"
-                  className="h-6 sm:h-7 w-auto"
-                />
-              </a>
-            </div>
-          </div>
-          <div className="mt-6 sm:mt-10">
-            <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-cyan-500/20 dark:bg-cyan-500/20 border border-cyan-500/30 dark:border-cyan-500/30 rounded-full text-xs sm:text-sm font-medium text-cyan-600 dark:text-cyan-300 backdrop-blur-sm">
-              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-3 h-3 sm:w-4 sm:h-4 inline mr-2 rounded" />
-              Powered by CYAN OS
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-gray-900 dark:from-white to-cyan-600 dark:to-cyan-400 bg-clip-text text-transparent leading-tight">
-              ULTRA-LOW LATENCY<br />AI TRANSLATOR
-            </h1>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3 text-cyan-600 dark:text-cyan-300">FOR GLOBAL COMMUNICATION</h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-5 sm:mb-8 max-w-3xl mx-auto font-light leading-relaxed px-2">
-              Break Language Barriers in Real-time<br />Meetings with Impeccable Clarity<br />and Natural Voice.
-            </p>
-            <div className="flex flex-wrap gap-1.5 sm:gap-3 justify-center items-center px-2 sm:px-4">
-              <button 
-                onClick={() => {
-                  trackEvent('cta_click', {
-                    button_name: 'experience_natural_voice',
-                    location: 'hero_section',
-                    destination: 'video_demo'
-                  });
-                  setView('video');
-                }}
-                className="w-auto max-w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-2.5 sm:px-5 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-semibold text-[11px] sm:text-sm hover:from-emerald-700 hover:to-teal-700 transition-all hover:scale-105 min-h-[30px] sm:min-h-[40px]"
-              >
-                Experience Natural Voice
-              </button>
-              <button
-                onClick={() => {
-                  trackEvent('cta_click', {
-                    button_name: 'learn_more',
-                    location: 'hero_section',
-                    destination: 'about_view'
-                  });
-                  setView('about');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="w-auto max-w-full bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white px-2.5 sm:px-5 py-1 sm:py-2.5 rounded-full font-semibold text-[11px] sm:text-sm border border-cyan-200/60 dark:border-cyan-300/40 hover:brightness-105 transition-all backdrop-blur-sm min-h-[30px] sm:min-h-[40px] shadow-lg shadow-cyan-500/20"
-              >
-                Learn More
-              </button>
-              <button
-                onClick={() => {
-                  trackEvent('cta_click', {
-                    button_name: 'hero_get_started',
-                    location: 'hero_section'
-                  });
-                  openPricingSection();
-                }}
-                className="w-auto max-w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 px-2.5 sm:px-6 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-bold text-[11px] sm:text-sm shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 transition-all hover:scale-105 min-h-[30px] sm:min-h-[40px]"
-              >
-                Get Started Free
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  trackEvent('cta_click', {
-                    button_name: 'hero_download_cyan',
-                    location: 'hero_section'
-                  });
-                }}
-                className="w-auto max-w-full border border-cyan-500/50 text-cyan-700 dark:text-cyan-300 px-2.5 sm:px-5 py-1 sm:py-2.5 rounded-md sm:rounded-lg font-semibold text-[11px] sm:text-sm hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-all min-h-[30px] sm:min-h-[40px]"
-              >
-                Download CYAN Beta
-              </button>
-            </div>
-
-            {/* Hero Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-4xl mx-auto">
-              {[
-                { icon: Clock, label: '<400ms', desc: 'Translation Latency', borderClass: 'border-amber-300/80 dark:border-amber-400/40' },
-                { icon: Globe, label: '+36', desc: 'Languages Supported', borderClass: 'border-cyan-300/80 dark:border-cyan-400/40' },
-                { icon: TrendingDown, label: 'Up to 80%', desc: 'Cost Reduction', borderClass: 'border-emerald-300/80 dark:border-emerald-400/40' }
-              ].map((stat, idx) => (
-                <div key={idx} className={`bg-gray-50 dark:bg-slate-800/60 backdrop-blur-md border rounded-2xl p-6 ${stat.borderClass} hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-xl hover:shadow-cyan-500/20 transition-all hover:scale-105`}>
-                  <stat.icon className="w-10 h-10 text-cyan-600 dark:text-cyan-400 mb-3 mx-auto" />
-                  <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">{stat.label}</div>
-                  <div className="text-gray-600 dark:text-gray-400 text-sm">{stat.desc}</div>
+              <div className="flex-1 overflow-y-auto bg-white h-[100vh] px-6 py-8 flex flex-col justify-between">
+                <div className="flex flex-col gap-6">
+                  <a href="#hero" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
+                  <a href="#solution" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
+                  <a href="#engine" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
+                  <a href="#platforms" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
+                  <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
+                  <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
+                  <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
+                  <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
+                  <a href="#footer" onClick={() => { setMobileMenuOpen(false); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
-          {/* Problem Section */}
-      <section
-        id="problem"
-        ref={setRef('problem')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/40 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-300 ${
-          isVisible.problem ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">The Challenges We Solve</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              Breaking down the barriers that prevent seamless global communication
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Globe,
-                title: 'COMMUNICATION GAPS',
-                desc: 'Language barriers create misunderstandings and lost opportunities in critical business conversations, limiting global collaboration and growth potential.',
-                pillClass: 'from-pink-500/20 to-rose-500/20 border-pink-400/50 text-pink-700 dark:text-pink-200 dark:border-pink-300/40',
-                cardBorderClass: 'border-pink-300/70 dark:border-pink-400/40'
-              },
-              {
-                icon: Clock,
-                title: 'TIME DELAYS',
-                desc: 'Traditional translation methods slow down meetings and decision-making, causing frustration and reducing productivity in time-sensitive situations.',
-                pillClass: 'from-amber-500/20 to-orange-500/20 border-amber-400/50 text-amber-700 dark:text-amber-200 dark:border-amber-300/40',
-                cardBorderClass: 'border-amber-300/70 dark:border-amber-400/40'
-              },
-              {
-                icon: Mic,
-                title: 'UNNATURAL VOICES',
-                desc: 'Robotic, monotone AI voices diminish the human connection and emotional nuance essential for building trust in professional relationships.',
-                pillClass: 'from-violet-500/20 to-fuchsia-500/20 border-violet-400/50 text-violet-700 dark:text-violet-200 dark:border-violet-300/40',
-                cardBorderClass: 'border-violet-300/70 dark:border-violet-400/40'
-              }
-            ].map((challenge, idx) => (
-              <div key={idx} className={`bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md border rounded-2xl p-8 ${challenge.cardBorderClass} hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10`}>
-                <challenge.icon className="w-12 h-12 text-cyan-600 dark:text-cyan-400 mb-4" />
-                <h3 className={`inline-flex rounded-full px-4 py-1.5 text-sm font-bold mb-4 border bg-gradient-to-r ${challenge.pillClass}`}>{challenge.title}</h3>
-                <p className="text-gray-600 dark:text-gray-400">{challenge.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Solution Section */}
-      <section
-        id="solution"
-        ref={setRef('solution')}
-        className={`py-20 px-6 bg-gradient-to-b from-cyan-50/35 via-white/45 to-blue-50/30 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-300 ${
-          isVisible.solution ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Our Solution</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              Experience the power of real-time AI translation with natural voice quality
-            </p>
-          </div>
-
-          <div className="space-y-8">
-            {/* Ultra-Low Latency Streaming */}
-            <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border-2 border-cyan-600/30 dark:border-cyan-400/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-cyan-600/10">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-600/30 animate-float">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-600 dark:text-cyan-400">Ultra-Low Latency Streaming</h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
-                  Experience real-time conversations with latency that feels natural. Our optimized architecture is designed to minimize delay using advanced neural processing and a dedicated real-time proxy, typically achieving end-to-end response in the 200–400ms range depending on network conditions and language pairs.
-                </p>
-              </div>
-            </div>
-
-            {/* Natural Voice Output */}
-            <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border-2 border-cyan-600/30 dark:border-cyan-400/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-cyan-600/10">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-600/30 animate-float">
-                  <Mic className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-600 dark:text-cyan-400">Natural Voice Output</h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
-                  Preserve emotion and tone with AI voices that sound genuinely human, maintaining the speaker's intent and personality.
-                </p>
-              </div>
-            </div>
-
-            {/* Seamless Integration */}
-            <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border-2 border-cyan-600/30 dark:border-cyan-400/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-cyan-600/10">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-cyan-600 dark:bg-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-600/30 animate-float">
-                  <Layers className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-cyan-600 dark:text-cyan-400">Seamless Integration</h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
-                  Works effortlessly with Zoom, Teams, Meet, and all major platforms. One click to activate, zero setup required.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CYAN OS Lite API Section - Hidden by default */}
-      <section
-        id="api"
-        ref={setRef('api')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-500 ${
-          showApiSection ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'
-        }`}
-        style={{ display: showApiSection ? 'block' : 'none' }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 relative">
-            <div className="inline-flex items-center gap-2 bg-cyan-600/10 dark:bg-cyan-600/20 border border-cyan-600/30 dark:border-cyan-600/40 rounded-full px-4 py-2 mb-4 backdrop-blur-sm">
-              <Code className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">CYAN OS Lite API</span>
-            </div>
-            <button
-              onClick={() => setShowApiSection(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-            >
-              ✕
-            </button>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN OS Lite API Overview</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              Powerful Text-to-Speech API with Voice Cloning and Real-time Streaming
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Core Features */}
-            <div>
-              <h3 className="text-2xl font-bold mb-6 text-cyan-600 dark:text-cyan-400">🎯 Core Features</h3>
-              <div className="space-y-4">
-                {[
-                  { icon: Mic, title: 'Multi-provider Text-to-Speech', desc: 'Azure, ElevenLabs, Google' },
-                  { icon: Zap, title: 'Voice Cloning from Audio Sample', desc: 'Create custom voice from 30s audio' },
-                  { icon: Clock, title: 'Real-time Streaming', desc: 'Fast playback with <400ms latency' },
-                  { icon: Layers, title: 'Chunked Processing', desc: 'Intelligent text segmentation for natural pauses and optimal voice quality' }
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex gap-4 items-start bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                    <div className="w-10 h-10 bg-cyan-600/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <feature.icon className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{feature.title}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{feature.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* API Endpoints */}
-            <div>
-              <h3 className="text-2xl font-bold mb-6 text-cyan-600 dark:text-cyan-400">🚀 API Endpoints</h3>
-              <div className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 font-mono text-sm">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-pink-400">POST</span>
-                    <span className="text-cyan-400">/api/tts/speak</span>
-                    <span className="text-gray-400">- Basic TTS</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-pink-400">POST</span>
-                    <span className="text-cyan-400">/api/tts/clone-and-speak</span>
-                    <span className="text-gray-400">- Clone voice + speak</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-pink-400">POST</span>
-                    <span className="text-cyan-400">/api/tts/clone-and-stream</span>
-                    <span className="text-gray-400">- Clone voice + stream</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-pink-400">POST</span>
-                    <span className="text-cyan-400">/api/tts/speak-chunked</span>
-                    <span className="text-gray-400">- Fast chunked TTS</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6">
-                <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">💰 Pricing Plans</h4>
-                <div className="space-y-2">
-                  <div className="bg-gray-50 dark:bg-gray-800/60 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <span className="font-bold text-gray-900 dark:text-gray-100">BASIC:</span>
-                    <span className="text-gray-600 dark:text-gray-400 ml-2">$0.00010/request (TTS only)</span>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-800/60 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                    <span className="font-bold text-gray-900 dark:text-gray-100">PRO:</span>
-                    <span className="text-gray-600 dark:text-gray-400 ml-2">$79/month (all features, 500K requests)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* User Benefits */}
-          <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border-2 border-cyan-600/30 dark:border-cyan-400/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-cyan-600/10">
-            <h3 className="text-2xl md:text-3xl font-bold mb-8 text-center text-cyan-600 dark:text-cyan-400">🎯 Features & User Benefits</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Developers */}
-              <div className="text-center">
-                <div className="w-16 h-16 bg-cyan-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Code className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                </div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-3">For Developers</h4>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                  <li>• 5 min integration vs 2 weeks self-build</li>
-                  <li>• Cost $0.0001/call vs $0.01/call</li>
-                  <li>• REST API with standard headers</li>
-                </ul>
-              </div>
-
-              {/* Business */}
-              <div className="text-center">
-                <div className="w-16 h-16 bg-cyan-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                </div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-3">For Business</h4>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                  <li>• Brand consistency across platforms</li>
-                  <li>• 24/7 availability without staff</li>
-                  <li>• Save 80% voice actor costs</li>
-                </ul>
-              </div>
-
-              {/* Content Creators */}
-              <div className="text-center">
-                <div className="w-16 h-16 bg-cyan-600/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Mic className="w-8 h-8 text-cyan-600 dark:text-cyan-400" />
-                </div>
-                <h4 className="font-bold text-gray-900 dark:text-gray-100 mb-3">For Content Creators</h4>
-                <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
-                  <li>• 10x content production speed</li>
-                  <li>• Multi-language market expansion</li>
-                  <li>• Reduce 90% audio production time</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* ROI Calculator */}
-            <div className="mt-12 bg-gradient-to-r from-cyan-600/10 to-purple-600/10 dark:from-cyan-600/20 dark:to-purple-600/20 rounded-2xl p-8 border border-cyan-600/30 dark:border-cyan-400/30">
-              <h4 className="text-xl font-bold mb-4 text-center text-gray-900 dark:text-gray-100">📊 ROI Calculator</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">$100/hour</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Manual recording</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400 mb-1">$0.10/1000 chars</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">CYAN OS API</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">Up to 80%</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Potential cost reduction</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section
-        id="engine"
-        ref={setRef('engine')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-320 ${
-          isVisible.engine ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Enterprise-Grade Infrastructure</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              Scalable architecture designed for global deployment
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="space-y-6">
-                {[
-                  {
-                    icon: Layers,
-                    title: 'Multi-Provider TTS',
-                    desc: 'Intelligent routing across ElevenLabs, GoogleWavenet, and Azure for maximum reliability',
-                    pillClass: 'from-cyan-500/20 to-sky-500/20 border-cyan-400/50 text-cyan-700 dark:text-cyan-200 dark:border-cyan-300/40',
-                    cardBorderClass: 'border-cyan-300/70 dark:border-cyan-400/40'
-                  },
-                  {
-                    icon: Mic,
-                    title: 'Voice Cloning',
-                    desc: 'Create custom voice profiles from just 30 seconds of audio with 98% accuracy',
-                    pillClass: 'from-purple-500/20 to-fuchsia-500/20 border-purple-400/50 text-purple-700 dark:text-purple-200 dark:border-purple-300/40',
-                    cardBorderClass: 'border-purple-300/70 dark:border-purple-400/40'
-                  },
-                  {
-                    icon: Zap,
-                    title: 'Real-time Streaming',
-                    desc: 'Stream audio as it\'s generated with chunked processing for zero perceived latency',
-                    pillClass: 'from-emerald-500/20 to-teal-500/20 border-emerald-400/50 text-emerald-700 dark:text-emerald-200 dark:border-emerald-300/40',
-                    cardBorderClass: 'border-emerald-300/70 dark:border-emerald-400/40'
-                  },
-                  {
-                    icon: Shield,
-                    title: 'Chunked Processing',
-                    desc: 'Intelligent text segmentation for natural pauses and optimal voice quality',
-                    pillClass: 'from-indigo-500/20 to-blue-500/20 border-indigo-400/50 text-indigo-700 dark:text-indigo-200 dark:border-indigo-300/40',
-                    cardBorderClass: 'border-indigo-300/70 dark:border-indigo-400/40'
-                  }
-                ].map((feature, idx) => (
-                  <div key={idx} className={`flex gap-4 items-start bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md p-5 rounded-xl border ${feature.cardBorderClass} hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-glow/10 transition-all`}>
-                    <div className="w-12 h-12 bg-cyan-glow dark:bg-cyan-glow rounded-lg flex items-center justify-center flex-shrink-0">
-                      <feature.icon className="w-6 h-6 text-gray-900 dark:text-gray-900" />
-                    </div>
-                    <div>
-                      <h3 className={`inline-flex rounded-full px-3 py-1 text-xs md:text-sm font-bold mb-2 border bg-gradient-to-r ${feature.pillClass}`}>{feature.title}</h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">{feature.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-8 border-2 border-cyan-600/30 dark:border-cyan-400/30 shadow-2xl shadow-cyan-600/10 backdrop-blur-md">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="ml-3 text-gray-400 text-sm">Architecture Overview</span>
-              </div>
-              <div className="bg-gray-800 dark:bg-gray-900 rounded-lg p-6 font-mono text-sm overflow-x-auto">
-                <div className="text-cyan-600 mb-4">// Natural Voice AI Engine</div>
-                <div className="text-gray-300">
-                  <span className="text-purple-400">interface</span> <span className="text-yellow-300">NaturalVoicePipeline</span> {'{\n'}
-                  <span className="ml-4 text-gray-400">// Advanced Neural Processing</span>{'\n'}
-                  <span className="ml-4 text-blue-400">neuralProcessor</span>: <span className="text-green-400">AdvancedAI</span>{'\n'}
-                  {'\n'}
-                  <span className="ml-4 text-gray-400">// Real-Time Proxy</span>{'\n'}
-                  <span className="ml-4 text-blue-400">realTimeProxy</span>: <span className="text-green-400">DedicatedInfra</span>{'\n'}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Developers Section */}
-      <section
-        id="developers"
-        ref={setRef('developers')}
-        className={`py-20 px-6 bg-gradient-to-b from-emerald-50/70 via-cyan-100/45 to-white/55 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-320 ${
-          isVisible.developers ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-cyan-600/10 dark:bg-cyan-600/20 border border-cyan-600/30 dark:border-cyan-600/40 rounded-full px-4 py-2 mb-4 backdrop-blur-sm">
-              <Code className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-              <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">Developer API</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Built for Developers</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              Simple, powerful API that scales from prototype to production
-            </p>
-            <div className="mt-4 flex justify-center">
-              <a
-                href="https://rapidapi.com/quochungpham144/api/cyan-os-lite"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() =>
-                  trackEvent('cta_click', {
-                    button_name: 'rapidapi_cyan_os_lite',
-                    location: 'developer_api'
-                  })
-                }
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-50 text-cyan-900 text-sm hover:bg-cyan-100 dark:bg-slate-900 dark:text-cyan-100 dark:hover:bg-cyan-800 border border-cyan-500/80 shadow-sm transition-colors"
-              >
-                <img
-                  src="/tap-search-icon.svg"
-                  alt="Tap to view API"
-                  className="w-4 h-4"
-                />
-                <span>View API on RapidAPI</span>
-              </a>
-            </div>
-          </div>
-
-          <div className="bg-gray-900 dark:bg-gray-950 rounded-3xl p-8 md:p-12 shadow-2xl shadow-cyan-600/10 border-2 border-cyan-600/20 dark:border-cyan-400/20 backdrop-blur-md">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              </div>
-              <span className="text-gray-400 text-sm">API Request Example</span>
-            </div>
-
-            <div className="bg-gray-800 dark:bg-gray-900 rounded-xl p-6 font-mono text-sm overflow-x-auto">
-              <div className="text-gray-300">
-                <span className="text-pink-400">POST</span> <span className="text-cyan-600">/api/natural-voice/stream</span>{'\n\n'}
-
-                <span className="text-gray-400">// Request Headers</span>{'\n'}
-                <span className="text-purple-400">Authorization</span>: <span className="text-green-400">"Bearer YOUR_API_KEY"</span>{'\n'}
-                <span className="text-purple-400">Content-Type</span>: <span className="text-green-400">"application/json"</span>{'\n\n'}
-
-                <span className="text-gray-400">// Request Body</span>{'\n'}
-                {'{\n'}
-                <span className="ml-4 text-blue-400">"text"</span>: <span className="text-green-400">"Hello, welcome to Natural Voice AI"</span>,{'\n'}
-                <span className="ml-4 text-blue-400">"voice_id"</span>: <span className="text-green-400">"natural_voice_123"</span>,{'\n'}
-                <span className="ml-4 text-blue-400">"language"</span>: <span className="text-green-400">"en-US"</span>,{'\n'}
-                <span className="ml-4 text-blue-400">"streaming"</span>: <span className="text-yellow-300">true</span>{'\n'}
-                {'}\n\n'}
-
-                <span className="text-gray-400">// Response: Natural audio stream</span>{'\n'}
-                <span className="text-gray-400">// Latency: &lt;400ms typical to first audio</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-              {[
-                { label: 'Response Time', value: '<400ms' },
-                { label: 'Success Rate', value: '~99%' },
-                { label: 'Concurrent Requests', value: 'Unlimited' }
-              ].map((stat, idx) => (
-                <div key={idx} className="bg-cyan-600/10 dark:bg-cyan-600/20 border border-cyan-600/30 dark:border-cyan-600/40 rounded-xl p-4 text-center backdrop-blur-sm">
-                  <div className="text-2xl font-bold text-cyan-600 dark:text-cyan-400 mb-1">{stat.value}</div>
-                  <div className="text-gray-400 text-sm">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ROI Section */}
-      <section
-        id="roi"
-        ref={setRef('roi')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm transition-all duration-320 ${
-          showRoiSection
-            ? isVisible.roi
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-10'
-            : 'opacity-0 translate-y-8 pointer-events-none'
-        }`}
-        style={{ display: showRoiSection ? 'block' : 'none' }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Unmatched ROI</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              See how much you save by switching to CYAN-OS
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Traditional Method */}
-            <div className="bg-red-50/60 dark:bg-red-900/20 backdrop-blur-md border-2 border-red-200/50 dark:border-red-800/50 rounded-2xl p-8">
-              <div className="text-center mb-6">
-                <div className="text-red-600 dark:text-red-400 text-sm font-bold mb-2">TRADITIONAL METHOD</div>
-                <h3 className="text-3xl font-bold text-red-700 dark:text-red-300">Manual Recording</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Voice Actor (per hour)</span>
-                  <span className="font-bold text-red-700 dark:text-red-400">$100-300</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Studio Time</span>
-                  <span className="font-bold text-red-700 dark:text-red-400">$50-150/hr</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Post-Production</span>
-                  <span className="font-bold text-red-700 dark:text-red-400">$75-200/hr</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Timeline</span>
-                  <span className="font-bold text-red-700 dark:text-red-400">6-8 weeks</span>
-                </div>
-                <div className="border-t-2 border-red-300/50 dark:border-red-700/50 pt-4 mt-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-gray-900 dark:text-gray-100">Total Cost (10 hours)</span>
-                    <span className="text-3xl font-bold text-red-700 dark:text-red-400">$2,250+</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CYAN-OS Method */}
-            <div className="bg-cyan-glow/10 dark:bg-cyan-glow/20 backdrop-blur-md border-2 border-cyan-glow rounded-2xl p-8 relative overflow-hidden shadow-lg shadow-cyan-glow/10">
-              <div className="absolute top-4 right-4 bg-cyan-glow dark:bg-cyan-glow text-gray-900 dark:text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
-                SAVE up to 80%
-              </div>
-              <div className="text-center mb-6">
-                <div className="text-cyan-600 dark:text-cyan-400 text-sm font-bold mb-2">CYAN-OS API</div>
-                <h3 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Automated Pipeline</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Cost per 1k characters</span>
-                  <span className="font-bold text-cyan-600 dark:text-cyan-400">$0.10</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Setup Time</span>
-                  <span className="font-bold text-cyan-600 dark:text-cyan-400">5 minutes</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Processing Time</span>
-                  <span className="font-bold text-cyan-600 dark:text-cyan-400">Real-time</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 dark:text-gray-300">Timeline</span>
-                  <span className="font-bold text-cyan-600 dark:text-cyan-400">Instant</span>
-                </div>
-                <div className="border-t-2 border-cyan-glow/50 pt-4 mt-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-gray-900 dark:text-gray-100">Total Cost (10 hours)</span>
-                    <span className="text-3xl font-bold text-cyan-600 dark:text-cyan-400">$2.50</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <div className="inline-block bg-gradient-to-r from-cyan-glow/20 to-cyan-glow/10 dark:from-cyan-glow/30 dark:to-cyan-glow/20 border border-cyan-glow/50 dark:border-cyan-glow/60 rounded-2xl p-8 backdrop-blur-md shadow-lg shadow-cyan-glow/10">
-              <div className="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-2">$2,247.50</div>
-              <div className="text-xl text-gray-600 dark:text-gray-400">Saved per 10 hours of content</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="platforms" className="py-16 px-6 bg-gradient-to-b from-emerald-50/65 via-cyan-100/45 to-white/55 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8 mb-10">
-            <div>
-              <div className="text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
-                For Platforms
-              </div>
-              <h3 className="mt-4 text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                Drop CYAN into the tools you already use
-              </h3>
-              <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl">
-                CYAN plugs straight into your existing meeting, streaming and collaboration tools via a
-                lightweight extension, so you do not have to change your workflow.
-              </p>
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
-              <p className="inline-block rounded-2xl bg-gradient-to-r from-cyan-500/15 to-blue-500/15 dark:from-cyan-500/20 dark:to-blue-500/20 border border-cyan-400/40 dark:border-cyan-300/30 px-4 py-3 text-gray-700 dark:text-cyan-100 shadow-sm">
-                Most everyday platforms work out of the box through the CYAN extension. For more advanced
-                setups, you can still route audio via virtual devices when you need to.
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              {
-                icon: Layers,
-                title: 'Desktop & OS',
-                subtitle: 'Windows, macOS',
-                description: 'Use CYAN alongside any desktop app. The audio engine runs on your machine, not only in the browser.',
-                bgClass: 'bg-gradient-to-br from-slate-900 to-slate-800',
-                borderClass: 'border-slate-700/80',
-                titleClass: 'text-white',
-                subtitleClass: 'text-slate-200',
-                descClass: 'text-slate-200'
-              },
-              {
-                icon: Globe,
-                title: 'Video Meetings',
-                subtitle: 'Zoom, Google Meet, Microsoft Teams, Gather, Whereby',
-                description: 'Drop CYAN into your daily standups, customer calls and webinars without changing your meeting links.',
-                bgClass: 'bg-gradient-to-br from-cyan-600 to-sky-500',
-                borderClass: 'border-cyan-400/80',
-                titleClass: 'text-white',
-                subtitleClass: 'text-cyan-50/80',
-                descClass: 'text-cyan-50/90'
-              },
-              {
-                icon: Mic,
-                title: 'Streaming & Creators',
-                subtitle: 'Twitch and local recording tools',
-                description: 'Feed CYAN into Twitch or your recording pipeline using the CYAN extension or optional system routing.',
-                bgClass: 'bg-gradient-to-br from-purple-600 to-pink-500',
-                borderClass: 'border-pink-400/80',
-                titleClass: 'text-white',
-                subtitleClass: 'text-pink-50/80',
-                descClass: 'text-pink-50/90'
-              },
-              {
-                icon: Shield,
-                title: 'Contact Centers',
-                subtitle: 'Call center, BPO and SIP tools',
-                description: 'Use CYAN as a translation layer on top of your existing voice infrastructure and call flows.',
-                bgClass: 'bg-gradient-to-br from-emerald-600 to-teal-500',
-                borderClass: 'border-emerald-400/80',
-                titleClass: 'text-white',
-                subtitleClass: 'text-emerald-50/80',
-                descClass: 'text-emerald-50/90'
-              }
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className={`flex flex-col h-full rounded-2xl border backdrop-blur-md p-4 shadow-sm hover:shadow-lg hover:border-cyan-300/80 transition-all ${item.bgClass} ${item.borderClass}`}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
-                    <item.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className={`text-sm font-semibold ${item.titleClass}`}>
-                      {item.title}
-                    </div>
-                    <div className={`text-xs ${item.subtitleClass}`}>
-                      {item.subtitle}
-                    </div>
-                  </div>
-                </div>
-                <p className={`text-xs leading-relaxed ${item.descClass}`}>
-                  {item.description}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 text-xs md:text-sm text-gray-600 dark:text-gray-400">
-            Integrated with the tools you already use today: Zoom, Google Meet, Microsoft Teams, Discord,
-            Slack, Twitch, Gather and Whereby.
-          </div>
-        </div>
-      </section>
-
-      <section className="py-10 px-6 bg-gradient-to-b from-white/50 via-cyan-50/35 to-white/45 dark:from-gray-900/60 dark:via-gray-900/60 dark:to-gray-900/55 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-center gap-4">
-            <div className="text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
-              Also listed on
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-600 dark:text-gray-300">
-              <a
-                href="https://www.producthunt.com/products/cyan-ultra-low-latency-ai-translator?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-cyan-ultra-low-latency-ai-translator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                Product Hunt
-              </a>
-              <a
-                href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator?utm_source=cyan-ultra-low-latency-ai-translator"
-                target="_blank"
-                rel="noopener"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                NextGen Tools
-              </a>
-              <a
-                href="https://devhub.best/projects/cyan-ultra-low-latency-ai-translator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                DevHub
-              </a>
-              <a
-                href="https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-2 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-slate-900/70 hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                VibeRank
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section - Hidden */}
-      <section
-        id="pricing"
-        ref={setRef('pricing')}
-        className={`py-20 px-6 bg-gradient-to-b from-white/60 dark:from-gray-900/60 to-gray-50/60 dark:to-gray-800/60 backdrop-blur-sm transition-all duration-320 ${
-          showPricingSection ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'
-        }`}
-        style={{ display: showPricingSection ? 'block' : 'none' }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Pricing Plans</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-              Flexible pricing for individuals, teams, and visionary founders
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* Free Plan */}
-            <div className="group bg-white dark:bg-slate-800/80 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-bl-2xl"></div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">Free</h3>
-              <div className="text-4xl font-bold mb-1 text-gray-900 dark:text-white relative z-10">$0</div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6 relative z-10">Start with 20 minutes of Azure/Google WaveNet credits to experience ultra-low latency translation</div>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'free', button_name: 'get_started', price: 0 });
-                  startPlanCheckout('free');
-                }}
-                className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-cyan-500/25 relative z-10"
-              >
-                Get Started
-              </button>
-              <ul className="mt-6 space-y-2">
-                {['20 minutes free trial', '1 voice clone', 'Standard latency', 'Community support'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Basic Plan */}
-            <div className="group bg-white dark:bg-slate-800/80 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-blue-500/10 to-transparent rounded-bl-2xl"></div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">Basic</h3>
-              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6 relative z-10">Individual Use</div>
-              <div className="text-4xl font-bold mb-1 text-gray-900 dark:text-white relative z-10">$29<span className="text-lg font-normal text-gray-500">/month</span></div>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'basic', button_name: 'get_started', price: 29 });
-                  startPlanCheckout('basic', 'paypal');
-                }}
-                className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-cyan-500/25 relative z-10"
-              >
-                Get Started
-              </button>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'basic', button_name: 'pay_with_crypto', price: 29 });
-                  startPlanCheckout('basic', 'crypto');
-                }}
-                className="w-full mt-2 border border-cyan-500/40 text-cyan-700 dark:text-cyan-300 py-2 rounded-lg text-sm font-semibold hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-all relative z-10"
-              >
-                Pay with Crypto
-              </button>
-              <ul className="mt-6 space-y-2">
-                {['30 Translation Hours Per Month', '1 Device', 'Real-Time Translation', 'Standard Voice (Powered by Google WaveNet)', 'Personal Calls'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Standard Plan */}
-            <div className="group bg-gradient-to-br from-orange-500/20 to-orange-500/5 dark:from-orange-500/20 dark:to-orange-500/5 border-2 border-orange-500 rounded-2xl p-6 pt-8 relative hover:shadow-2xl hover:shadow-orange-500/25 hover:-translate-y-1 transition-all backdrop-blur-md overflow-visible">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-orange-500/25 z-20 whitespace-nowrap text-center">
-                🔥 MOST POPULAR
-              </div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-orange-500/10 to-transparent rounded-bl-2xl"></div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">Standard</h3>
-              <div className="text-gray-600 dark:text-gray-300 text-sm mb-6 relative z-10">Power Users</div>
-              <div className="text-4xl font-bold mb-1 text-gray-900 dark:text-white relative z-10">$59<span className="text-lg font-normal text-gray-500">/month</span></div>
-              <button 
-                onClick={() => {
-                  trackEvent('pricing_click', {
-                    plan: 'standard',
-                    button_name: 'get_started',
-                    price: 59
-                  });
-                  startPlanCheckout('standard', 'paypal');
-                }}
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-yellow-300 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-orange-500/25 relative z-10"
-              >
-                Get Started
-              </button>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'standard', button_name: 'pay_with_crypto', price: 59 });
-                  startPlanCheckout('standard', 'crypto');
-                }}
-                className="w-full mt-2 border border-orange-500/40 text-orange-700 dark:text-orange-300 py-2 rounded-lg text-sm font-semibold hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all relative z-10"
-              >
-                Pay with Crypto
-              </button>
-              <ul className="mt-6 space-y-2">
-                {['50 hours/month', '2 Devices', 'Premium Neural Voice (Powered by Microsoft Azure)', 'Freelance Consultant Meetings', 'Investor Briefings'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-8">
-            {/* Pro Plan */}
-            <div className="group bg-white dark:bg-slate-800/80 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 pt-8 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-1 transition-all duration-300 relative overflow-visible">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-cyan-500/25 z-20 whitespace-nowrap text-center">
-                ⭐ RECOMMENDED
-              </div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-500/10 to-transparent rounded-bl-2xl"></div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">Pro</h3>
-              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6 relative z-10">Small Business B2B</div>
-              <div className="text-4xl font-bold mb-1 text-gray-900 dark:text-white relative z-10">$99<span className="text-lg font-normal text-gray-500">/month</span></div>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'pro', button_name: 'get_started', price: 99 });
-                  startPlanCheckout('pro', 'paypal');
-                }}
-                className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-cyan-500/25 relative z-10"
-              >
-                Get Started
-              </button>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'pro', button_name: 'pay_with_crypto', price: 99 });
-                  startPlanCheckout('pro', 'crypto');
-                }}
-                className="w-full mt-2 border border-cyan-500/40 text-cyan-700 dark:text-cyan-300 py-2 rounded-lg text-sm font-semibold hover:bg-cyan-50 dark:hover:bg-cyan-900/20 transition-all relative z-10"
-              >
-                Pay with Crypto
-              </button>
-              <ul className="mt-6 space-y-2">
-                {['100 hours/month', '5 Devices', 'Hyper-Accurate NMT (Azure-Backed Translation Engine)', 'Custom Glossary', 'ElevenLabs Boost: 50k High-Fidelity Character Credits/Month', 'Small Global Sales Teams', 'Product Demos', 'HR Interviews'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Team Plan */}
-            <div className="group bg-white dark:bg-slate-800/80 backdrop-blur-md border-2 border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-500/10 to-transparent rounded-bl-2xl"></div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">Team</h3>
-              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6 relative z-10">Corporate Use</div>
-              <div className="text-4xl font-bold mb-1 text-gray-900 dark:text-white relative z-10">$299<span className="text-lg font-normal text-gray-500">/month</span></div>
-              <button 
-                onClick={() => {
-                  trackEvent('pricing_click', {
-                    plan: 'team',
-                    button_name: 'contact_sales',
-                    price: 299
-                  });
-                  setTeamFormSubmitted(false);
-                  setShowTeamContactForm((prev) => !prev);
-                }}
-                className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-cyan-500/25 relative z-10"
-              >
-                Contact Sales
-              </button>
-
-              {showTeamContactForm && (
-                <div className="mt-4 bg-white/90 dark:bg-gray-900/80 border border-cyan-200 dark:border-cyan-700/40 rounded-xl p-4 shadow-xl relative z-10">
-                  <p className="text-xs text-gray-600 dark:text-gray-300 mb-3">
-                    Leave your work email and company. Form will be sent directly to Brevo.
-                  </p>
-                  <form
-                    action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
-                    method="POST"
-                    target="brevo-submit-frame"
-                    className="space-y-2"
-                    onSubmit={handleTeamContactSubmit}
-                  >
-                    <input
-                      type="text"
-                      name="YOUR_NAME"
-                      placeholder="Your Name"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    />
-                    <input
-                      type="email"
-                      name="YOUR_EMAIL"
-                      placeholder="Work Email"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                      required
-                    />
-                    <input
-                      type="text"
-                      name="COMPANY"
-                      placeholder="Company"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                      required
-                    />
-                    <input type="hidden" name="PLAN" value="Team Plan - $299/month" />
-                    <button
-                      type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors"
-                    >
-                      Submit to Brevo
-                    </button>
-                  </form>
-                  <iframe name="brevo-submit-frame" title="brevo-submit-frame" className="hidden" />
-                  {teamFormSubmitted && (
-                    <p className="mt-2 text-xs text-green-600 dark:text-green-400">
-                      Submitted successfully. We received your info.
-                    </p>
-                  )}
-                </div>
-              )}
-              <ul className="mt-6 space-y-2">
-                {['Unlimited Hours', 'Priority Support', 'Dedicated Account Manager', 'ElevenLabs Power Boost: 200k High-Fidelity Character Credits/Month', 'Team Reporting & Billing', 'Enterprise Board Meetings', 'Global Training Webinars', 'Multi-National Project Mgmt'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Executive Pro Annual Plan */}
-            <div className="group bg-gradient-to-br from-purple-600/20 to-purple-600/5 dark:from-purple-600/20 dark:to-purple-600/5 border-2 border-purple-600 rounded-2xl p-6 pt-8 relative hover:shadow-2xl hover:shadow-purple-600/25 hover:-translate-y-1 transition-all backdrop-blur-md overflow-visible">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg shadow-purple-600/25 z-20 whitespace-nowrap text-center">
-                ⭐ BEST VALUE
-              </div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-500/10 to-transparent rounded-bl-2xl"></div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white relative z-10">EXECUTIVE PRO ANNUAL</h3>
-              <div className="text-gray-600 dark:text-gray-300 text-sm mb-6 relative z-10">High-Value B2B</div>
-              <div className="flex items-baseline gap-2 mb-1 relative z-10">
-                <div className="text-4xl font-bold text-gray-900 dark:text-white">$699</div>
-                <div className="text-lg text-gray-500 line-through">$999</div>
-                <div className="text-sm text-green-600 dark:text-green-400 font-bold">/year</div>
-              </div>
-              <div className="bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-bold px-3 py-2 rounded-lg mb-4 text-center shadow-lg shadow-green-500/25 relative z-10">
-                💰 SAVE $300 - KICKSTARTER EXCLUSIVE
-              </div>
-              <div className="text-gray-600 dark:text-gray-400 text-sm mb-6 relative z-10">Maximize Output: 200 Translation Hours Per Year</div>
-              <button 
-                onClick={() => {
-                  trackEvent('pricing_click', {
-                    plan: 'executive_pro_annual',
-                    button_name: 'claim_spot',
-                    price: 699
-                  });
-                  startPlanCheckout('executive_pro_annual', 'paypal');
-                }}
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-yellow-300 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-600/50 relative z-10"
-              >
-                Claim Spot Now
-              </button>
-              <button
-                onClick={() => {
-                  trackEvent('pricing_click', { plan: 'executive_pro_annual', button_name: 'pay_with_crypto', price: 699 });
-                  startPlanCheckout('executive_pro_annual', 'crypto');
-                }}
-                className="w-full mt-2 border border-purple-500/40 text-purple-700 dark:text-purple-300 py-2 rounded-lg text-sm font-semibold hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all relative z-10"
-              >
-                Pay with Crypto
-              </button>
-              <ul className="mt-6 space-y-2">
-                {['Dedicated Real-Time Proxy Access (Lowest-Latency Performance Guarantee)', 'ElevenLabs UNLIMITED + Customized Voice Cloning Capability', 'Priority 24/7 Technical and Integration Support', 'Billed Annually: No Monthly Fees'].map((feature, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-xs text-gray-700 dark:text-gray-300">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Login/Register Modal */}
-      {showLoginModal && (
-        <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 overflow-y-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[88vh] overflow-y-auto">
-            {/* Close Button */}
-            <button
-              onClick={() => setShowLoginModal(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-            >
-              ✕
-            </button>
-
-            {/* Logo */}
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 bg-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover rounded" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                {isLoginMode ? 'Welcome Back' : 'Create Account'}
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                {isLoginMode ? 'Sign in to your CYAN account' : 'Join CYAN for ultra-low latency translation'}
-              </p>
-            </div>
-
-            {/* Form */}
-            <div className="space-y-4">
-              {/* Google Sign-In Button */}
-              <button
-                type="button"
-                onClick={async () => {
-                  trackEvent('oauth_click', {
-                    provider: 'google',
-                    action: isLoginMode ? 'login' : 'register'
-                  });
-
-                  try {
-                    await startGoogleLoginWithGis();
-                    return;
-                  } catch (error) {
-                    const message = error instanceof Error ? error.message : 'Google login failed. Please try again.';
-                    setCheckoutMessage(message);
-                    setShowLoginModal(true);
-                    trackEvent('oauth_error', { provider: 'google', error: message });
-                    return;
-                  }
-                }}
-                className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                Continue with Google
-              </button>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                    Or continue with email
-                  </span>
-                </div>
-              </div>
-
-              <form 
-                onSubmit={handleEmailAuthSubmit}
-                className="space-y-4"
-              >
-              {!isLoginMode && (
-                <input
-                  type="text"
-                  name="FIRSTNAME"
-                  placeholder="Full Name"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
-                />
-              )}
-              
-              <input
-                type="email"
-                name="EMAIL"
-                placeholder="Email Address"
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
-              />
-              
-              <input
-                type="password"
-                name="PASSWORD"
-                placeholder="Password"
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
-              />
-              
-              {!isLoginMode && (
-                <input
-                  type="password"
-                  name="CONFIRM_PASSWORD"
-                  placeholder="Confirm Password"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
-                />
-              )}
-              
-              <input
-                type="hidden"
-                name="FORM_TYPE"
-                value={isLoginMode ? 'login' : 'register'}
-              />
-              
-              <button
-                type="submit"
-                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-colors"
-              >
-                {isLoginMode ? 'Sign In' : 'Create Account'}
-              </button>
-            </form>
-            </div>
-
-            {/* Toggle Mode */}
-            <div className="mt-6 text-center">
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                {isLoginMode ? "Don't have an account?" : 'Already have an account?'}
-                <button
-                  onClick={() => setIsLoginMode(!isLoginMode)}
-                  className="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 font-semibold ml-1"
-                >
-                  {isLoginMode ? 'Sign Up' : 'Sign In'}
-                </button>
-              </p>
-            </div>
-
-            {/* Benefits */}
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <div className="text-center">
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Get started with:</p>
-                <div className="flex justify-center space-x-4 text-xs text-gray-600 dark:text-gray-300">
-                  <span>✓ 20min Free Trial</span>
-                  <span>✓ No Credit Card</span>
-                  <span>✓ Cancel Anytime</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showCookieBanner && (
-        <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
-          <div className="max-w-md w-full bg-slate-900/95 border border-slate-700 text-[11px] md:text-xs text-gray-200 rounded-full px-3 py-2 shadow-xl flex items-center gap-2 md:gap-3">
-            <div className="flex-1 leading-tight">
-              <div className="font-semibold text-gray-100 text-[11px] md:text-xs">Cookies &amp; data</div>
-              <p className="text-[10px] md:text-[11px] text-gray-300">We use cookies to keep you signed in and measure usage. Privacy Policy.</p>
-            </div>
-            <div className="flex items-center gap-1 md:gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.localStorage.setItem('cyan_cookie_consent', 'necessary');
-                  }
-                  setShowCookieBanner(false);
-                }}
-                className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
-              >
-                Necessary
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.localStorage.setItem('cyan_cookie_consent', 'all');
-                  }
-                  setShowCookieBanner(false);
-                  trackEvent('cookie_consent', { choice: 'all' });
-                }}
-                className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
-              >
-                Accept
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setView('privacy');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="px-2 py-1 rounded-full text-[10px] md:text-[11px] text-gray-300 hover:text-cyan-400 transition-colors"
-              >
-                Policy
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-gray-950 text-white py-12 px-6 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <span className="text-xl font-bold">CYAN</span>
-                  <div className="text-xs text-gray-500">ULTRA-LOW LATENCY AI TRANSLATOR</div>
-                </div>
-              </div>
-              <p className="text-gray-400 text-sm">
-                Next-generation ultra-low latency AI translation for global communication
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
+                <div className="mt-auto pt-4 flex flex-col gap-2">
                   <button
-                    type="button"
                     onClick={() => {
-                      setView('features');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      setMobileMenuOpen(false);
+                      trackEvent('cta_click', { button_name: 'early_access_mobile' });
                     }}
-                    className="hover:text-cyan-400 transition-colors"
+                    className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800"
                   >
-                    Features
+                    Email Early Access
                   </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      openPricingSection();
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    Pricing
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setView('docs');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    Documentation
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowApiSection(true);
-                      setTimeout(
-                        () => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }),
-                        100
-                      );
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    API Reference
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setView('about');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    About
-                  </button>
-                </li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
-                <li>
-                  <div className="space-y-1 text-sm text-gray-400">
-                    <span className="hover:text-cyan-400 transition-colors cursor-default">Contact:</span>
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="font-mono break-all">contact@cyan-os.cc</span>
+
+                  {isLoggedIn && userInfo ? (
+                    <div className="flex flex-col gap-4">
+                      <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
+                        <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-12 h-12 rounded-full shadow-sm" />
+                        <div>
+                          <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.name}</div>
+                          <div className="text-sm text-gray-500">{userInfo.email}</div>
+                        </div>
+                      </div>
                       <button
-                        type="button"
-                        onClick={async () => { await copyToClipboard('contact@cyan-os.cc'); }}
-                        className="p-1 rounded border border-cyan-500/60 text-cyan-300 hover:bg-cyan-500/10 transition-colors flex items-center justify-center"
-                        aria-label="Copy contact email"
+                        onClick={() => {
+                          saveSession(null);
+                          setMobileMenuOpen(false);
+                        }}
+                        className="text-center text-red-500 font-bold py-3 text-lg"
                       >
-                        <Copy className="w-3.5 h-3.5" />
+                        Logout
                       </button>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Legal</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setView('privacy');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    Privacy Policy
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setView('terms');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    Terms of Use
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setView('security');
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                    className="hover:text-cyan-400 transition-colors"
-                  >
-                    Security
-                  </button>
-                </li>
-              </ul>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setShowLoginModal(true);
+                      }}
+                      className="w-full bg-cyan-600 text-yellow-300 py-4 rounded-xl font-bold text-xl shadow-xl shadow-cyan-600/20"
+                    >
+                      Join / Login
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            &copy; 2024 CYAN ULTRA-LOW LATENCY AI TRANSLATOR. All rights reserved.
-          </div>
+        </nav>
+
+        {/* Floating Controls */}
+        {/* <div
+          id="floating-buttons"
+          className="fixed bottom-0 sm:bottom-10 right-4 sm:right-8 z-30 flex flex-col sm:items-end items-center gap-3 cursor-move select-none"
+          style={{ touchAction: 'none' }}
+        >
+          <a
+            href="#pricing"
+            onClick={() => {
+              trackEvent('cta_click', {
+                button_name: 'floating_get_started',
+                location: 'floating_button',
+                destination: 'pricing_section'
+              });
+              openPricingSection();
+            }}
+            className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
+            style={{ pointerEvents: 'auto' }}
+          >
+            Get Started Free <ArrowRight className="w-4 h-4" />
+          </a>
+          <button
+            type="button"
+            onClick={() => {
+              trackEvent('cta_click', {
+                button_name: 'download_cyan',
+                location: 'floating_button'
+              });
+            }}
+            className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
+            style={{ pointerEvents: 'auto' }}
+          >
+            <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
+            <span className="leading-tight text-[10px] text-cyan-200/90">
+              Currently in Private Beta.
+            </span>
+          </button>
+        </div> */}
+
+        {/* Scroll to Top Button */}
+        {scrolled && (
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-10 left-4 sm:left-8 z-[110] p-3.5 sm:p-4 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-gray-200 dark:border-slate-700 text-cyan-600 dark:text-cyan-400 shadow-2xl hover:shadow-cyan-500/20 hover:scale-110 transition-all duration-300 group"
+            aria-label="Scroll to top"
+          >
+            <ArrowUp className="w-5 h-5 sm:w-6 h-6 group-hover:-translate-y-1 transition-transform" />
+          </button>
+        )}
+
+        <div key={view} className="page-fade-in">
+          {view === 'privacy'
+            ? privacyView
+            : view === 'terms'
+              ? termsView
+              : view === 'security'
+                ? securityView
+                : view === 'features'
+                  ? howItWorksView
+                  : view === 'video'
+                    ? videoView
+                    : view === 'about'
+                      ? aboutView
+                      : view === 'docs'
+                        ? <DocsView goToMainView={goToMainView} />
+                        : (
+                          <div
+                            className="min-h-screen bg-gradient-to-b from-emerald-50 via-emerald-50/25 to-cyan-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden"
+                            onMouseDown={(event) => {
+                              if (typeof window !== 'undefined' && !window.matchMedia('(pointer:fine)').matches) return;
+                              setClickPulse({ x: event.clientX, y: event.clientY, id: Date.now() });
+                            }}
+                          >
+                            {/* Tech Grid Background
+                            <div className="fixed inset-0 pointer-events-none">
+                              <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/75 via-cyan-100/25 to-white/28 dark:from-slate-900/0 dark:via-slate-900/0 dark:to-slate-950/0"></div>
+                              <a
+                                href="#pricing"
+                                onClick={() => {
+                                  trackEvent('cta_click', {
+                                    button_name: 'floating_get_started',
+                                    location: 'floating_button',
+                                    destination: 'pricing_section'
+                                  });
+                                  openPricingSection();
+                                }}
+                                className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
+                                style={{ pointerEvents: 'auto' }}
+                              >
+                                Get Started Free <ArrowRight className="w-4 h-4" />
+                              </a>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  trackEvent('cta_click', {
+                                    button_name: 'download_cyan',
+                                    location: 'floating_button'
+                                  });
+                                  // TODO: cập nhật link download khi desktop app sẵn sàng
+                                }}
+                                className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
+                                style={{ pointerEvents: 'auto' }}
+                              >
+                                <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
+                                <span className="leading-tight text-[10px] text-cyan-200/90">
+                                  Currently in Private Beta. Sign up to request early access.
+                                </span>
+                              </button>
+                            </div> */}
+
+                            {/* Navigation */}
+                            <nav className={`fixed top-0 w-full transition-all duration-300 z-[100] ${scrolled
+                              ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3'
+                              : 'bg-transparent py-4 sm:py-6'
+                              }`}>
+                              <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+                                <div className="flex items-center gap-2 sm:gap-3">
+                                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+                                    <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+                                  </div>
+                                  <div className="text-left">
+                                    <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+                                    <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+                                  </div>
+                                </div>
+
+                                <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
+                                  <a href="#hero" onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
+                                  <a href="#solution" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
+                                  <a href="#engine" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
+                                  <a href="#platforms" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
+                                  <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
+                                  <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
+                                  <a href="#roi" onClick={(e) => { e.preventDefault(); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
+                                  <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
+                                  <a href="#footer" onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
+
+                                  <div className="ml-4 flex items-center gap-4">
+                                    <button
+                                      onClick={() => setIsDarkMode(!isDarkMode)}
+                                      className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                                      aria-label="Toggle dark mode"
+                                    >
+                                      {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                                    </button>
+
+                                    <div className="relative group">
+                                      <button
+                                        onClick={() => {
+                                          trackEvent('cta_click', { button_name: 'early_access_nav', location: 'navigation' });
+                                        }}
+                                        className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
+                                      >
+                                        Early Access
+                                      </button>
+
+                                      <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                                        <div className="p-4">
+                                          <h3 className="font-bold text-gray-900 dark:text-white mb-1">Join the Waitlist</h3>
+                                          <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">Get exclusive updates and priority access.</p>
+                                          <form action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg==" method="POST" className="space-y-3">
+                                            <input type="text" name="FIRSTNAME" placeholder="Your Name" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
+                                            <input type="email" name="EMAIL" placeholder="Your Email" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
+                                            <button type="submit" className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20">Join Waitlist</button>
+                                            <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">500+ members • No spam</div>
+                                          </form>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {isLoggedIn && userInfo ? (
+                                      <div className="relative">
+                                        <button
+                                          type="button"
+                                          onClick={() => setAccountMenuOpen((open) => !open)}
+                                          className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
+                                        >
+                                          <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
+                                          <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <button
+                                        onClick={() => setShowLoginModal(true)}
+                                        className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400 px-2"
+                                      >
+                                        Join
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  {/* Mobile Account/Login Button */}
+                                  {isLoggedIn && userInfo ? (
+                                    <div className="relative sm:hidden">
+                                      <button
+                                        type="button"
+                                        onClick={() => setMobileAccountOpen((open) => !open)}
+                                        className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-slate-700 shadow-sm"
+                                        aria-label="Open account menu"
+                                      >
+                                        <img
+                                          src={userInfo.picture || '/logoCYAN.png'}
+                                          alt={userInfo.name}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </button>
+
+                                      {mobileAccountOpen && (
+                                        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2.5 z-[135]">
+                                          <div className="px-4 pb-2 border-b border-gray-100 dark:border-slate-800">
+                                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                                            <div className="mt-1 flex items-center justify-between">
+                                              <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                                                {userInfo.plan || 'free'}
+                                              </span>
+                                              <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                                                {PLAN_PRICE[userInfo.plan || 'free']}
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div className="px-4 pt-3 flex flex-col gap-2">
+                                            <a
+                                              href="#pricing"
+                                              onClick={(e) => {
+                                                e.preventDefault();
+                                                setMobileAccountOpen(false);
+                                                openPricingSection();
+                                              }}
+                                              className="text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700"
+                                            >
+                                              Upgrade Plan
+                                            </a>
+                                            <button
+                                              type="button"
+                                              onClick={() => {
+                                                saveSession(null);
+                                                setMobileAccountOpen(false);
+                                              }}
+                                              className="text-left text-sm text-red-500 font-bold"
+                                            >
+                                              Logout
+                                            </button>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={() => setShowLoginModal(true)}
+                                      className="sm:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
+                                    >
+                                      Login
+                                    </button>
+                                  )}
+
+                                  <button
+                                    onClick={() => setIsDarkMode(!isDarkMode)}
+                                    className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                                    aria-label="Toggle dark mode"
+                                  >
+                                    {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                                  </button>
+                                  <button
+                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                    className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
+                                  >
+                                    {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Mobile Sidebar */}
+                              {/* Mobile Sidebar - Full Screen from Left */}
+                              <div
+                                className={`sm:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                              >
+                                <div className="flex flex-col h-full">
+                                  {/* Sidebar Header */}
+                                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-800">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+                                        <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+                                      </div>
+                                      <span className="text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+                                    </div>
+                                    <button
+                                      onClick={() => setMobileMenuOpen(false)}
+                                      className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-white"
+                                    >
+                                      <X className="w-6 h-6" />
+                                    </button>
+                                  </div>
+
+                                  {/* Sidebar Content */}
+                                  <div className="flex-1 overflow-y-auto bg-white h-[100vh] px-6 py-8 flex flex-col justify-between">
+                                    <div className="flex flex-col gap-6">
+                                      <a href="#hero" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
+                                      <a href="#solution" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
+                                      <a href="#engine" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
+                                      <a href="#platforms" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
+                                      <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
+                                      <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
+                                      <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
+                                      <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
+                                      <a href="#footer" onClick={() => { setMobileMenuOpen(false); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
+                                    </div>
+
+                                    <div className="mt-auto  pt-4 flex flex-col gap-2">
+                                      <button
+                                        onClick={() => {
+                                          setMobileMenuOpen(false);
+                                          trackEvent('cta_click', { button_name: 'early_access_mobile' });
+                                        }}
+                                        className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800"
+                                      >
+                                        Email Early Access
+                                      </button>
+
+                                      {isLoggedIn && userInfo ? (
+                                        <div className="flex flex-col gap-4">
+                                          <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
+                                            <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-12 h-12 rounded-full shadow-sm" />
+                                            <div>
+                                              <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.name}</div>
+                                              <div className="text-sm text-gray-500">{userInfo.email}</div>
+                                            </div>
+                                          </div>
+                                          <button
+                                            onClick={() => {
+                                              saveSession(null);
+                                              setMobileMenuOpen(false);
+                                            }}
+                                            className="text-center text-red-500 font-bold py-3 text-lg"
+                                          >
+                                            Logout
+                                          </button>
+                                        </div>
+                                      ) : (
+                                        <button
+                                          onClick={() => {
+                                            setMobileMenuOpen(false);
+                                            setShowLoginModal(true);
+                                          }}
+                                          className="w-full bg-cyan-600 text-yellow-300 py-4 rounded-xl font-bold text-xl shadow-xl shadow-cyan-600/20"
+                                        >
+                                          Join / Login
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </nav>
+
+                            {(checkoutBusy || checkoutMessage) && (
+                              <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-xl border border-cyan-500/40 bg-white/95 dark:bg-slate-900/95 px-4 py-3 shadow-2xl backdrop-blur">
+                                {checkoutBusy ? (
+                                  <p className="text-sm font-medium text-cyan-700 dark:text-cyan-300">Creating checkout session...</p>
+                                ) : (
+                                  <p className="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap break-words">{checkoutMessage}</p>
+                                )}
+                                {checkoutMessage && (
+                                  <button
+                                    onClick={() => setCheckoutMessage(null)}
+                                    className="mt-2 text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400"
+                                  >
+                                    Dismiss
+                                  </button>
+                                )}
+                              </div>
+                            )}
+
+                            {cryptoCheckout && (
+                              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+                                <div className="w-full max-w-lg rounded-2xl border border-cyan-500/30 bg-white dark:bg-slate-900 shadow-2xl">
+                                  <div className="flex items-start justify-between gap-4 border-b border-cyan-500/20 px-5 py-4">
+                                    <div>
+                                      <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Thanh toán Crypto</div>
+                                      <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">Mạng: BSC • Coin: {cryptoCheckout.payCurrency.toUpperCase()}</div>
+                                    </div>
+                                    <button
+                                      onClick={() => setCryptoCheckout(null)}
+                                      className="text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400"
+                                    >
+                                      Đóng
+                                    </button>
+                                  </div>
+
+                                  <div className="px-5 py-4 space-y-4">
+                                    <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
+                                      <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">Số tiền cần gửi</div>
+                                      <div className="mt-1 flex items-center justify-between gap-3">
+                                        <div className="text-lg font-bold text-gray-900 dark:text-white break-all">{cryptoCheckout.payAmount}</div>
+                                        <button
+                                          onClick={async () => {
+                                            const ok = await copyToClipboard(cryptoCheckout.payAmount);
+                                            setCheckoutMessage(ok ? 'Đã copy số tiền.' : 'Copy thất bại.');
+                                          }}
+                                          className="text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300"
+                                        >
+                                          Copy
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
+                                      <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">Địa chỉ nhận</div>
+                                      <div className="mt-1 flex items-start justify-between gap-3">
+                                        <div className="text-sm font-mono text-gray-900 dark:text-white break-all">{cryptoCheckout.payAddress}</div>
+                                        <button
+                                          onClick={async () => {
+                                            const ok = await copyToClipboard(cryptoCheckout.payAddress);
+                                            setCheckoutMessage(ok ? 'Đã copy địa chỉ.' : 'Copy thất bại.');
+                                          }}
+                                          className="text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300"
+                                        >
+                                          Copy
+                                        </button>
+                                      </div>
+                                    </div>
+
+                                    <div className="rounded-xl border border-cyan-500/20 bg-white dark:bg-slate-900 p-4">
+                                      <div className="text-xs text-gray-600 dark:text-gray-300">Sau khi gửi xong, bấm nút bên dưới để hệ thống kiểm tra và kích hoạt gói.</div>
+                                      <button
+                                        onClick={checkAndActivateCryptoPayment}
+                                        disabled={cryptoActivationBusy}
+                                        className="mt-3 w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all disabled:opacity-60"
+                                      >
+                                        {cryptoActivationBusy ? 'Đang kiểm tra thanh toán...' : 'Tôi đã thanh toán'}
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            <HeroSection
+                              setView={setView}
+                              openPricingSection={openPricingSection}
+                              trackEvent={trackEvent}
+                              setRef={setRef}
+                            />
+
+                            {/* Problem Section */}
+                            <ProblemSection isVisible={isVisible.problem} setRef={setRef} />
+
+                            {/* Solution Section */}
+                            <SolutionSection isVisible={isVisible.solution} setRef={setRef} />
+
+                            {/* CYAN OS Lite API Section - Hidden by default */}
+                            <ApiSection showApiSection={showApiSection} setShowApiSection={setShowApiSection} setRef={setRef} />
+
+                            <EngineSection isVisible={isVisible.engine} setRef={setRef} />
+
+                            {/* Developers Section */}
+                            <DevelopersSection isVisible={isVisible.developers} trackEvent={trackEvent} setRef={setRef} />
+
+                            {/* ROI Section */}
+                            <RoiSection isVisible={isVisible.roi} showRoiSection={showRoiSection} setRef={setRef} />
+
+                            <PlatformsSection isVisible={isVisible.platforms} setRef={setRef} />
+
+                            <ListingsSection />
+
+                            {/* Pricing Section - Hidden */}
+                            <PricingSection
+                              showPricingSection={showPricingSection}
+                              showTeamContactForm={showTeamContactForm}
+                              teamFormSubmitted={teamFormSubmitted}
+                              setRef={setRef}
+                              trackEvent={trackEvent}
+                              startPlanCheckout={startPlanCheckout}
+                              setShowTeamContactForm={setShowTeamContactForm}
+                              setTeamFormSubmitted={setTeamFormSubmitted}
+                              handleTeamContactSubmit={handleTeamContactSubmit}
+                            />
+
+
+                            {/* Login/Register Modal */}
+                            {showLoginModal && (
+                              <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 overflow-y-auto">
+                                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[88vh] overflow-y-auto">
+                                  {/* Close Button */}
+                                  <button
+                                    onClick={() => setShowLoginModal(false)}
+                                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                  >
+                                    ✕
+                                  </button>
+
+                                  {/* Logo */}
+                                  <div className="text-center mb-6">
+                                    <div className="w-12 h-12 bg-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                      <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover rounded" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                                      {isLoginMode ? 'Welcome Back' : 'Create Account'}
+                                    </h2>
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                      {isLoginMode ? 'Sign in to your CYAN account' : 'Join CYAN for ultra-low latency translation'}
+                                    </p>
+                                  </div>
+
+                                  {/* Form */}
+                                  <div className="space-y-4">
+                                    {/* Google Sign-In Button */}
+                                    <button
+                                      type="button"
+                                      onClick={async () => {
+                                        trackEvent('oauth_click', {
+                                          provider: 'google',
+                                          action: isLoginMode ? 'login' : 'register'
+                                        });
+
+                                        try {
+                                          await startGoogleLoginWithGis();
+                                          return;
+                                        } catch (error) {
+                                          const message = error instanceof Error ? error.message : 'Google login failed. Please try again.';
+                                          setCheckoutMessage(message);
+                                          setShowLoginModal(true);
+                                          trackEvent('oauth_error', { provider: 'google', error: message });
+                                          return;
+                                        }
+                                      }}
+                                      className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                    >
+                                      <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                                      </svg>
+                                      Continue with Google
+                                    </button>
+
+                                    <div className="relative">
+                                      <div className="absolute inset-0 flex items-center">
+                                        <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                                      </div>
+                                      <div className="relative flex justify-center text-sm">
+                                        <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                                          Or continue with email
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <form
+                                      onSubmit={handleEmailAuthSubmit}
+                                      className="space-y-4"
+                                    >
+                                      {!isLoginMode && (
+                                        <input
+                                          type="text"
+                                          name="FIRSTNAME"
+                                          placeholder="Full Name"
+                                          required
+                                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                                        />
+                                      )}
+
+                                      <input
+                                        type="email"
+                                        name="EMAIL"
+                                        placeholder="Email Address"
+                                        required
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                                      />
+
+                                      <input
+                                        type="password"
+                                        name="PASSWORD"
+                                        placeholder="Password"
+                                        required
+                                        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                                      />
+
+                                      {!isLoginMode && (
+                                        <input
+                                          type="password"
+                                          name="CONFIRM_PASSWORD"
+                                          placeholder="Confirm Password"
+                                          required
+                                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                                        />
+                                      )}
+
+                                      <input
+                                        type="hidden"
+                                        name="FORM_TYPE"
+                                        value={isLoginMode ? 'login' : 'register'}
+                                      />
+
+                                      <button
+                                        type="submit"
+                                        className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                                      >
+                                        {isLoginMode ? 'Sign In' : 'Create Account'}
+                                      </button>
+                                    </form>
+                                  </div>
+
+                                  {/* Toggle Mode */}
+                                  <div className="mt-6 text-center">
+                                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                      {isLoginMode ? "Don't have an account?" : 'Already have an account?'}
+                                      <button
+                                        onClick={() => setIsLoginMode(!isLoginMode)}
+                                        className="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 font-semibold ml-1"
+                                      >
+                                        {isLoginMode ? 'Sign Up' : 'Sign In'}
+                                      </button>
+                                    </p>
+                                  </div>
+
+                                  {/* Benefits */}
+                                  <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                                    <div className="text-center">
+                                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Get started with:</p>
+                                      <div className="flex justify-center space-x-4 text-xs text-gray-600 dark:text-gray-300">
+                                        <span>✓ 20min Free Trial</span>
+                                        <span>✓ No Credit Card</span>
+                                        <span>✓ Cancel Anytime</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {showCookieBanner && (
+                              <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
+                                <div className="max-w-md w-full bg-slate-900/95 border border-slate-700 text-[11px] md:text-xs text-gray-200 rounded-full px-3 py-2 shadow-xl flex items-center gap-2 md:gap-3">
+                                  <div className="flex-1 leading-tight">
+                                    <div className="font-semibold text-gray-100 text-[11px] md:text-xs">Cookies &amp; data</div>
+                                    <p className="text-[10px] md:text-[11px] text-gray-300">We use cookies to keep you signed in and measure usage. Privacy Policy.</p>
+                                  </div>
+                                  <div className="flex items-center gap-1 md:gap-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (typeof window !== 'undefined') {
+                                          window.localStorage.setItem('cyan_cookie_consent', 'necessary');
+                                        }
+                                        setShowCookieBanner(false);
+                                      }}
+                                      className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
+                                    >
+                                      Necessary
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        if (typeof window !== 'undefined') {
+                                          window.localStorage.setItem('cyan_cookie_consent', 'all');
+                                        }
+                                        setShowCookieBanner(false);
+                                        trackEvent('cookie_consent', { choice: 'all' });
+                                      }}
+                                      className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
+                                    >
+                                      Accept
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setView('privacy');
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                      }}
+                                      className="px-2 py-1 rounded-full text-[10px] md:text-[11px] text-gray-300 hover:text-cyan-400 transition-colors"
+                                    >
+                                      Policy
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            <Footer
+                              setView={setView}
+                              openPricingSection={openPricingSection}
+                              setShowApiSection={setShowApiSection}
+                              copyToClipboard={copyToClipboard}
+                            />
+                          </div>
+                        )
+          }
         </div>
-      </footer>
-    </div>
-                )
-      }
-      </div>
+      </>
     </Suspense>
   );
 }
