@@ -133,7 +133,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  Privacy Policy
+                  Privacy
                 </button>
               </li>
               <li>
