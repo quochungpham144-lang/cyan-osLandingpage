@@ -73,6 +73,18 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                   Polygon, Ethereum). Users are responsible for network fees (Gas fees) and ensuring the correct wallet
                   address and network are used as required by the system.
                 </li>
+                <li>
+                  4.1. Taxes and Fees: You are responsible for all applicable sales, use, value-added, or other taxes
+                  and duties imposed by any governmental authority on your purchase. All payments are exclusive of such
+                  taxes.
+                </li>
+                <li>
+                  4.2. Anti-Money Laundering (AML) Compliance: By using Cryptocurrency for payment, you represent and
+                  warrant that (i) the funds used are not derived from any illegal activity; and (ii) you are not
+                  located in a country that is subject to a U.S. Government embargo, or designated by the U.S.
+                  Government as a "terrorist supporting" country; and (iii) you are not listed on any U.S. Government
+                  list of prohibited or restricted parties (e.g., OFAC).
+                </li>
               </ul>
             </div>
             <div>
@@ -144,6 +156,12 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                 or error-free operation.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
+                <li>
+                  11.1. Modification of Fees: CYAN AI reserves the right to change our subscription plans or adjust
+                  pricing for our service or any components thereof in any manner and at any time as we may determine
+                  in our sole and absolute discretion. Any price changes will take effect following notice to you via
+                  email or through the Service.
+                </li>
                 <li>Changes: We may modify, suspend, or discontinue parts of the Service (including plans and features) with reasonable notice where practicable.</li>
                 <li>Abuse &amp; Misuse: We reserve the right to suspend or terminate accounts involved in abuse, fraud, or violations of these Terms or applicable law.</li>
               </ul>
@@ -157,17 +175,64 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                 <li>Exclusions: CYAN disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
                 <li>Liability Cap: To the extent permitted by law, CYAN&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
                 <li>Indirect Damages: CYAN is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
+                <li>
+                  12.3. Third-Party Dependency Disclaimer: The Service relies on third-party Application Programming
+                  Interfaces (APIs) including, but not limited to, ElevenLabs, Microsoft Azure, and Google Cloud. CYAN
+                  AI shall not be held liable for any service interruptions, data inaccuracies, or policy changes
+                  initiated by these third-party providers. You acknowledge that our Service availability is contingent
+                  upon the operational status of these external infrastructures.
+                </li>
               </ul>
             </div>
             <div>
-              <div className="font-semibold text-white">13. GOVERNING LAW, DISPUTES &amp; CHANGES TO TERMS</div>
+              <div className="font-semibold text-white">13. GOVERNING LAW AND JURISDICTION</div>
               <p className="mt-1 text-gray-300">
-                These Terms are governed by the laws of the Socialist Republic of Vietnam, without regard to conflict of
-                laws principles, while respecting any mandatory consumer protection rights that apply in your own country.
+                These Terms shall be governed by and construed in accordance with the laws of the State of Delaware,
+                United States, without regard to its conflict of law principles. Any legal action or proceeding arising
+                under these Terms will be brought exclusively in the federal or state courts located in the State of
+                Delaware, and the parties hereby irrevocably consent to the personal jurisdiction and venue therein.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Dispute Resolution: Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the competent courts in Vietnam, unless otherwise required by mandatory local law.</li>
-                <li>Changes to Terms: We may update these Terms from time to time. Material changes will be communicated via the Service or by email where appropriate, and your continued use of the Service after such changes constitutes acceptance of the updated Terms.</li>
+                <li>
+                  13.1. Exclusive Forum: You and CYAN AI agree that all disputes, claims, controversies, or causes of
+                  action arising out of or relating to these Terms or the Service shall be filed only in the federal or
+                  state courts located in the State of Delaware.
+                </li>
+                <li>
+                  13.2. Waiver of Objections: Each party irrevocably waives any objection based on improper venue,
+                  forum non conveniens, or similar doctrine, and agrees not to challenge the enforceability of this
+                  forum-selection provision except to the extent prohibited by applicable law.
+                </li>
+                <li>
+                  13.3. Injunctive and Equitable Relief: Notwithstanding any other provision, CYAN AI may seek
+                  temporary, preliminary, or permanent injunctive or equitable relief in any court of competent
+                  jurisdiction to protect its intellectual property, confidential information, security posture, or
+                  platform integrity.
+                </li>
+                <li>
+                  13.4. Time Limitation on Claims: To the maximum extent permitted by law, any claim or cause of action
+                  arising out of or related to the Service must be brought within one (1) year after the claim first
+                  arose; otherwise, such claim is permanently barred.
+                </li>
+                <li>
+                  13.5. International Use and Mandatory Rights: The Service is controlled and operated from the United
+                  States. You are responsible for compliance with your local laws. Nothing in these Terms limits any
+                  non-waivable consumer rights that apply under mandatory law in your jurisdiction.
+                </li>
+                <li>
+                  13.6. Survival: This Section 13 survives any suspension, termination, or expiration of your account or
+                  access to the Service.
+                </li>
+                <li>
+                  13.7. Jury Trial Waiver: To the fullest extent permitted by applicable law, each party knowingly,
+                  voluntarily, and irrevocably waives any right to a trial by jury in any action, proceeding, or
+                  counterclaim arising out of or relating to these Terms or the Service.
+                </li>
+                <li>
+                  13.8. Class Action Waiver: To the maximum extent permitted by law, all claims must be brought solely
+                  in an individual capacity, and not as a plaintiff or class member in any purported class, collective,
+                  consolidated, representative, or private attorney general proceeding.
+                </li>
               </ul>
             </div>
           </div>
