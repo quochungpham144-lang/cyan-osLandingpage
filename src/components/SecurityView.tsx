@@ -14,7 +14,7 @@ export const SecurityView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS</div>
               <div className="text-xs text-gray-400">Dedicated Voice Copyright &amp; Cloning Policy</div>
             </div>
           </div>
@@ -30,7 +30,7 @@ export const SecurityView = memo(({ isDarkMode, goToMainView }: Props) => (
           <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
             <div>
               <div className="text-base md:text-lg font-semibold text-white">
-                CYAN AI: DEDICATED VOICE COPYRIGHT &amp; CLONING POLICY
+                CYAN OS: DEDICATED VOICE COPYRIGHT &amp; CLONING POLICY
               </div>
               <div className="mt-1 text-xs text-gray-400">Effective Date: January 28, 2026</div>
             </div>
@@ -39,7 +39,7 @@ export const SecurityView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">1. LEGAL OWNERSHIP OF VOICE DATA</div>
               <p className="mt-1 text-gray-300">
-                CYAN AI (the &quot;Company&quot;) recognizes that a person&apos;s voice is a core part of their
+                CYAN OS (the &quot;Company&quot;) recognizes that a person&apos;s voice is a core part of their
                 personal identity and intellectual property.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -134,7 +134,7 @@ export const SecurityView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">6. INDEMNIFICATION</div>
               <p className="mt-1 text-gray-300">
-                The User agrees to indemnify, defend, and hold harmless CYAN AI, its founders, and its technology
+                The User agrees to indemnify, defend, and hold harmless CYAN OS, its founders, and its technology
                 partners (ElevenLabs, Azure, Google) from any and all claims, damages, or legal fees arising from the
                 User’s unauthorized use of a third party’s voice.
               </p>

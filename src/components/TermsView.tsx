@@ -14,7 +14,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS REAL-TIME TRANSLATOR</div>
               <div className="text-xs text-gray-400">Terms of Service</div>
             </div>
           </div>
@@ -29,7 +29,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
         <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
           <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
             <div>
-              <div className="text-base md:text-lg font-semibold text-white">TERMS OF SERVICE: CYAN AI REAL-TIME TRANSLATOR</div>
+              <div className="text-base md:text-lg font-semibold text-white">TERMS OF SERVICE: CYAN OS REAL-TIME TRANSLATOR</div>
               <div className="mt-1 text-xs text-gray-400">Version: 1.02 – Updated: January 28, 2026</div>
             </div>
           </div>
@@ -37,7 +37,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">1. ACCEPTANCE OF TERMS</div>
               <p className="mt-1 text-gray-300">
-                By accessing and using the CYAN AI utility (hereinafter referred to as the &quot;Service&quot;), you
+                By accessing and using the CYAN OS utility (hereinafter referred to as the &quot;Service&quot;), you
                 agree to be bound by these Terms. If you are using the Service on behalf of an organization, you agree
                 to these Terms on behalf of that organization.
               </p>
@@ -157,7 +157,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
-                  11.1. Modification of Fees: CYAN AI reserves the right to change our subscription plans or adjust
+                  11.1. Modification of Fees: CYAN OS reserves the right to change our subscription plans or adjust
                   pricing for our service or any components thereof in any manner and at any time as we may determine
                   in our sole and absolute discretion. Any price changes will take effect following notice to you via
                   email or through the Service.
@@ -178,7 +178,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                 <li>
                   12.1. Third-Party Dependency Disclaimer: The Service relies on third-party Application Programming
                   Interfaces (APIs) including, but not limited to, ElevenLabs, Microsoft Azure, and Google Cloud. CYAN
-                  AI shall not be held liable for any service interruptions, data inaccuracies, or policy changes
+                  OS shall not be held liable for any service interruptions, data inaccuracies, or policy changes
                   initiated by these third-party providers. You acknowledge that our Service availability is contingent
                   upon the operational status of these external infrastructures.
                 </li>
@@ -194,7 +194,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
-                  13.1. Exclusive Forum: You and CYAN AI agree that all disputes, claims, controversies, or causes of
+                  13.1. Exclusive Forum: You and CYAN OS agree that all disputes, claims, controversies, or causes of
                   action arising out of or relating to these Terms or the Service shall be filed only in the federal or
                   state courts located in the State of Delaware.
                 </li>
@@ -204,7 +204,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                   forum-selection provision except to the extent prohibited by applicable law.
                 </li>
                 <li>
-                  13.3. Injunctive and Equitable Relief: Notwithstanding any other provision, CYAN AI may seek
+                  13.3. Injunctive and Equitable Relief: Notwithstanding any other provision, CYAN OS may seek
                   temporary, preliminary, or permanent injunctive or equitable relief in any court of competent
                   jurisdiction to protect its intellectual property, confidential information, security posture, or
                   platform integrity.

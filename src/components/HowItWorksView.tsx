@@ -14,7 +14,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN AI REAL-TIME TRANSLATOR</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS REAL-TIME TRANSLATOR</div>
               <div className="text-xs text-gray-400">How it works</div>
             </div>
           </div>
@@ -29,7 +29,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
         <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
           <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
             <div>
-              <div className="text-base md:text-lg font-semibold text-white">HOW CYAN AI REAL-TIME TRANSLATOR WORKS</div>
+              <div className="text-base md:text-lg font-semibold text-white">HOW CYAN OS REAL-TIME TRANSLATOR WORKS</div>
               <div className="mt-1 text-xs text-gray-400">From your microphone to translated speech in under a second</div>
             </div>
           </div>
