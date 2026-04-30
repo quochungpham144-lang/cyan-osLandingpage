@@ -176,7 +176,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                 <li>Liability Cap: To the extent permitted by law, CYAN&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
                 <li>Indirect Damages: CYAN is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
                 <li>
-                  12.3. Third-Party Dependency Disclaimer: The Service relies on third-party Application Programming
+                  12.1. Third-Party Dependency Disclaimer: The Service relies on third-party Application Programming
                   Interfaces (APIs) including, but not limited to, ElevenLabs, Microsoft Azure, and Google Cloud. CYAN
                   AI shall not be held liable for any service interruptions, data inaccuracies, or policy changes
                   initiated by these third-party providers. You acknowledge that our Service availability is contingent
