@@ -4,6 +4,7 @@ import { Footer } from './components/Footer';
 import { PrivacyView } from './components/PrivacyView';
 import { TermsView } from './components/TermsView';
 import { SecurityView } from './components/SecurityView';
+import { ServiceBillingPolicyView } from './components/ServiceBillingPolicyView';
 import { HowItWorksView } from './components/HowItWorksView';
 import { VideoView } from './components/VideoView';
 import { AboutView } from './components/AboutView';
@@ -38,7 +39,7 @@ declare global {
 
 export type PlanKey = 'free' | 'basic' | 'standard' | 'pro' | 'team' | 'executive_pro_annual'
 export type PaymentMethod = 'paypal' | 'crypto'
-export type AppView = 'main' | 'privacy' | 'terms' | 'security' | 'features' | 'video' | 'about' | 'docs'
+export type AppView = 'main' | 'privacy' | 'terms' | 'security' | 'service_billing' | 'features' | 'video' | 'about' | 'docs'
 
 type GoogleTokenResponse = {
   access_token?: string
@@ -288,6 +289,8 @@ function App() {
   const termsView = <TermsView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
   const securityView = <SecurityView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
+
+  const serviceBillingView = <ServiceBillingPolicyView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
   const howItWorksView = <HowItWorksView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
 
@@ -1422,6 +1425,8 @@ function App() {
               ? termsView
               : view === 'security'
                 ? securityView
+                : view === 'service_billing'
+                  ? serviceBillingView
                 : view === 'features'
                   ? howItWorksView
                   : view === 'video'
