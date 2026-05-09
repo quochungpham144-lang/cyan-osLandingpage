@@ -19,6 +19,8 @@ import { PlatformsSection } from './components/PlatformsSection';
 import { ListingsSection } from './components/ListingsSection';
 import { PricingSection } from './components/PricingSection';
 import { FormEvent, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { SignJWT } from 'jose';
+
 import {
   Zap,
   ArrowRight,
@@ -102,6 +104,9 @@ const BACKEND_URL = 'https://translator-backend-pi.vercel.app'
 const GOOGLE_CLIENT_ID =
   (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_GOOGLE_CLIENT_ID ||
   '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com'
+
+const JWT_SECRET = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_JWT_SECRET;
+
 
 const PLAN_PRICE: Record<PlanKey, string> = {
   free: '$0',
@@ -309,11 +314,33 @@ function App() {
   useEffect(() => {
     if (!autoOpenApp) return;
     if (!isLoggedIn || !userInfo) return;
-    const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
-    window.location.href = deepLink;
-    trackEvent('open_in_app_auto', { userId: userInfo.id });
-    setAutoOpenApp(false);
+
+    const openAppWithToken = async () => {
+      try {
+        const secret = new TextEncoder().encode(JWT_SECRET);
+        const token = await new SignJWT({
+          user_id: userInfo.id,
+          email: userInfo.email,
+          username: userInfo.name,
+          plan: userInfo.plan || 'free'
+        })
+          .setProtectedHeader({ alg: 'HS256' })
+          .setIssuedAt()
+          .setExpirationTime('7d')
+          .sign(secret);
+
+        const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}&token=${token}`;
+        window.location.href = deepLink;
+        trackEvent('open_in_app_auto', { userId: userInfo.id });
+        setAutoOpenApp(false);
+      } catch (err) {
+        console.error('Failed to generate token:', err);
+      }
+    };
+
+    openAppWithToken();
   }, [autoOpenApp, isLoggedIn, userInfo, trackEvent]);
+
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1195,6 +1222,36 @@ function App() {
                       <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
                       <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
                     </button>
+
+                    {accountMenuOpen && (
+                      <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2 z-[100]">
+                        <div className="px-4 py-2 border-b border-gray-100 dark:border-slate-800">
+                          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Account</p>
+                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                          <p className="text-[10px] text-gray-500 truncate">{userInfo.email}</p>
+                        </div>
+                        <div className="p-2 flex flex-col gap-1">
+                          <button
+                            onClick={() => {
+                              setAccountMenuOpen(false);
+                              setAutoOpenApp(true);
+                            }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-sm font-bold text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/30 rounded-lg transition-colors"
+                          >
+                            <Zap className="w-4 h-4" /> Open CYAN OS
+                          </button>
+                          <button
+                            onClick={() => {
+                              setAccountMenuOpen(false);
+                              saveSession(null);
+                            }}
+                            className="flex items-center gap-2 w-full px-3 py-2 text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <button
@@ -1238,6 +1295,16 @@ function App() {
                         </div>
                       </div>
                       <div className="px-4 pt-3 flex flex-col gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMobileAccountOpen(false);
+                            setAutoOpenApp(true);
+                          }}
+                          className="text-left text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700 flex items-center gap-2"
+                        >
+                          <Zap className="w-4 h-4" /> Open CYAN OS
+                        </button>
                         <a
                           href="#pricing"
                           onClick={(e) => {
@@ -1341,6 +1408,15 @@ function App() {
                           <div className="text-sm text-gray-500">{userInfo.email}</div>
                         </div>
                       </div>
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setAutoOpenApp(true);
+                        }}
+                        className="w-full bg-cyan-600 text-yellow-300 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+                      >
+                        <Zap className="w-5 h-5" /> Open CYAN OS
+                      </button>
                       <button
                         onClick={() => {
                           saveSession(null);
@@ -1813,6 +1889,8 @@ function App() {
                               openPricingSection={openPricingSection}
                               trackEvent={trackEvent}
                               setRef={setRef}
+                              isLoggedIn={isLoggedIn}
+                              openApp={() => setAutoOpenApp(true)}
                             />
 
                             {/* Problem Section */}

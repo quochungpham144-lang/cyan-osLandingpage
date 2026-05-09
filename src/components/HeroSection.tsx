@@ -7,9 +7,11 @@ interface Props {
   openPricingSection: () => void;
   trackEvent: (event: string, data?: Record<string, unknown>) => void;
   setRef: (id: string) => (el: HTMLElement | null) => void;
+  isLoggedIn: boolean;
+  openApp: () => void;
 }
 
-export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef }: Props) => {
+export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef, isLoggedIn, openApp }: Props) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -169,12 +171,16 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
 
             <button
               onClick={() => {
-                trackEvent('cta_click', { button_name: 'hero_get_started', location: 'hero_section' });
-                openPricingSection();
+                if (isLoggedIn) {
+                  openApp();
+                } else {
+                  trackEvent('cta_click', { button_name: 'hero_get_started', location: 'hero_section' });
+                  openPricingSection();
+                }
               }}
               className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-cyan-500/25"
             >
-              Get Started Free
+              {isLoggedIn ? 'Open CYAN OS' : 'Get Started Free'}
             </button>
 
             <button
