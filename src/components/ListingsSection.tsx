@@ -26,6 +26,13 @@ export const ListingsSection = memo(() => (
               icon: 'https://www.vectorlogo.zone/logos/google_cloud/google_cloud-icon.svg' // Fallback to tech icon
             },
             {
+              name: 'SaasHunt',
+              href: 'https://saashunt.best/projects/cyan-ultra-low-latency-ai-translator',
+              color: 'hover:border-amber-500 hover:bg-amber-500/5',
+              textColor: 'hover:text-amber-600 dark:hover:text-amber-400',
+              icon: 'https://www.vectorlogo.zone/logos/producthunt/producthunt-icon.svg' // Fallback icon
+            },
+            {
               name: 'DevHub',
               href: 'https://devhub.best/projects/cyan-ultra-low-latency-ai-translator',
               color: 'hover:border-purple-500 hover:bg-purple-500/5',
@@ -51,6 +58,8 @@ export const ListingsSection = memo(() => (
                 <img 
                   src={item.icon} 
                   alt={item.name} 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-contain"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${item.name[0]}&background=random&color=fff&size=32`;
