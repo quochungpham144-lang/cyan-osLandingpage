@@ -5,7 +5,7 @@
 @keyframes pageFadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.995);
+    transform: translateY(4px) scale(0.998);
   }
   to {
     opacity: 1;

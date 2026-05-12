@@ -92,12 +92,38 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 <button
                   type="button"
                   onClick={() => {
+                    setView('leadership');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  Leadership & Vision
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
                     setView('about');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   About
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView('about');
+                    setTimeout(() => {
+                      document.querySelector('.pt-8.mt-8.border-t')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 100);
+                  }}
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  The Team
                 </button>
               </li>
               <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
