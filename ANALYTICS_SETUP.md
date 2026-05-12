@@ -5,7 +5,7 @@
 ### 1. **Tạo Google Analytics Property**
 - Truy cập: https://analytics.google.com
 - Create Account → Property
-- Property Name: "Cyan AI Translation"
+- Property Name: "CYAN OS Translation"
 - Reporting Time Zone: Your timezone
 - Currency: USD
 
