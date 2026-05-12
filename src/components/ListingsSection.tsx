@@ -23,21 +23,21 @@ export const ListingsSection = memo(() => (
               href: 'https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator',
               color: 'hover:border-cyan-500 hover:bg-cyan-500/5',
               textColor: 'hover:text-cyan-600 dark:hover:text-cyan-400',
-              icon: 'https://www.vectorlogo.zone/logos/google_cloud/google_cloud-icon.svg' // Fallback to tech icon
+              icon: 'https://www.google.com/s2/favicons?domain=nxgntools.com&sz=128'
             },
             {
               name: 'DevHub',
               href: 'https://devhub.best/projects/cyan-ultra-low-latency-ai-translator',
               color: 'hover:border-purple-500 hover:bg-purple-500/5',
               textColor: 'hover:text-purple-600 dark:hover:text-purple-400',
-              icon: 'https://www.vectorlogo.zone/logos/github/github-icon.svg' // Fallback to dev icon
+              icon: 'https://www.google.com/s2/favicons?domain=devhub.best&sz=128'
             },
             {
               name: 'VibeRank',
               href: 'https://viberank.dev/apps/CYAN%3A%20Ultra-Low%20Latency%20AI%20Translator',
               color: 'hover:border-emerald-500 hover:bg-emerald-500/5',
               textColor: 'hover:text-emerald-600 dark:hover:text-emerald-400',
-              icon: 'https://www.vectorlogo.zone/logos/discordapp/discordapp-icon.svg' // Fallback to community icon
+              icon: 'https://www.google.com/s2/favicons?domain=viberank.dev&sz=128'
             }
           ].map((item) => (
             <a

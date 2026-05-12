@@ -106,8 +106,7 @@ export const SolutionSection = memo(({ isVisible, setRef }: Props) => {
                         className="flex-1 rounded-full bg-gradient-to-t from-cyan-500 to-blue-500 opacity-60 group-hover:opacity-100 transition-opacity duration-500"
                         style={{
                           height: `${height}%`,
-                          animation: `pulse ${1.5 + Math.random()}s ease-in-out infinite`,
-                          animationDelay: `${i * 0.05}s`
+                          animation: `pulse ${1.5 + Math.random()}s ease-in-out ${i * 0.05}s infinite`
                         }}
                       />
                     );
