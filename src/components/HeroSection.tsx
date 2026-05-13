@@ -7,11 +7,9 @@ interface Props {
   openPricingSection: () => void;
   trackEvent: (event: string, data?: Record<string, unknown>) => void;
   setRef: (id: string) => (el: HTMLElement | null) => void;
-  isLoggedIn: boolean;
-  openApp: () => void;
 }
 
-export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef, isLoggedIn, openApp }: Props) => {
+export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef }: Props) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -89,16 +87,19 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
               />
             </a>
             <a
-              href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator"
+              href="https://saashunt.best/projects/cyan-ultra-low-latency-ai-translator"
               target="_blank"
               rel="noopener noreferrer"
+              title="SaasHunt Top 2 Daily Winner"
               className="inline-flex items-center rounded-lg overflow-hidden border border-gray-200/50 dark:border-gray-800 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
             >
               <img
-                src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
-                alt="NextGen Tools"
+                src="https://saashunt.best/images/badges/top2-light.svg"
+                alt="SaasHunt Top 2 Daily Winner"
                 loading="eager"
                 decoding="async"
+                width={195}
+                height={34}
                 className="h-7 sm:h-8 w-auto"
               />
             </a>
@@ -171,16 +172,12 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
 
             <button
               onClick={() => {
-                if (isLoggedIn) {
-                  openApp();
-                } else {
-                  trackEvent('cta_click', { button_name: 'hero_get_started', location: 'hero_section' });
-                  openPricingSection();
-                }
+                trackEvent('cta_click', { button_name: 'hero_get_started', location: 'hero_section' });
+                openPricingSection();
               }}
               className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-cyan-500/25"
             >
-              {isLoggedIn ? 'Open CYAN OS' : 'Get Started Free'}
+              Get Started Free
             </button>
 
             <button

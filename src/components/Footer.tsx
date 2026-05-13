@@ -159,7 +159,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  Privacy Policy
+                  Privacy
                 </button>
               </li>
               <li>
@@ -184,6 +184,18 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   Security
+                </button>
+              </li>
+              <li className="col-span-2 md:col-span-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setView('service_billing');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  Service &amp; Refund Policy
                 </button>
               </li>
             </ul>
