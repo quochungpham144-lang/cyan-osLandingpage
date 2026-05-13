@@ -73,7 +73,7 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView }: Props) => (
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Tulika Anand</h2>
               <p className="text-cyan-600 dark:text-cyan-400 font-bold mb-6">CTO</p>
               <div className="space-y-4 max-w-sm text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed px-4">
-                <p>AI/ML Engineer specializing in real-time AI systems, generative AI, and scalable  low-latency infrastructure || IIT Guwahati '28</p>
+                <p>Data science and machine learning specialist | Computer Science at KIET and Data Science at IIT Guwahati ('28) | Leads model optimization, pipeline engineering, and all technical execution.</p>
                 <p className="text-gray-500 dark:text-gray-400 text-xs font-medium uppercase tracking-widest pt-2">Uttar Pradesh, India</p>
               </div>
             </div>
