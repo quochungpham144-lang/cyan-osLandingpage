@@ -198,7 +198,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
             </button>
           </div>
           <p className="text-center md:text-right text-gray-500 text-[10px] flex items-center justify-center md:justify-end">
-            &copy; 2026 CYAN OS<span className="tm-symbol">™</span> ULTRA-LOW LATENCY AI TRANSLATOR.
+            &copy; 2026 CYAN OS<span className="tm-symbol">™</span>, Inc. Ultra-Low Latency AI Translator. All rights reserved.
           </p>
         </div>
       </div>
