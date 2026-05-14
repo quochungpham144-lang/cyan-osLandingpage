@@ -1144,259 +1144,261 @@ function App() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <>
-        {/* Navigation */}
-        <nav className={`fixed top-0 w-full transition-all duration-300 z-[100] ${scrolled
-          ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3'
-          : 'bg-transparent py-4 sm:py-6 border-b-2 border-gray-200/60 dark:border-slate-700/50'
-          }`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={goToMainView}>
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
-                <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+        {/* Navigation - Only show on main view */}
+        {view === 'main' && (
+          <nav className={`fixed top-0 w-full transition-all duration-300 z-[100] ${scrolled
+            ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3'
+            : 'bg-transparent py-4 sm:py-6 border-b-2 border-gray-200/60 dark:border-slate-700/50'
+            }`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+              <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={goToMainView}>
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+                  <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+                </div>
+                <div className="text-left leading-tight">
+                  <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
+                    CYAN OS<span className="tm-symbol">™</span>
+                  </span>
+                  <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden uppercase tracking-wider mt-0.5">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+                </div>
               </div>
-              <div className="text-left">
-                <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                  CYAN OS<span className="tm-symbol">™</span>
-                </span>
-                <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
-              </div>
-            </div>
 
-            <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
-              <a href="#hero" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
-              <a href="#solution" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
-              <a href="#engine" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
-              <a href="#platforms" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
-              <a href="#developers" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
-              <a href="#api" onClick={(e) => { e.preventDefault(); navigateTo('main'); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
-              <a href="#roi" onClick={(e) => { e.preventDefault(); navigateTo('main'); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
-              <a href="#pricing" onClick={(e) => { e.preventDefault(); navigateTo('main'); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
-              <a href="#footer" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
+              <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
+                <a href="#hero" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
+                <a href="#solution" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
+                <a href="#engine" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
+                <a href="#platforms" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
+                <a href="#developers" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
+                <a href="#api" onClick={(e) => { e.preventDefault(); navigateTo('main'); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
+                <a href="#roi" onClick={(e) => { e.preventDefault(); navigateTo('main'); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
+                <a href="#pricing" onClick={(e) => { e.preventDefault(); navigateTo('main'); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
+                <a href="#footer" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
 
-              <div className="ml-4 flex items-center gap-4">
-                <button
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
-                  aria-label="Toggle dark mode"
-                >
-                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                </button>
-
-                <div className="relative group">
+                <div className="ml-4 flex items-center gap-4">
                   <button
-                    onClick={() => {
-                      trackEvent('cta_click', { button_name: 'early_access_nav', location: 'navigation' });
-                    }}
-                    className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                    aria-label="Toggle dark mode"
                   >
-                    Early Access
+                    {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
                   </button>
 
-                  <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="p-4">
-                      <h3 className="font-bold text-gray-900 dark:text-white mb-1">Join the Waitlist</h3>
-                      <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">Get exclusive updates and priority access.</p>
-                      <form action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg==" method="POST" className="space-y-3">
-                        <input type="text" name="FIRSTNAME" placeholder="Your Name" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
-                        <input type="email" name="EMAIL" placeholder="Your Email" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
-                        <button type="submit" className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20">Join Waitlist</button>
-                        <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">500+ members • No spam</div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-
-                {isLoggedIn && userInfo ? (
-                  <div className="relative">
+                  <div className="relative group">
                     <button
-                      type="button"
-                      onClick={() => setAccountMenuOpen((open) => !open)}
-                      className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
+                      onClick={() => {
+                        trackEvent('cta_click', { button_name: 'early_access_nav', location: 'navigation' });
+                      }}
+                      className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
                     >
-                      <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
-                      <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
+                      Early Access
                     </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setShowLoginModal(true)}
-                    className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400 px-2"
-                  >
-                    Join
-                  </button>
-                )}
-              </div>
-            </div>
 
-            <div className="flex items-center gap-2">
-              {/* Mobile Account/Login Button */}
-              {isLoggedIn && userInfo ? (
-                <div className="relative sm:hidden">
-                  <button
-                    type="button"
-                    onClick={() => setMobileAccountOpen((open) => !open)}
-                    className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-slate-700 shadow-sm"
-                    aria-label="Open account menu"
-                  >
-                    <img
-                      src={userInfo.picture || '/logoCYAN.png'}
-                      alt={userInfo.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-
-                  {mobileAccountOpen && (
-                    <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2.5 z-[135]">
-                      <div className="px-4 pb-2 border-b border-gray-100 dark:border-slate-800">
-                        <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                        <div className="mt-1 flex items-center justify-between">
-                          <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                            {userInfo.plan || 'free'}
-                          </span>
-                          <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
-                            {PLAN_PRICE[userInfo.plan || 'free']}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="px-4 pt-3 flex flex-col gap-2">
-                        <a
-                          href="#pricing"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setMobileAccountOpen(false);
-                            openPricingSection();
-                          }}
-                          className="text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700"
-                        >
-                          Upgrade Plan
-                        </a>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            saveSession(null);
-                            setMobileAccountOpen(false);
-                          }}
-                          className="text-left text-sm text-red-500 font-bold"
-                        >
-                          Logout
-                        </button>
+                    <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                      <div className="p-4">
+                        <h3 className="font-bold text-gray-900 dark:text-white mb-1">Join the Waitlist</h3>
+                        <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">Get exclusive updates and priority access.</p>
+                        <form action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg==" method="POST" className="space-y-3">
+                          <input type="text" name="FIRSTNAME" placeholder="Your Name" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
+                          <input type="email" name="EMAIL" placeholder="Your Email" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
+                          <button type="submit" className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20">Join Waitlist</button>
+                          <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">500+ members • No spam</div>
+                        </form>
                       </div>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="sm:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
-                >
-                  Login
-                </button>
-              )}
-
-              <button
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
-                aria-label="Toggle dark mode"
-              >
-                {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Sidebar */}
-          <div
-            className={`sm:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
-          >
-            <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-800">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
-                    <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                     CYAN OS<span className="tm-symbol">™</span>
-                   </span>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-white"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto bg-white h-[100vh] px-6 py-8 flex flex-col justify-between">
-                <div className="flex flex-col gap-6">
-                  <a href="#hero" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); }} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
-                  <a href="#solution" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
-                  <a href="#engine" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
-                  <a href="#platforms" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
-                  <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
-                  <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
-                  <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
-                  <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
-                  <a href="#footer" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
-                </div>
-
-                <div className="flex flex-col gap-3 mt-6 border-t border-gray-100 dark:border-slate-800 pt-6">
-                  <a href="/privacy" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('privacy'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Privacy Policy</a>
-                  <a href="/terms" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('terms'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Terms of Service</a>
-                  <a href="/security" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('security'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Security Policy</a>
-                  <a href="/service_billing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('service_billing'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Service & Refund Policy</a>
-                </div>
-
-                <div className="mt-auto pt-4 flex flex-col gap-2">
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      trackEvent('cta_click', { button_name: 'early_access_mobile' });
-                    }}
-                    className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800"
-                  >
-                    Email Early Access
-                  </button>
 
                   {isLoggedIn && userInfo ? (
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
-                        <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-12 h-12 rounded-full shadow-sm" />
-                        <div>
-                          <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.name}</div>
-                          <div className="text-sm text-gray-500">{userInfo.email}</div>
-                        </div>
-                      </div>
+                    <div className="relative">
                       <button
-                        onClick={() => {
-                          saveSession(null);
-                          setMobileMenuOpen(false);
-                        }}
-                        className="text-center text-red-500 font-bold py-3 text-lg"
+                        type="button"
+                        onClick={() => setAccountMenuOpen((open) => !open)}
+                        className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
                       >
-                        Logout
+                        <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
+                        <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
                       </button>
                     </div>
                   ) : (
                     <button
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setShowLoginModal(true);
-                      }}
-                      className="w-full bg-cyan-600 text-yellow-300 py-4 rounded-xl font-bold text-xl shadow-xl shadow-cyan-600/20"
+                      onClick={() => setShowLoginModal(true)}
+                      className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400 px-2"
                     >
-                      Join / Login
+                      Join
                     </button>
                   )}
                 </div>
               </div>
+
+              <div className="flex items-center gap-2">
+                {/* Mobile Account/Login Button */}
+                {isLoggedIn && userInfo ? (
+                  <div className="relative sm:hidden">
+                    <button
+                      type="button"
+                      onClick={() => setMobileAccountOpen((open) => !open)}
+                      className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-slate-700 shadow-sm"
+                      aria-label="Open account menu"
+                    >
+                      <img
+                        src={userInfo.picture || '/logoCYAN.png'}
+                        alt={userInfo.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+
+                    {mobileAccountOpen && (
+                      <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2.5 z-[135]">
+                        <div className="px-4 pb-2 border-b border-gray-100 dark:border-slate-800">
+                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
+                          <div className="mt-1 flex items-center justify-between">
+                            <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                              {userInfo.plan || 'free'}
+                            </span>
+                            <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                              {PLAN_PRICE[userInfo.plan || 'free']}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="px-4 pt-3 flex flex-col gap-2">
+                          <a
+                            href="#pricing"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setMobileAccountOpen(false);
+                              openPricingSection();
+                            }}
+                            className="text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700"
+                          >
+                            Upgrade Plan
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              saveSession(null);
+                              setMobileAccountOpen(false);
+                            }}
+                            className="text-left text-sm text-red-500 font-bold"
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="sm:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
+                  >
+                    Login
+                  </button>
+                )}
+
+                <button
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                  aria-label="Toggle dark mode"
+                >
+                  {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                </button>
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
+                >
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
-          </div>
-        </nav>
+
+            {/* Mobile Sidebar */}
+            <div
+              className={`sm:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            >
+              <div className="flex flex-col h-full">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
+                      <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+                    </div>
+                    <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
+                      CYAN OS<span className="tm-symbol">™</span>
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-white"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto bg-white h-[100vh] px-6 py-8 flex flex-col justify-between">
+                  <div className="flex flex-col gap-6">
+                    <a href="#hero" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); }} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
+                    <a href="#solution" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
+                    <a href="#engine" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
+                    <a href="#platforms" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
+                    <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
+                    <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
+                    <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
+                    <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
+                    <a href="#footer" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
+                  </div>
+
+                  <div className="flex flex-col gap-3 mt-6 border-t border-gray-100 dark:border-slate-800 pt-6">
+                    <a href="/privacy" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('privacy'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Privacy Policy</a>
+                    <a href="/terms" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('terms'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Terms of Service</a>
+                    <a href="/security" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('security'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Security Policy</a>
+                    <a href="/service_billing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('service_billing'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Service & Refund Policy</a>
+                  </div>
+
+                  <div className="mt-auto pt-4 flex flex-col gap-2">
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        trackEvent('cta_click', { button_name: 'early_access_mobile' });
+                      }}
+                      className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800"
+                    >
+                      Email Early Access
+                    </button>
+
+                    {isLoggedIn && userInfo ? (
+                      <div className="flex flex-col gap-4">
+                        <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
+                          <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-12 h-12 rounded-full shadow-sm" />
+                          <div>
+                            <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.name}</div>
+                            <div className="text-sm text-gray-500">{userInfo.email}</div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => {
+                            saveSession(null);
+                            setMobileMenuOpen(false);
+                          }}
+                          className="text-center text-red-500 font-bold py-3 text-lg"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setShowLoginModal(true);
+                        }}
+                        className="w-full bg-cyan-600 text-yellow-300 py-4 rounded-xl font-bold text-xl shadow-xl shadow-cyan-600/20"
+                      >
+                        Join / Login
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        )}
 
         {/* Floating Controls */}
         {/* <div

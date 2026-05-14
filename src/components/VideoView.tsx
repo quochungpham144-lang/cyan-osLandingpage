@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const VideoView = memo(({ isDarkMode, goToMainView }: Props) => (
-  <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-slate-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+  <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 pt-24 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-5xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
