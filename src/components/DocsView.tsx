@@ -7,38 +7,48 @@ interface Props {
 
 export const DocsView = memo(({ goToMainView }: Props) => (
   <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100 pt-24">
-                    <div className="relative max-w-6xl mx-auto px-4 py-8 lg:py-12">
-                      <div className="absolute inset-0 -z-10 opacity-40 pointer-events-none">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.12),_transparent_60%)]" />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(59,130,246,0.12),_transparent_60%)]" />
-                        <div className="absolute inset-0 bg-[linear-gradient(115deg,_rgba(15,23,42,0.9),_transparent)]" />
-                      </div>
+    <nav className="fixed top-0 w-full z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={goToMainView}>
+            <div className="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+            </div>
+            <div className="hidden sm:block">
+              <span className="text-xl font-bold text-white flex items-baseline">
+                CYAN OS<span className="tm-symbol">™</span>
+              </span>
+              <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+            </div>
+          </div>
 
-                      <div className="flex justify-between items-center mb-8">
-                        <div>
-                          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
-                            <Code className="w-3.5 h-3.5" />
-                            <span>CYAN OS<span className="tm-symbol">™</span> &amp; CYAN OS<span className="tm-symbol">™</span> Lite Documentation</span>
-                          </div>
-                          <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
-                            Streaming Architecture & Integration Guide
-                          </h1>
-                          <p className="mt-2 text-sm md:text-base text-slate-300 max-w-2xl">
-                            This page describes how CYAN OS<span className="tm-symbol">™</span>&apos;s realtime translator and CYAN OS<span className="tm-symbol">™</span> Lite gateway work together:
-                            from microphone capture, to AI routing, to audio watermarking and external marketplaces.
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            goToMainView();
-                          }}
-                          className="hidden sm:inline-flex items-center gap-2 rounded-full border border-slate-600 bg-slate-900/70 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:border-cyan-400 hover:text-cyan-200 transition-colors"
-                        >
-                          <ArrowRight className="w-3 h-3 rotate-180" />
-                          <span>Back to site</span>
-                        </button>
-                      </div>
+          <div className="hidden md:flex items-center space-x-6">
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Home</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Solution</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Engine</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Platforms</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Developers</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">API</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">ROI</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Pricing</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Contact</button>
+            <button
+              onClick={goToMainView}
+              className="bg-cyan-600 hover:bg-cyan-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all hover:scale-105 shadow-lg shadow-cyan-500/20"
+            >
+              Back to site
+            </button>
+          </div>
+
+          <div className="md:hidden flex items-center gap-4">
+            <button onClick={goToMainView} className="text-xs font-medium text-gray-400 hover:text-white transition-colors">
+              Back to site
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div className="relative max-w-6xl mx-auto px-4 py-8 lg:py-12">
 
                       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.1fr)] gap-6 lg:gap-8">
                         <div className="space-y-6">

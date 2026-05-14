@@ -7,26 +7,48 @@ interface Props {
 
 export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Props) => (
   <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 pt-24 ${isDarkMode ? 'dark' : ''}`}>
-    <div className="max-w-4xl mx-auto px-6 py-10">
-      <header className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-            <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+    <nav className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={goToMainView}>
+            <div className="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
+            </div>
+            <div className="hidden sm:block">
+              <span className="text-xl font-bold text-white flex items-baseline">
+                CYAN OS<span className="tm-symbol">™</span>
+              </span>
+              <div className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+            </div>
           </div>
-          <div>
-            <div className="text-sm font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> SERVICE &amp; REFUND POLICY</div>
-            <div className="text-xs text-gray-400">Comprehensive Service &amp; Refund Framework</div>
+
+          <div className="hidden md:flex items-center space-x-6">
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Home</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Solution</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Engine</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Platforms</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Developers</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">API</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">ROI</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Pricing</button>
+            <button onClick={goToMainView} className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Contact</button>
+            <button
+              onClick={goToMainView}
+              className="bg-cyan-600 hover:bg-cyan-700 text-white px-5 py-2 rounded-full text-sm font-semibold transition-all hover:scale-105 shadow-lg shadow-cyan-500/20"
+            >
+              Back to site
+            </button>
+          </div>
+
+          <div className="md:hidden flex items-center gap-4">
+            <button onClick={goToMainView} className="text-xs font-medium text-gray-400 hover:text-white transition-colors">
+              Back to site
+            </button>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={goToMainView}
-          className="text-xs font-medium text-gray-400 hover:text-gray-100"
-        >
-          Back to site
-        </button>
-      </header>
-
+      </div>
+    </nav>
+    <div className="max-w-4xl mx-auto px-6 py-10">
       <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
         <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
           <div>

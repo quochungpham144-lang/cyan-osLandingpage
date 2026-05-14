@@ -20,6 +20,7 @@ const HowItWorksView = lazy(() => import('./components/HowItWorksView').then(m =
 const VideoView = lazy(() => import('./components/VideoView').then(m => ({ default: m.VideoView })));
 const AboutView = lazy(() => import('./components/AboutView').then(m => ({ default: m.AboutView })));
 const DocsView = lazy(() => import('./components/DocsView').then(m => ({ default: m.DocsView })));
+const LeadershipView = lazy(() => import('./components/LeadershipView').then(m => ({ default: m.LeadershipView })));
 import {
   Zap,
   ArrowRight,
@@ -40,7 +41,7 @@ declare global {
 
 export type PlanKey = 'free' | 'basic' | 'standard' | 'pro' | 'team' | 'executive_pro_annual'
 export type PaymentMethod = 'paypal' | 'crypto'
-export type AppView = 'main' | 'privacy' | 'terms' | 'security' | 'service_billing' | 'features' | 'video' | 'about' | 'docs'
+export type AppView = 'main' | 'privacy' | 'terms' | 'security' | 'service_billing' | 'features' | 'video' | 'about' | 'docs' | 'leadership'
 
 type GoogleTokenResponse = {
   access_token?: string
@@ -177,7 +178,7 @@ function App() {
   useEffect(() => {
     const handleLocationChange = () => {
       const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
-      const validViews: AppView[] = ['privacy', 'terms', 'security', 'service_billing', 'features', 'video', 'about', 'docs'];
+      const validViews: AppView[] = ['privacy', 'terms', 'security', 'service_billing', 'features', 'video', 'about', 'docs', 'leadership'];
       if (validViews.includes(path as AppView)) {
         setView(path as AppView);
       } else {
@@ -1380,7 +1381,7 @@ function App() {
         )}
 
         {/* Floating Controls */}
-        {/* <div
+        <div
           id="floating-buttons"
           className="fixed bottom-0 sm:bottom-10 right-4 sm:right-8 z-30 flex flex-col sm:items-end items-center gap-3 cursor-move select-none"
           style={{ touchAction: 'none' }}
@@ -1416,7 +1417,7 @@ function App() {
               Currently in Private Beta.
             </span>
           </button>
-        </div> */}
+        </div>
 
         {/* Scroll to Top Button */}
         {scrolled && (
@@ -1444,6 +1445,8 @@ function App() {
                     ? <VideoView isDarkMode={isDarkMode} goToMainView={goToMainView} />
                     : view === 'about'
                       ? <AboutView isDarkMode={isDarkMode} goToMainView={goToMainView} />
+                      : view === 'leadership'
+                        ? <LeadershipView isDarkMode={isDarkMode} goToMainView={goToMainView} toggleDarkMode={() => setIsDarkMode(!isDarkMode)} />
                       : view === 'docs'
                         ? <DocsView goToMainView={goToMainView} />
                         : (
