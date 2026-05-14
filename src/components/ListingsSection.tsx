@@ -23,21 +23,21 @@ export const ListingsSection = memo(() => (
               href: 'https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator',
               color: 'hover:border-cyan-500 hover:bg-cyan-500/5',
               textColor: 'hover:text-cyan-600 dark:hover:text-cyan-400',
-              icon: 'https://www.vectorlogo.zone/logos/google_cloud/google_cloud-icon.svg' // Fallback to tech icon
+              icon: '/nextgen-tools.webp' // Use local NextGen Tools icon
             },
             {
               name: 'SaasHunt',
               href: 'https://saashunt.best/projects/cyan-ultra-low-latency-ai-translator',
               color: 'hover:border-amber-500 hover:bg-amber-500/5',
               textColor: 'hover:text-amber-600 dark:hover:text-amber-400',
-              icon: 'https://www.vectorlogo.zone/logos/producthunt/producthunt-icon.svg' // Fallback icon
+              icon: '/saashunt.svg' // Use local SaasHunt icon
             },
             {
               name: 'DevHub',
               href: 'https://devhub.best/projects/cyan-ultra-low-latency-ai-translator',
               color: 'hover:border-purple-500 hover:bg-purple-500/5',
               textColor: 'hover:text-purple-600 dark:hover:text-purple-400',
-              icon: 'https://www.vectorlogo.zone/logos/github/github-icon.svg' // Fallback to dev icon
+              icon: '/devhub.svg' // Use local DevHub icon
             },
             {
               name: 'VibeRank',
