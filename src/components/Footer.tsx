@@ -120,7 +120,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 <button
                   type="button"
                   onClick={() => {
-                    // Logic for Teams
+                    setView('leadership');
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
