@@ -20,7 +20,7 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
       <div className="text-center mb-16 relative">
         <div className="inline-flex items-center gap-2 bg-cyan-600/10 dark:bg-cyan-600/20 border border-cyan-600/30 dark:border-cyan-600/40 rounded-full px-4 py-2 mb-4 backdrop-blur-sm">
           <Code className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-          <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">CYAN OS Lite API</span>
+          <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400 text-center">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> Lite API</span>
         </div>
         <button
           onClick={() => setShowApiSection(false)}
@@ -28,7 +28,7 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
         >
           ✕
         </button>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN OS Lite API Overview</h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> Lite API Overview</h2>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
           Powerful Text-to-Speech API with Voice Cloning and Real-time Streaming
         </p>
@@ -134,7 +134,7 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             {[
               { value: '$100/hour', label: 'Manual recording' },
-              { value: '$0.10/1000 chars', label: 'CYAN OS API', highlight: true },
+              { value: '$0.10/1000 chars', label: <span className="flex items-center justify-center">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> API</span>, highlight: true },
               { value: 'Up to 80%', label: 'Potential cost reduction', green: true },
             ].map(({ value, label, highlight, green }) => (
               <div key={label}>

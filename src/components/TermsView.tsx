@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
-  <div className={`min-h-screen pt-24 bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
+  <div className={`min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100 ${isDarkMode ? 'dark' : ''}`}>
       <div className="max-w-4xl mx-auto px-6 py-10">
         <header className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
@@ -14,7 +14,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN OS REAL-TIME TRANSLATOR</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> REAL-TIME TRANSLATOR</div>
               <div className="text-xs text-gray-400">Terms of Service</div>
             </div>
           </div>
@@ -29,7 +29,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
         <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
           <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
             <div>
-              <div className="text-base md:text-lg font-semibold text-white">TERMS OF SERVICE: CYAN OS REAL-TIME TRANSLATOR</div>
+              <div className="text-base md:text-lg font-semibold text-white">TERMS OF SERVICE: CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> REAL-TIME TRANSLATOR</div>
               <div className="mt-1 text-xs text-gray-400">Version: 1.02 – Updated: January 28, 2026</div>
             </div>
           </div>
@@ -37,7 +37,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">1. ACCEPTANCE OF TERMS</div>
               <p className="mt-1 text-gray-300">
-                By accessing and using the CYAN OS utility (hereinafter referred to as the &quot;Service&quot;), you
+                By accessing and using the CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> utility (hereinafter referred to as the &quot;Service&quot;), you
                 agree to be bound by these Terms. If you are using the Service on behalf of an organization, you agree
                 to these Terms on behalf of that organization.
               </p>
@@ -45,7 +45,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">2. DESCRIPTION OF SERVICE</div>
               <p className="mt-1 text-gray-300">
-                CYAN provides an ultra-low latency, real-time AI translation solution, utilizing third-party API
+                CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> provides an ultra-low latency, real-time AI translation solution, utilizing third-party API
                 infrastructures including ElevenLabs, Microsoft Azure, and Google Cloud AI through our decentralized
                 proxy network.
               </p>
@@ -103,11 +103,11 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
                   Voice Cloning: Users represent and warrant that they hold legal ownership or have obtained written
-                  consent from the voice owner before using the cloning feature. CYAN assumes no liability for
+                  consent from the voice owner before using the cloning feature. CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> assumes no liability for
                   unauthorized impersonation.
                 </li>
                 <li>
-                  Prohibitions: Using CYAN to create fraudulent content (Deepfakes), hate speech, or content that
+                  Prohibitions: Using CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> to create fraudulent content (Deepfakes), hate speech, or content that
                   violates current laws is strictly prohibited.
                 </li>
               </ul>
@@ -122,7 +122,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">8. LIMITATION OF LIABILITY</div>
               <p className="mt-1 text-gray-300">
-                CYAN does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
+                CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> does not guarantee 100% accuracy of translated content due to the inherent nature of AI technology.
                 We shall not be held liable for any business losses arising from the use of the service.
               </p>
             </div>
@@ -141,23 +141,23 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">10. LICENSE GRANT &amp; OWNERSHIP</div>
               <p className="mt-1 text-gray-300">
-                Subject to your compliance with these Terms, CYAN grants you a limited, non-exclusive, non-transferable,
+                Subject to your compliance with these Terms, CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> grants you a limited, non-exclusive, non-transferable,
                 and revocable license to access and use the Service for lawful business or personal purposes.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Ownership: All rights, title, and interest in and to the Service, including software, models, and branding, remain with CYAN and its licensors.</li>
+                <li>Ownership: All rights, title, and interest in and to the Service, including software, models, and branding, remain with CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> and its licensors.</li>
                 <li>No Reverse Engineering: You may not reverse engineer, decompile, or attempt to extract source code or underlying models except where permitted by law.</li>
               </ul>
             </div>
             <div>
               <div className="font-semibold text-white">11. SERVICE AVAILABILITY &amp; MODIFICATIONS</div>
               <p className="mt-1 text-gray-300">
-                CYAN aims to provide a stable, high-availability translation service but does not guarantee uninterrupted
+                CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> aims to provide a stable, high-availability translation service but does not guarantee uninterrupted
                 or error-free operation.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
-                  11.1. Modification of Fees: CYAN OS reserves the right to change our subscription plans or adjust
+                  11.1. Modification of Fees: CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> reserves the right to change our subscription plans or adjust
                   pricing for our service or any components thereof in any manner and at any time as we may determine
                   in our sole and absolute discretion. Any price changes will take effect following notice to you via
                   email or through the Service.
@@ -172,13 +172,13 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                 To the maximum extent permitted by law, the Service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; basis, without warranties of any kind, whether express or implied.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>Exclusions: CYAN disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
-                <li>Liability Cap: To the extent permitted by law, CYAN&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
-                <li>Indirect Damages: CYAN is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
+                <li>Exclusions: CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> disclaims any implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</li>
+                <li>Liability Cap: To the extent permitted by law, CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>&apos;s aggregate liability arising out of or relating to the Service will not exceed the amounts you have paid for the Service in the six (6) months preceding the event giving rise to the claim.</li>
+                <li>Indirect Damages: CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> is not liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits or data.</li>
                 <li>
                   12.1. Third-Party Dependency Disclaimer: The Service relies on third-party Application Programming
-                  Interfaces (APIs) including, but not limited to, ElevenLabs, Microsoft Azure, and Google Cloud. CYAN
-                  OS shall not be held liable for any service interruptions, data inaccuracies, or policy changes
+                  Interfaces (APIs) including, but not limited to, ElevenLabs, Microsoft Azure, and Google Cloud. CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>
+                  shall not be held liable for any service interruptions, data inaccuracies, or policy changes
                   initiated by these third-party providers. You acknowledge that our Service availability is contingent
                   upon the operational status of these external infrastructures.
                 </li>
@@ -194,7 +194,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>
-                  13.1. Exclusive Forum: You and CYAN OS agree that all disputes, claims, controversies, or causes of
+                  13.1. Exclusive Forum: You and CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> agree that all disputes, claims, controversies, or causes of
                   action arising out of or relating to these Terms or the Service shall be filed only in the federal or
                   state courts located in the State of Delaware.
                 </li>
@@ -204,7 +204,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                   forum-selection provision except to the extent prohibited by applicable law.
                 </li>
                 <li>
-                  13.3. Injunctive and Equitable Relief: Notwithstanding any other provision, CYAN OS may seek
+                  13.3. Injunctive and Equitable Relief: Notwithstanding any other provision, CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> may seek
                   temporary, preliminary, or permanent injunctive or equitable relief in any court of competent
                   jurisdiction to protect its intellectual property, confidential information, security posture, or
                   platform integrity.

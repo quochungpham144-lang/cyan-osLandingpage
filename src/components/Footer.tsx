@@ -20,7 +20,9 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
               </div>
               <div>
-                <span className="text-xl font-bold">CYAN</span>
+                <span className="text-xl font-bold flex items-baseline">
+                  CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="opacity-60 font-normal text-[0.45em] align-top ml-0.5 inline-block select-none leading-none">™</span>
+                </span>
                 <div className="text-[10px] text-gray-500 uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
               </div>
             </div>
@@ -92,38 +94,12 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 <button
                   type="button"
                   onClick={() => {
-                    setView('leadership');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className="hover:text-cyan-400 transition-colors text-left"
-                >
-                  Leadership & Vision
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
                     setView('about');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   About
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setView('about');
-                    setTimeout(() => {
-                      document.querySelector('.pt-8.mt-8.border-t')?.scrollIntoView({ behavior: 'smooth' });
-                    }, 100);
-                  }}
-                  className="hover:text-cyan-400 transition-colors text-left"
-                >
-                  The Team
                 </button>
               </li>
               <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
@@ -217,18 +193,18 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
               type="button"
               className="w-full sm:w-auto bg-slate-800/80 backdrop-blur-md text-cyan-100 border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:bg-slate-800 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
             >
-              <span className="text-sm">Download CYAN</span>
+              <span className="text-sm">Download CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="opacity-60 font-normal text-[0.45em] align-top ml-0.5 inline-block select-none leading-none">™</span></span>
               <span className="text-[10px] text-cyan-400/60 uppercase tracking-widest font-bold">Private Beta</span>
             </button>
           </div>
-          <div className="text-center md:text-right text-sm text-gray-400">
-            &copy; 2026 CYAN ULTRA-LOW LATENCY AI TRANSLATOR. All rights reserved.
-          </div>
+          <p className="text-center md:text-right text-gray-500 text-[10px] flex items-center justify-center md:justify-end">
+            &copy; 2026 CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="opacity-60 font-normal text-[0.45em] align-top ml-0.5 inline-block select-none leading-none">™</span> ULTRA-LOW LATENCY AI TRANSLATOR.
+          </p>
         </div>
       </div>
       {/* Blinkit Style Faded Background Text */}
       <div className="absolute bottom-1 sm:-bottom-10 lg:-bottom-10 left-1/2 -translate-x-1/2 text-[20vw] font-black text-white/[0.03] dark:text-white/[0.02] select-none pointer-events-none whitespace-nowrap tracking-tighter leading-none z-0 uppercase">
-        CYAN-OS
+        CYANOS
       </div>
     </footer>
   );
