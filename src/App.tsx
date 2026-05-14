@@ -1137,7 +1137,7 @@ function App() {
               </div>
               <div className="text-left">
                 <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                  CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>
+                  CYAN OS<span className="tm-symbol">™</span>
                 </span>
                 <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
               </div>
@@ -1301,7 +1301,7 @@ function App() {
                     <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                   </div>
                   <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                     CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>
+                     CYAN OS<span className="tm-symbol">™</span>
                    </span>
                 </div>
                 <button
@@ -1404,7 +1404,7 @@ function App() {
             className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
             style={{ pointerEvents: 'auto' }}
           >
-            <span className="leading-tight text-[13px] sm:text-sm">Download CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span></span>
+            <span className="leading-tight text-[13px] sm:text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
             <span className="leading-tight text-[10px] text-cyan-200/90">
               Currently in Private Beta.
             </span>
@@ -1477,7 +1477,7 @@ function App() {
                                 className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
                                 style={{ pointerEvents: 'auto' }}
                               >
-                                <span className="leading-tight text-[13px] sm:text-sm">Download CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span></span>
+                                <span className="leading-tight text-[13px] sm:text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
                                 <span className="leading-tight text-[10px] text-cyan-200/90">
                                   Currently in Private Beta. Sign up to request early access.
                                 </span>
@@ -1496,7 +1496,7 @@ function App() {
                                   </div>
                                   <div className="text-left">
                                     <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                                        CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>
+                                        CYAN OS<span className="tm-symbol">™</span>
                                     </span>
                                     <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
                                   </div>
@@ -1662,7 +1662,7 @@ function App() {
                                         <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                                       </div>
                                       <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                                        CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>
+                                         CYAN OS<span className="tm-symbol">™</span>
                                        </span>
                                     </div>
                                     <button
@@ -1880,9 +1880,9 @@ function App() {
                                     </h2>
                                     <p className="text-gray-600 dark:text-gray-400 text-sm">
                                       {isLoginMode ? (
-                                        <span>Sign in to your CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> account</span>
+                                        <span>Sign in to your CYAN OS<span className="tm-symbol">™</span> account</span>
                                       ) : (
-                                        <span>Join CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> for ultra-low latency translation</span>
+                                        <span>Join CYAN OS<span className="tm-symbol">™</span> for ultra-low latency translation</span>
                                       )}
                                     </p>
                                   </div>

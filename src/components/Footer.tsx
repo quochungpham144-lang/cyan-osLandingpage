@@ -21,7 +21,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
               </div>
               <div>
                 <span className="text-xl font-bold flex items-baseline">
-                  CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="opacity-60 font-normal text-[0.45em] align-top ml-0.5 inline-block select-none leading-none">™</span>
+                  CYAN OS<span className="tm-symbol">™</span>
                 </span>
                 <div className="text-[10px] text-gray-500 uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
               </div>
@@ -193,12 +193,12 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
               type="button"
               className="w-full sm:w-auto bg-slate-800/80 backdrop-blur-md text-cyan-100 border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:bg-slate-800 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
             >
-              <span className="text-sm">Download CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="opacity-60 font-normal text-[0.45em] align-top ml-0.5 inline-block select-none leading-none">™</span></span>
+              <span className="text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
               <span className="text-[10px] text-cyan-400/60 uppercase tracking-widest font-bold">Private Beta</span>
             </button>
           </div>
           <p className="text-center md:text-right text-gray-500 text-[10px] flex items-center justify-center md:justify-end">
-            &copy; 2026 CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="opacity-60 font-normal text-[0.45em] align-top ml-0.5 inline-block select-none leading-none">™</span> ULTRA-LOW LATENCY AI TRANSLATOR.
+            &copy; 2026 CYAN OS<span className="tm-symbol">™</span> ULTRA-LOW LATENCY AI TRANSLATOR.
           </p>
         </div>
       </div>

@@ -14,7 +14,7 @@ export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Prop
             <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
           </div>
           <div>
-            <div className="text-sm font-semibold text-cyan-300">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> SERVICE &amp; BILLING POLICY</div>
+            <div className="text-sm font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> SERVICE &amp; BILLING POLICY</div>
             <div className="text-xs text-gray-400">SLA + Refund &amp; Cancellation</div>
           </div>
         </div>
@@ -30,7 +30,7 @@ export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Prop
       <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
         <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
           <div>
-            <div className="text-base md:text-lg font-semibold text-white">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> SERVICE &amp; BILLING POLICY</div>
+            <div className="text-base md:text-lg font-semibold text-white">CYAN OS<span className="tm-symbol">™</span> SERVICE &amp; BILLING POLICY</div>
             <div className="mt-1 text-xs text-gray-400">Version: 1.02 - Updated: January 28, 2026</div>
           </div>
         </div>
@@ -39,7 +39,7 @@ export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Prop
           <div>
             <div className="font-semibold text-white">1. SERVICE LEVEL AGREEMENT (SLA)</div>
             <p className="mt-1 text-gray-300">
-              This Service Level Agreement defines CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> operational performance commitments for paid plans,
+              This Service Level Agreement defines CYAN OS<span className="tm-symbol">™</span> operational performance commitments for paid plans,
               specifically Executive Pro and Enterprise users.
             </p>
           </div>
@@ -47,7 +47,7 @@ export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Prop
           <div>
             <div className="font-semibold text-white">1.1. Performance Metrics and Latency</div>
             <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-              <li>Target Latency: CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> targets 200ms to 500ms processing latency for 95% of translation requests (P95).</li>
+              <li>Target Latency: CYAN OS<span className="tm-symbol">™</span> targets 200ms to 500ms processing latency for 95% of translation requests (P95).</li>
               <li>Orchestration Reliability: The platform uses intelligent routing to switch between providers (ElevenLabs, Azure, Google) in under 100ms if a provider degrades or fails.</li>
             </ul>
           </div>
@@ -83,7 +83,7 @@ export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Prop
             <div className="font-semibold text-white">2. REFUND AND CANCELLATION POLICY</div>
             <p className="mt-1 text-gray-300">
               This policy is designed to ensure fairness between users and the pre-committed AI infrastructure costs
-              CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> pays to technology partners.
+              CYAN OS<span className="tm-symbol">™</span> pays to technology partners.
             </p>
           </div>
 
@@ -101,7 +101,7 @@ export const ServiceBillingPolicyView = memo(({ isDarkMode, goToMainView }: Prop
             <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
               <li>The request is submitted to Support within 48 hours of successful payment.</li>
               <li>The account has not exceeded 15,000 translated characters or 30 minutes of live conversation usage.</li>
-              <li>A confirmed CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>-side technical fault exists and cannot be resolved within 24 hours, as validated by engineering.</li>
+              <li>A confirmed CYAN OS<span className="tm-symbol">™</span>-side technical fault exists and cannot be resolved within 24 hours, as validated by engineering.</li>
             </ul>
           </div>
 

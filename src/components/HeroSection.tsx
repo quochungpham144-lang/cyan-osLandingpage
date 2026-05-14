@@ -124,7 +124,7 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
         <div className="mt-2">
           <div className="inline-flex items-center mb-8 px-4 py-2 bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 rounded-full text-sm font-medium text-cyan-700 dark:text-cyan-300 backdrop-blur-sm shadow-sm">
             <img src="/logoCYAN.png" alt="CYAN Logo" className="w-4 h-4 mr-2.5 rounded-sm" />
-            Powered by CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span>
+            Powered by CYAN OS<span className="tm-symbol">™</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8 tracking-tight leading-[1.2] text-gray-900 dark:text-white">

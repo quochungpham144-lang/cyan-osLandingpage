@@ -14,7 +14,7 @@ export const VideoView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN<sup className="text-[0.6em] ml-0.5">OS</sup><span className="tm-symbol">™</span> REAL-TIME TRANSLATOR</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> REAL-TIME TRANSLATOR</div>
               <div className="text-xs text-gray-400">Experience Natural Voice</div>
             </div>
           </div>
@@ -34,7 +34,7 @@ export const VideoView = memo(({ isDarkMode, goToMainView }: Props) => (
               <div>
                 <div className="text-base md:text-lg font-semibold text-white">DEMO: ULTRA-LOW LATENCY AI TRANSLATION</div>
                 <div className="font-semibold text-white flex items-center justify-center gap-1">
-                  Electron CYAN<sup className="text-[0.6em]">OS</sup><span className="tm-symbol">™</span> – Experience natural voice translation without leaving this site
+                  Electron CYAN OS<span className="tm-symbol">™</span> – Experience natural voice translation without leaving this site
                 </div>
               </div>
             </div>

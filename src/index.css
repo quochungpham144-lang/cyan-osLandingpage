@@ -23,10 +23,11 @@
   font-weight: 400;
   user-select: none;
   display: inline-block;
-  margin-left: 0.1rem;
+  margin-left: 0.15rem;
   line-height: 1;
-  font-size: 0.45em;
+  font-size: 0.4em;
   vertical-align: super;
+  font-family: sans-serif;
 }
 
 @media (prefers-reduced-motion: reduce) {
