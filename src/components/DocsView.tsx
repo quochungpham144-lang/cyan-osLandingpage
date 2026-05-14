@@ -18,13 +18,13 @@ export const DocsView = memo(({ goToMainView }: Props) => (
                         <div>
                           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
                             <Code className="w-3.5 h-3.5" />
-                            <span>CYAN & CYAN OS Lite Documentation</span>
+                            <span>CYAN OS<span className="tm-symbol">™</span> &amp; CYAN OS<span className="tm-symbol">™</span> Lite Documentation</span>
                           </div>
                           <h1 className="mt-4 text-3xl md:text-4xl font-bold tracking-tight text-white">
                             Streaming Architecture & Integration Guide
                           </h1>
                           <p className="mt-2 text-sm md:text-base text-slate-300 max-w-2xl">
-                            This page describes how CYAN&apos;s realtime translator and CYAN OS Lite gateway work together:
+                            This page describes how CYAN OS<span className="tm-symbol">™</span>&apos;s realtime translator and CYAN OS<span className="tm-symbol">™</span> Lite gateway work together:
                             from microphone capture, to AI routing, to audio watermarking and external marketplaces.
                           </p>
                         </div>
@@ -44,11 +44,11 @@ export const DocsView = memo(({ goToMainView }: Props) => (
                         <div className="space-y-6">
                           <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
                             <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              1. End-to-End Streaming Flow (Client ⇄ CYAN OS Lite ⇄ Providers)
+                              1. End-to-End Streaming Flow (Client ⇄ CYAN OS<span className="tm-symbol">™</span> Lite ⇄ Providers)
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              CYAN desktop client and browser extension stream raw audio to a local Electron core, which
-                              bridges to CYAN OS Lite running in the cloud. CYAN OS Lite then orchestrates provider calls
+                              CYAN OS<span className="tm-symbol">™</span> desktop client and browser extension stream raw audio to a local Electron core, which
+                              bridges to CYAN OS<span className="tm-symbol">™</span> Lite running in the cloud. CYAN OS<span className="tm-symbol">™</span> Lite then orchestrates provider calls
                               (STT, translation, TTS) while keeping latency under 400ms whenever possible.
                             </p>
                             <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 font-mono text-[10px] md:text-xs text-slate-200 overflow-x-auto">
@@ -57,9 +57,9 @@ export const DocsView = memo(({ goToMainView }: Props) => (
 {`Mic / Virtual Device
   ↓  PCM chunks (48kHz → 16kHz noise-gated)
 Electron Core
-  ↓  /api/stt/stream (CYAN OS Lite)
+  ↓  /api/stt/stream (CYAN OS<span className="tm-symbol">™</span> Lite)
   ↓  Provider STT (Google/Azure) → partial + final transcripts
-  ↓  /api/translate (CYAN OS Lite with glossary & caching)
+  ↓  /api/translate (CYAN OS<span className="tm-symbol">™</span> Lite with glossary & caching)
   ↓  /api/tts/speak-stream (chunked TTS)
   ↓  PCM / MPEG chunks → local player
 
@@ -73,7 +73,7 @@ Typical one-way latency: 200–400ms (network + provider + local render).`}
                               2. TTS Routing: Local ONNX Piper vs Cloud Voices
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              For text-to-speech, CYAN uses a hybrid strategy: a local ONNX model (Piper) for instant
+                              For text-to-speech, CYAN OS<span className="tm-symbol">™</span> uses a hybrid strategy: a local ONNX model (Piper) for instant
                               preview, and high-quality cloud voices (Google WaveNet, Azure Neural, ElevenLabs) for the
                               main stream. This keeps the experience responsive while still delivering natural voices.
                             </p>
@@ -104,12 +104,12 @@ elif plan == "pro":
 
 /api/tts/speak-stream(engine, language, text)
   ↓  provider streams audio chunks
-  ↓  CYAN OS Lite forwards chunks to client
+  ↓  CYAN OS<span className="tm-symbol">™</span> Lite forwards chunks to client
   ↓  audio watermark injected before output`}
                                 </pre>
                                 <p className="mt-2 text-[10px] text-slate-400">
                                   The gateway chooses the engine based on plan, language, and health checks. If a cloud
-                                  provider fails, CYAN OS Lite can fall back or temporarily rely more on ONNX voices.
+                                  provider fails, CYAN OS<span className="tm-symbol">™</span> Lite can fall back or temporarily rely more on ONNX voices.
                                 </p>
                               </div>
                             </div>
@@ -117,12 +117,12 @@ elif plan == "pro":
 
                           <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
                             <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              3. Audio Watermarking for Realtime Streams
+                              3. Forensic Audio Watermarking
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              To protect generated audio, CYAN inserts a lightweight PCM watermark before it reaches the
-                              virtual microphone / output device. The watermark is designed to be inaudible to humans but
-                              detectable offline for compliance checks and abuse investigation.
+                              To protect generated audio, CYAN OS<span className="tm-symbol">™</span> inserts a lightweight PCM watermark before it reaches the
+                              client&apos;s output device. This watermark is inaudible to human ears but can be detected
+                              by our forensic tools if the audio is recorded and used elsewhere.
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div className="rounded-xl bg-slate-950/90 border border-slate-700/80 p-4 text-[10px] md:text-xs font-mono text-slate-200">
@@ -151,10 +151,10 @@ elif plan == "pro":
 
                           <section className="rounded-2xl border border-slate-700/70 bg-slate-900/70 p-5 shadow-xl shadow-cyan-900/40">
                             <h2 className="text-lg font-semibold text-cyan-300 mb-3">
-                              4. RapidAPI & Ocean / Blockchain Gateways
+                              4. RapidAPI &amp; Ocean / Blockchain Gateways
                             </h2>
                             <p className="text-xs md:text-sm text-slate-300 mb-3">
-                              CYAN OS Lite is also exposed as a standalone API product via RapidAPI and blockchain-based
+                              CYAN OS<span className="tm-symbol">™</span> Lite is also exposed as a standalone API product via RapidAPI and blockchain-based
                               marketplaces such as Ocean. This lets developers integrate the same infrastructure you see
                               in the desktop client directly into their own apps.
                             </p>
@@ -182,21 +182,21 @@ Body:
   ↓  buys access token / data NFT
 Ocean Gateway
   ↓  attaches usage token to request
-CYAN OS Lite
+CYAN OS<span className="tm-symbol">™</span> Lite
   ↓  validates token → routes to providers
   ↓  streams audio back to consumer`}
                               </pre>
                               <p className="mt-2 text-[10px] text-slate-400">
-                                This pattern allows usage-based pricing and on-chain revenue splits, while CYAN OS Lite
-                                remains the high-performance execution layer.
-                              </p>
+                                  This pattern allows usage-based pricing and on-chain revenue splits, while CYAN OS<span className="tm-symbol">™</span> Lite
+                                  remains the high-performance execution layer.
+                                </p>
                             </div>
                           </section>
                         </div>
 
                         <aside className="space-y-4">
                           <div className="rounded-2xl border border-cyan-500/50 bg-slate-900/80 p-4 shadow-xl shadow-cyan-900/50">
-                            <h3 className="text-sm font-semibold text-cyan-300 mb-2">CYAN Runtime Snapshot</h3>
+                            <h3 className="text-sm font-semibold text-cyan-300 mb-2">CYAN OS<span className="tm-symbol">™</span> Runtime Snapshot</h3>
                             <div className="text-[10px] md:text-xs font-mono text-slate-200 space-y-1">
                               <div>Latency: &lt;400ms p50 (target)</div>
                               <div>Languages: 36+ (STT + TTS)</div>
@@ -209,11 +209,11 @@ CYAN OS Lite
                             <h3 className="text-sm font-semibold text-slate-100 mb-2">When to use what</h3>
                             <ul className="text-[11px] text-slate-300 space-y-1.5">
                               <li>
-                                <span className="font-semibold text-cyan-300">CYAN Desktop:</span> quickest way to use
+                                <span className="font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> Desktop:</span> quickest way to use
                                 realtime translation in meetings.
                               </li>
                               <li>
-                                <span className="font-semibold text-cyan-300">CYAN OS Lite API:</span> when you need
+                                <span className="font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> Lite API:</span> when you need
                                 backend-only integration with your own UI.
                               </li>
                               <li>

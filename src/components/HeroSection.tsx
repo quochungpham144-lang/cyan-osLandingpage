@@ -7,11 +7,9 @@ interface Props {
   openPricingSection: () => void;
   trackEvent: (event: string, data?: Record<string, unknown>) => void;
   setRef: (id: string) => (el: HTMLElement | null) => void;
-  isLoggedIn: boolean;
-  openApp: () => void;
 }
 
-export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef, isLoggedIn, openApp }: Props) => {
+export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef }: Props) => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -89,16 +87,19 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
               />
             </a>
             <a
-              href="https://www.nxgntools.com/tools/cyan-ultra-low-latency-ai-translator"
+              href="https://saashunt.best/projects/cyan-ultra-low-latency-ai-translator"
               target="_blank"
               rel="noopener noreferrer"
+              title="SaasHunt Top 2 Daily Winner"
               className="inline-flex items-center rounded-lg overflow-hidden border border-gray-200/50 dark:border-gray-800 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5"
             >
               <img
-                src="https://www.nxgntools.com/api/embed/cyan-ultra-low-latency-ai-translator?type=FIND_US_ON&hideUpvotes=true"
-                alt="NextGen Tools"
+                src="https://saashunt.best/images/badges/top2-light.svg"
+                alt="SaasHunt Top 2 Daily Winner"
                 loading="eager"
                 decoding="async"
+                width={195}
+                height={34}
                 className="h-7 sm:h-8 w-auto"
               />
             </a>
@@ -123,7 +124,7 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
         <div className="mt-2">
           <div className="inline-flex items-center mb-8 px-4 py-2 bg-cyan-50 dark:bg-cyan-500/10 border border-cyan-200 dark:border-cyan-500/20 rounded-full text-sm font-medium text-cyan-700 dark:text-cyan-300 backdrop-blur-sm shadow-sm">
             <img src="/logoCYAN.png" alt="CYAN Logo" className="w-4 h-4 mr-2.5 rounded-sm" />
-            Powered by CYAN OS
+            Powered by CYAN OS<span className="tm-symbol">™</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8 tracking-tight leading-[1.2] text-gray-900 dark:text-white">
@@ -159,40 +160,41 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
-            <button
-              onClick={() => {
+            <a
+              href="/video"
+              onClick={(e) => {
+                e.preventDefault();
                 trackEvent('cta_click', { button_name: 'experience_natural_voice', location: 'hero_section', destination: 'video_demo' });
                 setView('video');
               }}
-              className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-emerald-600 hover:to-teal-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-emerald-500/25"
+              className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-emerald-600 hover:to-teal-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-emerald-500/25 text-center"
             >
               Experience Natural Voice
-            </button>
+            </a>
 
-            <button
-              onClick={() => {
-                if (isLoggedIn) {
-                  openApp();
-                } else {
-                  trackEvent('cta_click', { button_name: 'hero_get_started', location: 'hero_section' });
-                  openPricingSection();
-                }
+            <a
+              href="#pricing"
+              onClick={(e) => {
+                e.preventDefault();
+                trackEvent('cta_click', { button_name: 'hero_get_started', location: 'hero_section' });
+                openPricingSection();
               }}
-              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-cyan-500/25"
+              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-cyan-500/25 text-center"
             >
-              {isLoggedIn ? 'Open CYAN OS' : 'Get Started Free'}
-            </button>
+              Get Started Free
+            </a>
 
-            <button
-              onClick={() => {
+            <a
+              href="/about"
+              onClick={(e) => {
+                e.preventDefault();
                 trackEvent('cta_click', { button_name: 'learn_more', location: 'hero_section', destination: 'about_view' });
                 setView('about');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="w-full sm:w-auto bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:-translate-y-1 backdrop-blur-sm shadow-sm"
+              className="w-full sm:w-auto bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:-translate-y-1 backdrop-blur-sm shadow-sm text-center"
             >
               Learn More
-            </button>
+            </a>
           </div>
 
           {/* Hero Stats */}

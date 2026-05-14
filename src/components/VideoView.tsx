@@ -14,7 +14,7 @@ export const VideoView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN OS REAL-TIME TRANSLATOR</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> REAL-TIME TRANSLATOR</div>
               <div className="text-xs text-gray-400">Experience Natural Voice</div>
             </div>
           </div>
@@ -33,8 +33,8 @@ export const VideoView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div className="flex items-start justify-between gap-4 pb-4 mb-6">
               <div>
                 <div className="text-base md:text-lg font-semibold text-white">DEMO: ULTRA-LOW LATENCY AI TRANSLATION</div>
-                <div className="mt-1 text-xs text-gray-400">
-                  Electron CYAN – Experience natural voice translation without leaving this site
+                <div className="font-semibold text-white flex items-center justify-center gap-1">
+                  Electron CYAN OS<span className="tm-symbol">™</span> – Experience natural voice translation without leaving this site
                 </div>
               </div>
             </div>
@@ -42,7 +42,7 @@ export const VideoView = memo(({ isDarkMode, goToMainView }: Props) => (
               <div className="relative pt-[56.25%]">
                 <iframe
                   src="https://www.youtube.com/embed/zffQKk-tCpo?autoplay=1&rel=0"
-                  title="Electron CYAN - ULTRA-LOW LATENCY AI TRANSLATOR"
+                  title="Electron CYANOS™ - ULTRA-LOW LATENCY AI TRANSLATOR"
                   className="absolute inset-0 w-full h-full"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen

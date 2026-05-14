@@ -20,7 +20,9 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
               </div>
               <div>
-                <span className="text-xl font-bold">CYAN</span>
+                <span className="text-xl font-bold flex items-baseline">
+                  CYAN OS<span className="tm-symbol">™</span>
+                </span>
                 <div className="text-[10px] text-gray-500 uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
               </div>
             </div>
@@ -33,44 +35,46 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
             <h4 className="font-bold text-white mb-5 text-base">Product</h4>
             <ul className="space-y-3 text-sm text-gray-400">
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="/features"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('features');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   Features
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
                     openPricingSection();
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   Pricing
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="/docs"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('docs');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   Documentation
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="#api"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setShowApiSection(true);
                     setTimeout(
                       () => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }),
@@ -80,7 +84,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   API Reference
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -89,88 +93,92 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
             <h4 className="font-bold text-white mb-5 text-base">Company</h4>
             <ul className="space-y-3 text-sm text-gray-400">
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="/about"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('about');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  About
-                </button>
+                  About Us
+                </a>
               </li>
-              <li><a href="#" className="hover:text-cyan-400 transition-colors">Blog</a></li>
-              <li><a href="#" className="hover:text-cyan-400 transition-colors">Careers</a></li>
               <li>
-                <div className="space-y-2 pt-2">
-                  <span className="text-gray-300 text-xs font-semibold uppercase tracking-wider">Contact</span>
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="font-mono text-gray-400">contact@cyan-os.cc</span>
-                    <button
-                      type="button"
-                      onClick={async () => { await copyToClipboard('contact@cyan-os.cc'); }}
-                      className="p-1.5 rounded bg-gray-800 border border-gray-700 text-cyan-400 hover:bg-gray-700 transition-colors"
-                      aria-label="Copy contact email"
-                    >
-                      <Copy className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
+                <a
+                  href="/video"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setView('video');
+                  }}
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  Demo Video
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://marcabien.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  Technology Partner
+                </a>
               </li>
             </ul>
           </div>
 
-          <div className="col-span-2 md:col-span-1 mt-4 md:mt-0">
+          <div className="col-span-1">
             <h4 className="font-bold text-white mb-5 text-base">Legal</h4>
-            <ul className="grid grid-cols-2 md:grid-cols-1 gap-3 text-sm text-gray-400">
+            <ul className="space-y-3 text-sm text-gray-400">
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="/privacy"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('privacy');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  Privacy
-                </button>
+                  Privacy Policy
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => {
+                <a
+                  href="/terms"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('terms');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  Terms of Use
-                </button>
+                  Terms of Service
+                </a>
               </li>
-              <li className="col-span-2 md:col-span-1">
-                <button
-                  type="button"
-                  onClick={() => {
+              <li>
+                <a
+                  href="/security"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('security');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  Security
-                </button>
+                  Security Policy
+                </a>
               </li>
-              <li className="col-span-2 md:col-span-1">
-                <button
-                  type="button"
-                  onClick={() => {
+              <li>
+                <a
+                  href="/service_billing"
+                  onClick={(e) => {
+                    e.preventDefault();
                     setView('service_billing');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
                   Service &amp; Refund Policy
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -191,18 +199,18 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
               type="button"
               className="w-full sm:w-auto bg-slate-800/80 backdrop-blur-md text-cyan-100 border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:bg-slate-800 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
             >
-              <span className="text-sm">Download CYAN</span>
+              <span className="text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
               <span className="text-[10px] text-cyan-400/60 uppercase tracking-widest font-bold">Private Beta</span>
             </button>
           </div>
-          <div className="text-center md:text-right text-sm text-gray-400">
-            &copy; 2026 CYAN ULTRA-LOW LATENCY AI TRANSLATOR. All rights reserved.
-          </div>
+          <p className="text-center md:text-right text-gray-500 text-[10px] flex items-center justify-center md:justify-end">
+            &copy; 2026 CYAN OS<span className="tm-symbol">™</span>, Inc. Ultra-Low Latency AI Translator. All rights reserved.
+          </p>
         </div>
       </div>
       {/* Blinkit Style Faded Background Text */}
       <div className="absolute bottom-1 sm:-bottom-10 lg:-bottom-10 left-1/2 -translate-x-1/2 text-[20vw] font-black text-white/[0.03] dark:text-white/[0.02] select-none pointer-events-none whitespace-nowrap tracking-tighter leading-none z-0 uppercase">
-        CYAN-OS
+        CYANOS
       </div>
     </footer>
   );

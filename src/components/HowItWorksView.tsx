@@ -14,7 +14,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
               <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-cyan-300">CYAN OS REAL-TIME TRANSLATOR</div>
+              <div className="text-sm font-semibold text-cyan-300">CYAN OS<span className="tm-symbol">™</span> REAL-TIME TRANSLATOR</div>
               <div className="text-xs text-gray-400">How it works</div>
             </div>
           </div>
@@ -29,7 +29,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
         <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-6 md:px-8 md:py-8">
           <div className="flex items-start justify-between gap-4 border-b border-gray-800 pb-4 mb-6">
             <div>
-              <div className="text-base md:text-lg font-semibold text-white">HOW CYAN OS REAL-TIME TRANSLATOR WORKS</div>
+              <div className="text-base md:text-lg font-semibold text-white">HOW CYAN OS<span className="tm-symbol">™</span> REAL-TIME TRANSLATOR WORKS</div>
               <div className="mt-1 text-xs text-gray-400">From your microphone to translated speech in under a second</div>
             </div>
           </div>
@@ -37,7 +37,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">1. REAL-TIME TRANSLATION PIPELINE</div>
               <p className="mt-1 text-gray-300">
-                CYAN is designed to sit next to your meetings, calls, and webinars as a low-latency translation layer.
+                CYAN OS<span className="tm-symbol">™</span> is designed to sit next to your meetings, calls, and webinars as a low-latency translation layer.
                 The high-level pipeline is:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
@@ -50,7 +50,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">2. AUDIO CAPTURE AND INPUT</div>
               <p className="mt-1 text-gray-300">
-                The CYAN desktop client captures audio in real time:
+                The CYAN OS<span className="tm-symbol">™</span> desktop client captures audio in real time:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Input sources can be your microphone, system audio, or a virtual cable from Zoom, Meet, or Teams.</li>
@@ -61,7 +61,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">3. SPEECH RECOGNITION AND TRANSLATION</div>
               <p className="mt-1 text-gray-300">
-                Inside the backend, CYAN coordinates multiple AI services:
+                Inside the backend, CYAN OS<span className="tm-symbol">™</span> coordinates multiple AI services:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Speech recognition turns your source-language audio into text.</li>
@@ -72,7 +72,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">4. TEXT-TO-SPEECH AND STREAMING OUTPUT</div>
               <p className="mt-1 text-gray-300">
-                After translation, CYAN turns the text back into speech and streams it:
+                After translation, CYAN OS<span className="tm-symbol">™</span> turns the text back into speech and streams it:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Partner engines such as ElevenLabs and Azure are used for high-quality voices.</li>
@@ -83,7 +83,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">5. VOICE CLONING AND PERSONALIZATION</div>
               <p className="mt-1 text-gray-300">
-                For Executive Pro users, CYAN supports customized voice cloning:
+                For Executive Pro users, CYAN OS<span className="tm-symbol">™</span> supports customized voice cloning:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>You provide a short, legally compliant audio sample of your own voice.</li>
@@ -105,7 +105,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">7. PRIVACY, SECURITY, AND COMPLIANCE</div>
               <p className="mt-1 text-gray-300">
-                CYAN was built with privacy-first constraints:
+                CYAN OS<span className="tm-symbol">™</span> was built with privacy-first constraints:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Zero-retention design for live translation sessions.</li>
@@ -119,7 +119,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">8. TYPICAL USE CASES</div>
               <p className="mt-1 text-gray-300">
-                CYAN is optimized for real-world, high-stakes communication where human interpreters are expensive or unavailable:
+                CYAN OS<span className="tm-symbol">™</span> is optimized for real-world, high-stakes communication where human interpreters are expensive or unavailable:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Founders pitching to international investors in a different language.</li>
@@ -130,7 +130,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
             <div>
               <div className="font-semibold text-white">9. TECHNICAL EXPECTATIONS FOR DEVELOPERS</div>
               <p className="mt-1 text-gray-300">
-                For engineering teams integrating CYAN into production workflows, it is important to treat the numbers on the landing page as realistic targets, not hard SLAs:
+                For engineering teams integrating CYAN OS<span className="tm-symbol">™</span> into production workflows, it is important to treat the numbers on the landing page as realistic targets, not hard SLAs:
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
                 <li>Latency: Typical end-to-end response from speech input to first translated audio is in the 200–400ms range, depending on network conditions, provider routing, and language pairs.</li>
@@ -138,7 +138,7 @@ export const HowItWorksView = memo(({ isDarkMode, goToMainView }: Props) => (
                 <li>Cost: The “up to 80% cost reduction” figure assumes a comparison with traditional human voiceover or manual translation workflows; actual savings vary by usage pattern and provider mix.</li>
               </ul>
               <p className="mt-2 text-gray-300">
-                When building on CYAN OS or the public API, we recommend instrumenting your own latency and error metrics so you can tune timeouts, backoff strategies, and user experience for your specific region and infrastructure.
+                When building on CYAN OS<span className="tm-symbol">™</span> or the public API, we recommend instrumenting your own latency and error metrics so you can tune timeouts, backoff strategies, and user experience for your specific region and infrastructure.
               </p>
             </div>
           </div>

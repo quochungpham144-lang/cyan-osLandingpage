@@ -19,8 +19,6 @@ import { PlatformsSection } from './components/PlatformsSection';
 import { ListingsSection } from './components/ListingsSection';
 import { PricingSection } from './components/PricingSection';
 import { FormEvent, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import { SignJWT } from 'jose';
-
 import {
   Zap,
   ArrowRight,
@@ -105,9 +103,6 @@ const GOOGLE_CLIENT_ID =
   (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_GOOGLE_CLIENT_ID ||
   '464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com'
 
-const JWT_SECRET = (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_JWT_SECRET;
-
-
 const PLAN_PRICE: Record<PlanKey, string> = {
   free: '$0',
   basic: '$29/month',
@@ -118,7 +113,7 @@ const PLAN_PRICE: Record<PlanKey, string> = {
 }
 
 function App() {
-  const CANONICAL_PROD_ORIGIN = 'https://cyan-os-landingpage.vercel.app';
+  const CANONICAL_PROD_ORIGIN = 'https://cyan-os.cc';
 
   const getStoredSession = (): UserSession | null => {
     const raw = localStorage.getItem('user_session');
@@ -167,11 +162,42 @@ function App() {
   const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
   const [midDevMenuOpen, setMidDevMenuOpen] = useState(false);
   const [view, setView] = useState<AppView>('main');
-  const [showCookieBanner, setShowCookieBanner] = useState(false);
-  const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
-  const [mobileEarlySubmitted, setMobileEarlySubmitted] = useState(false);
-  const [clickPulse, setClickPulse] = useState<{ x: number; y: number; id: number } | null>(null);
-  const [scrolled, setScrolled] = useState(false);
+
+  const navigateTo = useCallback((newView: AppView) => {
+    if (newView === 'main') {
+      window.history.pushState(null, '', '/');
+    } else {
+      window.history.pushState(null, '', `/${newView}`);
+    }
+    setView(newView);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '');
+      const validViews: AppView[] = ['privacy', 'terms', 'security', 'service_billing', 'features', 'video', 'about', 'docs'];
+      if (validViews.includes(path as AppView)) {
+        setView(path as AppView);
+      } else {
+        setView('main');
+      }
+    };
+
+    handleLocationChange();
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
+
+  const goToMainView = useCallback(() => {
+     navigateTo('main');
+   }, [navigateTo]);
+
+   const [showCookieBanner, setShowCookieBanner] = useState(false);
+   const [mobileEarlyEmail, setMobileEarlyEmail] = useState('');
+   const [mobileEarlySubmitted, setMobileEarlySubmitted] = useState(false);
+   const [clickPulse, setClickPulse] = useState<{ x: number; y: number; id: number } | null>(null);
+   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -314,33 +340,11 @@ function App() {
   useEffect(() => {
     if (!autoOpenApp) return;
     if (!isLoggedIn || !userInfo) return;
-
-    const openAppWithToken = async () => {
-      try {
-        const secret = new TextEncoder().encode(JWT_SECRET);
-        const token = await new SignJWT({
-          user_id: userInfo.id,
-          email: userInfo.email,
-          username: userInfo.name,
-          plan: userInfo.plan || 'free'
-        })
-          .setProtectedHeader({ alg: 'HS256' })
-          .setIssuedAt()
-          .setExpirationTime('7d')
-          .sign(secret);
-
-        const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}&token=${token}`;
-        window.location.href = deepLink;
-        trackEvent('open_in_app_auto', { userId: userInfo.id });
-        setAutoOpenApp(false);
-      } catch (err) {
-        console.error('Failed to generate token:', err);
-      }
-    };
-
-    openAppWithToken();
+    const deepLink = `cyanos://auth?userId=${userInfo.id}&plan=${userInfo.plan || 'free'}`;
+    window.location.href = deepLink;
+    trackEvent('open_in_app_auto', { userId: userInfo.id });
+    setAutoOpenApp(false);
   }, [autoOpenApp, isLoggedIn, userInfo, trackEvent]);
-
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1137,18 +1141,6 @@ function App() {
     sectionsRef.current[id] = el;
   }, []);
 
-  function goToMainView() {
-    setView('main');
-    window.history.replaceState({}, document.title, `${window.location.pathname}${window.location.search}`);
-    window.requestAnimationFrame(() => {
-      const html = document.documentElement;
-      const previous = html.style.scrollBehavior;
-      html.style.scrollBehavior = 'auto';
-      window.scrollTo(0, 0);
-      html.style.scrollBehavior = previous;
-    });
-  }
-
   return (
     <Suspense fallback={<LoadingFallback />}>
       <>
@@ -1158,26 +1150,28 @@ function App() {
           : 'bg-transparent py-4 sm:py-6 border-b-2 border-gray-200/60 dark:border-slate-700/50'
           }`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 cursor-pointer" onClick={goToMainView}>
               <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
                 <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
               </div>
               <div className="text-left">
-                <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
-                <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
+                <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
+                  CYAN OS<span className="tm-symbol">™</span>
+                </span>
+                <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden uppercase tracking-wider">ULTRA-LOW LATENCY AI TRANSLATOR</div>
               </div>
             </div>
 
             <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
-              <a href="#hero" onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
-              <a href="#solution" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
-              <a href="#engine" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
-              <a href="#platforms" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
-              <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
-              <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
-              <a href="#roi" onClick={(e) => { e.preventDefault(); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
-              <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
-              <a href="#footer" onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
+              <a href="#hero" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
+              <a href="#solution" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
+              <a href="#engine" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
+              <a href="#platforms" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
+              <a href="#developers" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
+              <a href="#api" onClick={(e) => { e.preventDefault(); navigateTo('main'); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
+              <a href="#roi" onClick={(e) => { e.preventDefault(); navigateTo('main'); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
+              <a href="#pricing" onClick={(e) => { e.preventDefault(); navigateTo('main'); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
+              <a href="#footer" onClick={(e) => { e.preventDefault(); navigateTo('main'); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
 
               <div className="ml-4 flex items-center gap-4">
                 <button
@@ -1222,36 +1216,6 @@ function App() {
                       <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
                       <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
                     </button>
-
-                    {accountMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2 z-[100]">
-                        <div className="px-4 py-2 border-b border-gray-100 dark:border-slate-800">
-                          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Account</p>
-                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                          <p className="text-[10px] text-gray-500 truncate">{userInfo.email}</p>
-                        </div>
-                        <div className="p-2 flex flex-col gap-1">
-                          <button
-                            onClick={() => {
-                              setAccountMenuOpen(false);
-                              setAutoOpenApp(true);
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-sm font-bold text-cyan-600 dark:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/30 rounded-lg transition-colors"
-                          >
-                            <Zap className="w-4 h-4" /> Open CYAN OS
-                          </button>
-                          <button
-                            onClick={() => {
-                              setAccountMenuOpen(false);
-                              saveSession(null);
-                            }}
-                            className="flex items-center gap-2 w-full px-3 py-2 text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors"
-                          >
-                            Logout
-                          </button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 ) : (
                   <button
@@ -1295,16 +1259,6 @@ function App() {
                         </div>
                       </div>
                       <div className="px-4 pt-3 flex flex-col gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setMobileAccountOpen(false);
-                            setAutoOpenApp(true);
-                          }}
-                          className="text-left text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700 flex items-center gap-2"
-                        >
-                          <Zap className="w-4 h-4" /> Open CYAN OS
-                        </button>
                         <a
                           href="#pricing"
                           onClick={(e) => {
@@ -1365,7 +1319,9 @@ function App() {
                   <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
                     <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                   </div>
-                  <span className="text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+                  <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
+                     CYAN OS<span className="tm-symbol">™</span>
+                   </span>
                 </div>
                 <button
                   onClick={() => setMobileMenuOpen(false)}
@@ -1377,15 +1333,22 @@ function App() {
 
               <div className="flex-1 overflow-y-auto bg-white h-[100vh] px-6 py-8 flex flex-col justify-between">
                 <div className="flex flex-col gap-6">
-                  <a href="#hero" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
-                  <a href="#solution" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
-                  <a href="#engine" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
-                  <a href="#platforms" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
-                  <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
-                  <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
-                  <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
-                  <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
-                  <a href="#footer" onClick={() => { setMobileMenuOpen(false); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
+                  <a href="#hero" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); }} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
+                  <a href="#solution" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
+                  <a href="#engine" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('engine')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
+                  <a href="#platforms" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('platforms')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
+                  <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
+                  <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
+                  <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
+                  <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('main'); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
+                  <a href="#footer" onClick={() => { setMobileMenuOpen(false); navigateTo('main'); setTimeout(() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
+                </div>
+
+                <div className="flex flex-col gap-3 mt-6 border-t border-gray-100 dark:border-slate-800 pt-6">
+                  <a href="/privacy" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('privacy'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Privacy Policy</a>
+                  <a href="/terms" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('terms'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Terms of Service</a>
+                  <a href="/security" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('security'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Security Policy</a>
+                  <a href="/service_billing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); navigateTo('service_billing'); }} className="text-sm font-medium text-gray-500 dark:text-gray-400">Service & Refund Policy</a>
                 </div>
 
                 <div className="mt-auto pt-4 flex flex-col gap-2">
@@ -1408,15 +1371,6 @@ function App() {
                           <div className="text-sm text-gray-500">{userInfo.email}</div>
                         </div>
                       </div>
-                      <button
-                        onClick={() => {
-                          setMobileMenuOpen(false);
-                          setAutoOpenApp(true);
-                        }}
-                        className="w-full bg-cyan-600 text-yellow-300 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
-                      >
-                        <Zap className="w-5 h-5" /> Open CYAN OS
-                      </button>
                       <button
                         onClick={() => {
                           saveSession(null);
@@ -1476,7 +1430,7 @@ function App() {
             className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
             style={{ pointerEvents: 'auto' }}
           >
-            <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
+            <span className="leading-tight text-[13px] sm:text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
             <span className="leading-tight text-[10px] text-cyan-200/90">
               Currently in Private Beta.
             </span>
@@ -1549,7 +1503,7 @@ function App() {
                                 className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
                                 style={{ pointerEvents: 'auto' }}
                               >
-                                <span className="leading-tight text-[13px] sm:text-sm">Download CYAN</span>
+                                <span className="leading-tight text-[13px] sm:text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
                                 <span className="leading-tight text-[10px] text-cyan-200/90">
                                   Currently in Private Beta. Sign up to request early access.
                                 </span>
@@ -1567,7 +1521,9 @@ function App() {
                                     <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                                   </div>
                                   <div className="text-left">
-                                    <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+                                    <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
+                                        CYAN OS<span className="tm-symbol">™</span>
+                                    </span>
                                     <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
                                   </div>
                                 </div>
@@ -1731,7 +1687,9 @@ function App() {
                                       <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
                                         <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
                                       </div>
-                                      <span className="text-xl font-bold text-gray-900 dark:text-white">CYAN</span>
+                                      <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
+                                         CYAN OS<span className="tm-symbol">™</span>
+                                       </span>
                                     </div>
                                     <button
                                       onClick={() => setMobileMenuOpen(false)}
@@ -1885,12 +1843,10 @@ function App() {
                             )}
 
                             <HeroSection
-                              setView={setView}
+                              setView={navigateTo}
                               openPricingSection={openPricingSection}
                               trackEvent={trackEvent}
                               setRef={setRef}
-                              isLoggedIn={isLoggedIn}
-                              openApp={() => setAutoOpenApp(true)}
                             />
 
                             {/* Problem Section */}
@@ -1949,7 +1905,11 @@ function App() {
                                       {isLoginMode ? 'Welcome Back' : 'Create Account'}
                                     </h2>
                                     <p className="text-gray-600 dark:text-gray-400 text-sm">
-                                      {isLoginMode ? 'Sign in to your CYAN account' : 'Join CYAN for ultra-low latency translation'}
+                                      {isLoginMode ? (
+                                        <span>Sign in to your CYAN OS<span className="tm-symbol">™</span> account</span>
+                                      ) : (
+                                        <span>Join CYAN OS<span className="tm-symbol">™</span> for ultra-low latency translation</span>
+                                      )}
                                     </p>
                                   </div>
 
@@ -2129,7 +2089,7 @@ function App() {
                             )}
 
                             <Footer
-                              setView={setView}
+                              setView={navigateTo}
                               openPricingSection={openPricingSection}
                               setShowApiSection={setShowApiSection}
                               copyToClipboard={copyToClipboard}

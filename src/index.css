@@ -18,6 +18,18 @@
   will-change: opacity, transform;
 }
 
+.tm-symbol {
+  opacity: 0.6;
+  font-weight: 400;
+  user-select: none;
+  display: inline-block;
+  margin-left: 0.15rem;
+  line-height: 1;
+  font-size: 0.4em;
+  vertical-align: super;
+  font-family: sans-serif;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page-fade-in {
     animation: none;
