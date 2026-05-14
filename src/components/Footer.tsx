@@ -117,14 +117,37 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 </a>
               </li>
               <li>
-                <a
-                  href="https://marcabien.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Logic for Teams
+                  }}
                   className="hover:text-cyan-400 transition-colors text-left"
                 >
-                  Technology Partner
-                </a>
+                  Teams
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Logic for Blog
+                  }}
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  Blog
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Logic for Careers
+                  }}
+                  className="hover:text-cyan-400 transition-colors text-left"
+                >
+                  Careers
+                </button>
               </li>
             </ul>
           </div>

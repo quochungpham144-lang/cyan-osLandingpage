@@ -10,17 +10,16 @@ interface Props {
 }
 
 export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setRef }: Props) => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!sectionRef.current) return;
     const rect = sectionRef.current.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    sectionRef.current.style.setProperty('--mouse-x', `${x}px`);
+    sectionRef.current.style.setProperty('--mouse-y', `${y}px`);
   }, []);
 
   return (
@@ -44,7 +43,7 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
         <div
           className={`absolute inset-0 transition-opacity duration-500 ease-out ${isHovering ? 'opacity-100' : 'opacity-0'}`}
           style={{
-            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(6, 182, 212, 0.15), transparent 80%)`,
+            background: `radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(6, 182, 212, 0.15), transparent 80%)`,
           }}
         />
 
@@ -54,8 +53,8 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
           style={{
             backgroundImage: `linear-gradient(to right, rgba(6, 182, 212, 0.2) 1px, transparent 1px), linear-gradient(to bottom, rgba(6, 182, 212, 0.2) 1px, transparent 1px)`,
             backgroundSize: '40px 40px',
-            maskImage: `radial-gradient(200px circle at ${mousePos.x}px ${mousePos.y}px, black, transparent)`,
-            WebkitMaskImage: `radial-gradient(200px circle at ${mousePos.x}px ${mousePos.y}px, black, transparent)`,
+            maskImage: `radial-gradient(200px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), black, transparent)`,
+            WebkitMaskImage: `radial-gradient(200px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), black, transparent)`,
           }}
         />
       </div>

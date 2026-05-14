@@ -1,13 +1,6 @@
 
-import { DocsView } from './components/DocsView';
+import { FormEvent, memo, Suspense, useCallback, useEffect, useRef, useState, lazy } from 'react';
 import { Footer } from './components/Footer';
-import { PrivacyView } from './components/PrivacyView';
-import { TermsView } from './components/TermsView';
-import { SecurityView } from './components/SecurityView';
-import { ServiceBillingPolicyView } from './components/ServiceBillingPolicyView';
-import { HowItWorksView } from './components/HowItWorksView';
-import { VideoView } from './components/VideoView';
-import { AboutView } from './components/AboutView';
 import { HeroSection } from './components/HeroSection';
 import { ProblemSection } from './components/ProblemSection';
 import { SolutionSection } from './components/SolutionSection';
@@ -18,7 +11,15 @@ import { RoiSection } from './components/RoiSection';
 import { PlatformsSection } from './components/PlatformsSection';
 import { ListingsSection } from './components/ListingsSection';
 import { PricingSection } from './components/PricingSection';
-import { FormEvent, memo, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+
+const PrivacyView = lazy(() => import('./components/PrivacyView').then(m => ({ default: m.PrivacyView })));
+const TermsView = lazy(() => import('./components/TermsView').then(m => ({ default: m.TermsView })));
+const SecurityView = lazy(() => import('./components/SecurityView').then(m => ({ default: m.SecurityView })));
+const ServiceBillingPolicyView = lazy(() => import('./components/ServiceBillingPolicyView').then(m => ({ default: m.ServiceBillingPolicyView })));
+const HowItWorksView = lazy(() => import('./components/HowItWorksView').then(m => ({ default: m.HowItWorksView })));
+const VideoView = lazy(() => import('./components/VideoView').then(m => ({ default: m.VideoView })));
+const AboutView = lazy(() => import('./components/AboutView').then(m => ({ default: m.AboutView })));
+const DocsView = lazy(() => import('./components/DocsView').then(m => ({ default: m.DocsView })));
 import {
   Zap,
   ArrowRight,
@@ -315,20 +316,6 @@ function App() {
     </div>
   ));
 
-  const privacyView = <PrivacyView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
-  const termsView = <TermsView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
-  const securityView = <SecurityView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
-  const serviceBillingView = <ServiceBillingPolicyView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
-  const howItWorksView = <HowItWorksView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
-  const videoView = <VideoView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
-  const aboutView = <AboutView isDarkMode={isDarkMode} goToMainView={goToMainView} />;
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
@@ -345,14 +332,6 @@ function App() {
     trackEvent('open_in_app_auto', { userId: userInfo.id });
     setAutoOpenApp(false);
   }, [autoOpenApp, isLoggedIn, userInfo, trackEvent]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('autoOpenApp') === '1') {
-      setAutoOpenApp(true);
-    }
-  }, []);
 
   const handleTeamContactSubmit = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
@@ -1452,19 +1431,19 @@ function App() {
 
         <div key={view} className="page-fade-in">
           {view === 'privacy'
-            ? privacyView
+            ? <PrivacyView isDarkMode={isDarkMode} goToMainView={goToMainView} />
             : view === 'terms'
-              ? termsView
+              ? <TermsView isDarkMode={isDarkMode} goToMainView={goToMainView} />
               : view === 'security'
-                ? securityView
+                ? <SecurityView isDarkMode={isDarkMode} goToMainView={goToMainView} />
                 : view === 'service_billing'
-                  ? serviceBillingView
+                  ? <ServiceBillingPolicyView isDarkMode={isDarkMode} goToMainView={goToMainView} />
                 : view === 'features'
-                  ? howItWorksView
+                  ? <HowItWorksView isDarkMode={isDarkMode} goToMainView={goToMainView} />
                   : view === 'video'
-                    ? videoView
+                    ? <VideoView isDarkMode={isDarkMode} goToMainView={goToMainView} />
                     : view === 'about'
-                      ? aboutView
+                      ? <AboutView isDarkMode={isDarkMode} goToMainView={goToMainView} />
                       : view === 'docs'
                         ? <DocsView goToMainView={goToMainView} />
                         : (
@@ -1511,256 +1490,6 @@ function App() {
                                 </span>
                               </button>
                             </div> */}
-
-                            {/* Navigation */}
-                            <nav className={`fixed top-0 w-full transition-all duration-300 z-[100] ${scrolled
-                              ? 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3'
-                              : 'bg-transparent py-4 sm:py-6'
-                              }`}>
-                              <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-                                <div className="flex items-center gap-2 sm:gap-3">
-                                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
-                                    <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-                                  </div>
-                                  <div className="text-left">
-                                    <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                                        CYAN OS<span className="tm-symbol">™</span>
-                                    </span>
-                                    <div className="text-[10px] text-gray-500 dark:text-gray-400 sm:block hidden">ULTRA-LOW LATENCY AI TRANSLATOR</div>
-                                  </div>
-                                </div>
-
-                                <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
-                                  <a href="#hero" onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Home</a>
-                                  <a href="#solution" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Solution</a>
-                                  <a href="#engine" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Engine</a>
-                                  <a href="#platforms" className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Platforms</a>
-                                  <a href="#developers" onClick={(e) => { e.preventDefault(); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Developers</a>
-                                  <a href="#api" onClick={(e) => { e.preventDefault(); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">API</a>
-                                  <a href="#roi" onClick={(e) => { e.preventDefault(); openRoiSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">ROI</a>
-                                  <a href="#pricing" onClick={(e) => { e.preventDefault(); openPricingSection(); }} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Pricing</a>
-                                  <a href="#footer" onClick={() => document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] font-medium hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors text-gray-600 dark:text-gray-300 px-1">Contact</a>
-
-                                  <div className="ml-4 flex items-center gap-4">
-                                    <button
-                                      onClick={() => setIsDarkMode(!isDarkMode)}
-                                      className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
-                                      aria-label="Toggle dark mode"
-                                    >
-                                      {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                                    </button>
-
-                                    <div className="relative group">
-                                      <button
-                                        onClick={() => {
-                                          trackEvent('cta_click', { button_name: 'early_access_nav', location: 'navigation' });
-                                        }}
-                                        className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
-                                      >
-                                        Early Access
-                                      </button>
-
-                                      <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                                        <div className="p-4">
-                                          <h3 className="font-bold text-gray-900 dark:text-white mb-1">Join the Waitlist</h3>
-                                          <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">Get exclusive updates and priority access.</p>
-                                          <form action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg==" method="POST" className="space-y-3">
-                                            <input type="text" name="FIRSTNAME" placeholder="Your Name" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
-                                            <input type="email" name="EMAIL" placeholder="Your Email" required className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm" />
-                                            <button type="submit" className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20">Join Waitlist</button>
-                                            <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">500+ members • No spam</div>
-                                          </form>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    {isLoggedIn && userInfo ? (
-                                      <div className="relative">
-                                        <button
-                                          type="button"
-                                          onClick={() => setAccountMenuOpen((open) => !open)}
-                                          className="flex items-center gap-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 transition-colors"
-                                        >
-                                          <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-6 h-6 rounded-full" />
-                                          <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">{userInfo.name}</span>
-                                        </button>
-                                      </div>
-                                    ) : (
-                                      <button
-                                        onClick={() => setShowLoginModal(true)}
-                                        className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400 px-2"
-                                      >
-                                        Join
-                                      </button>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                  {/* Mobile Account/Login Button */}
-                                  {isLoggedIn && userInfo ? (
-                                    <div className="relative sm:hidden">
-                                      <button
-                                        type="button"
-                                        onClick={() => setMobileAccountOpen((open) => !open)}
-                                        className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 dark:border-slate-700 shadow-sm"
-                                        aria-label="Open account menu"
-                                      >
-                                        <img
-                                          src={userInfo.picture || '/logoCYAN.png'}
-                                          alt={userInfo.name}
-                                          className="w-full h-full object-cover"
-                                        />
-                                      </button>
-
-                                      {mobileAccountOpen && (
-                                        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2.5 z-[135]">
-                                          <div className="px-4 pb-2 border-b border-gray-100 dark:border-slate-800">
-                                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{userInfo.name}</p>
-                                            <div className="mt-1 flex items-center justify-between">
-                                              <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                                                {userInfo.plan || 'free'}
-                                              </span>
-                                              <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
-                                                {PLAN_PRICE[userInfo.plan || 'free']}
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <div className="px-4 pt-3 flex flex-col gap-2">
-                                            <a
-                                              href="#pricing"
-                                              onClick={(e) => {
-                                                e.preventDefault();
-                                                setMobileAccountOpen(false);
-                                                openPricingSection();
-                                              }}
-                                              className="text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700"
-                                            >
-                                              Upgrade Plan
-                                            </a>
-                                            <button
-                                              type="button"
-                                              onClick={() => {
-                                                saveSession(null);
-                                                setMobileAccountOpen(false);
-                                              }}
-                                              className="text-left text-sm text-red-500 font-bold"
-                                            >
-                                              Logout
-                                            </button>
-                                          </div>
-                                        </div>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => setShowLoginModal(true)}
-                                      className="sm:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
-                                    >
-                                      Login
-                                    </button>
-                                  )}
-
-                                  <button
-                                    onClick={() => setIsDarkMode(!isDarkMode)}
-                                    className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
-                                    aria-label="Toggle dark mode"
-                                  >
-                                    {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                                  </button>
-                                  <button
-                                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                                    className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
-                                  >
-                                    {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                                  </button>
-                                </div>
-                              </div>
-
-                              {/* Mobile Sidebar */}
-                              {/* Mobile Sidebar - Full Screen from Left */}
-                              <div
-                                className={`sm:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
-                              >
-                                <div className="flex flex-col h-full">
-                                  {/* Sidebar Header */}
-                                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-800">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-8 h-8 bg-cyan-500 rounded-lg flex items-center justify-center overflow-hidden">
-                                        <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
-                                      </div>
-                                      <span className="text-xl font-bold text-gray-900 dark:text-white flex items-baseline">
-                                         CYAN OS<span className="tm-symbol">™</span>
-                                       </span>
-                                    </div>
-                                    <button
-                                      onClick={() => setMobileMenuOpen(false)}
-                                      className="p-2 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-white"
-                                    >
-                                      <X className="w-6 h-6" />
-                                    </button>
-                                  </div>
-
-                                  {/* Sidebar Content */}
-                                  <div className="flex-1 overflow-y-auto bg-white h-[100vh] px-6 py-8 flex flex-col justify-between">
-                                    <div className="flex flex-col gap-6">
-                                      <a href="#hero" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Home</a>
-                                      <a href="#solution" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Solution</a>
-                                      <a href="#engine" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Engine</a>
-                                      <a href="#platforms" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-gray-900 dark:text-white">Platforms</a>
-                                      <a href="#developers" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); document.getElementById('developers')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Developers</a>
-                                      <a href="#api" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); setShowApiSection(true); setTimeout(() => document.getElementById('api')?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="text-lg font-bold text-gray-900 dark:text-white">API</a>
-                                      <a href="#roi" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openRoiSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">ROI</a>
-                                      <a href="#pricing" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); openPricingSection(); }} className="text-lg font-bold text-gray-900 dark:text-white">Pricing</a>
-                                      <a href="#footer" onClick={() => { setMobileMenuOpen(false); document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-lg font-bold text-gray-900 dark:text-white">Contact</a>
-                                    </div>
-
-                                    <div className="mt-auto  pt-4 flex flex-col gap-2">
-                                      <button
-                                        onClick={() => {
-                                          setMobileMenuOpen(false);
-                                          trackEvent('cta_click', { button_name: 'early_access_mobile' });
-                                        }}
-                                        className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800"
-                                      >
-                                        Email Early Access
-                                      </button>
-
-                                      {isLoggedIn && userInfo ? (
-                                        <div className="flex flex-col gap-4">
-                                          <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-800/50 rounded-xl">
-                                            <img src={userInfo.picture || '/logoCYAN.png'} alt={userInfo.name} className="w-12 h-12 rounded-full shadow-sm" />
-                                            <div>
-                                              <div className="text-lg font-bold text-gray-900 dark:text-white">{userInfo.name}</div>
-                                              <div className="text-sm text-gray-500">{userInfo.email}</div>
-                                            </div>
-                                          </div>
-                                          <button
-                                            onClick={() => {
-                                              saveSession(null);
-                                              setMobileMenuOpen(false);
-                                            }}
-                                            className="text-center text-red-500 font-bold py-3 text-lg"
-                                          >
-                                            Logout
-                                          </button>
-                                        </div>
-                                      ) : (
-                                        <button
-                                          onClick={() => {
-                                            setMobileMenuOpen(false);
-                                            setShowLoginModal(true);
-                                          }}
-                                          className="w-full bg-cyan-600 text-yellow-300 py-4 rounded-xl font-bold text-xl shadow-xl shadow-cyan-600/20"
-                                        >
-                                          Join / Login
-                                        </button>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </nav>
 
                             {(checkoutBusy || checkoutMessage) && (
                               <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-xl border border-cyan-500/40 bg-white/95 dark:bg-slate-900/95 px-4 py-3 shadow-2xl backdrop-blur">

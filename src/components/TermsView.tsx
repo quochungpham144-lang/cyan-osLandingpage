@@ -122,7 +122,7 @@ export const TermsView = memo(({ isDarkMode, goToMainView }: Props) => (
                 CYAN OS<span className="tm-symbol">™</span> aims to provide a stable, high-availability translation service but does not guarantee uninterrupted or error-free operation.
               </p>
               <ul className="mt-2 list-disc list-inside text-gray-300 space-y-1">
-                <li>11.1. Modification of Fees: CYAN OS<span className="tm-symbol">™</span> reserves the right to change our subscription plans or adjust pricing for our service or any components thereof in any manner and at any time as we may determine in our sole and absolute discretion [marcabien.com]. Any price changes will take effect following notice to you via email or through the Service.</li>
+                <li>11.1. Modification of Fees: CYAN OS<span className="tm-symbol">™</span> reserves the right to change our subscription plans or adjust pricing for our service or any components thereof in any manner and at any time as we may determine in our sole and absolute discretion. Any price changes will take effect following notice to you via email or through the Service.</li>
                 <li>11.2. Changes: We may modify, suspend, or discontinue parts of the Service (including plans and features) with reasonable notice where practicable.</li>
                 <li>11.3. Abuse &amp; Misuse: We reserve the right to suspend or terminate accounts involved in abuse, fraud, or violations of these Terms or applicable law.</li>
               </ul>
