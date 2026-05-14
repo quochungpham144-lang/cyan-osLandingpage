@@ -1380,45 +1380,6 @@ function App() {
           </nav>
         )}
 
-        {/* Floating Controls */}
-        <div
-          id="floating-buttons"
-          className="fixed bottom-0 sm:bottom-10 right-4 sm:right-8 z-30 flex flex-col sm:items-end items-center gap-3 cursor-move select-none"
-          style={{ touchAction: 'none' }}
-        >
-          <a
-            href="#pricing"
-            onClick={() => {
-              trackEvent('cta_click', {
-                button_name: 'floating_get_started',
-                location: 'floating_button',
-                destination: 'pricing_section'
-              });
-              openPricingSection();
-            }}
-            className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
-            style={{ pointerEvents: 'auto' }}
-          >
-            Get Started Free <ArrowRight className="w-4 h-4" />
-          </a>
-          <button
-            type="button"
-            onClick={() => {
-              trackEvent('cta_click', {
-                button_name: 'download_cyan',
-                location: 'floating_button'
-              });
-            }}
-            className="bg-slate-900/85 dark:bg-slate-900/90 text-cyan-100 border border-cyan-400/45 px-4 py-2 rounded-full font-medium shadow-md hover:bg-slate-800 hover:border-cyan-400/70 transition-all duration-300 flex flex-col items-start sm:items-center gap-0.5 text-[11px] sm:text-sm hover:scale-105 pointer-events-auto"
-            style={{ pointerEvents: 'auto' }}
-          >
-            <span className="leading-tight text-[13px] sm:text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
-            <span className="leading-tight text-[10px] text-cyan-200/90">
-              Currently in Private Beta.
-            </span>
-          </button>
-        </div>
-
         {/* Scroll to Top Button */}
         {scrolled && (
           <button
