@@ -3,9 +3,10 @@ import { memo } from 'react';
 interface Props {
   isDarkMode: boolean;
   goToMainView: () => void;
+  toggleDarkMode: () => void;
 }
 
-export const LeadershipView = memo(({ isDarkMode, goToMainView }: Props) => (   
+export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }: Props) => (   
   <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'dark' : ''}`}>
     <nav className="fixed top-0 w-full z-50 bg-gray-950/80 backdrop-blur-md border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
