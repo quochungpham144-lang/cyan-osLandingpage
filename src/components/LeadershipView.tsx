@@ -86,7 +86,7 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }
               <div className="relative mb-10 group">
                 <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-cyan-500/50 p-2 relative z-10 overflow-hidden bg-white dark:bg-gray-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                   <img
-                    src='..\..\public\hung.jpg'
+                    src='/hung.jpg'
                     alt="Quoc Hung Pham"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -118,7 +118,7 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }
               <div className="relative mb-10 group">
                 <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-cyan-500/50 p-2 relative z-10 overflow-hidden bg-white dark:bg-gray-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                   <img
-                    src="..\..\public\tulika.jpeg"
+                    src="/tulika.jpeg"
                     alt="Tulika Anand"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -149,7 +149,7 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }
               <div className="relative mb-10 group">
                 <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-cyan-500/50 p-2 relative z-10 overflow-hidden bg-white dark:bg-gray-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                   <img
-                      src="..\..\public\raph.jpg"
+                      src="/raph.jpg"
                       alt="Raphael Enriquez"
                       className="w-full h-full object-cover rounded-full"
                   />
