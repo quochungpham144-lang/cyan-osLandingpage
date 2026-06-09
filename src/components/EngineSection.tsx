@@ -68,7 +68,7 @@ export const EngineSection = memo(({ isVisible, setRef }: Props) => (
           </div>
         </div>
 
-        <div className="bg-[#0D1117] rounded-3xl overflow-hidden border border-gray-800 shadow-2xl shadow-cyan-500/10 min-h-[400px] lg:min-h-0">
+        <div className="bg-[#0D1117] rounded-3xl overflow-hidden border border-gray-800 shadow-2xl shadow-cyan-500/10 min-h-[300px] sm:min-h-[350px] lg:min-h-0">
           {/* Terminal Header */}
           <div className="bg-[#161B22] px-4 sm:px-6 py-4 border-b border-gray-800 flex items-center justify-between">
             <div className="flex items-center gap-2">

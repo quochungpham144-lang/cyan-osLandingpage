@@ -86,7 +86,7 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }
               <div className="relative mb-10 group">
                 <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-cyan-500/50 p-2 relative z-10 overflow-hidden bg-white dark:bg-gray-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                   <img
-                    src="https://media.licdn.com/dms/image/v2/D5603AQE0zZOefLjE8A/profile-displayphoto-scale_400_400/B56Z0NlYk8KYAk-/0/1774049399283?e=1779926400&v=beta&t=ztVq3EM1CK4vBkuaLBg7ULDotXpF2ob5jV1sQRxyhGo"
+                    src='..\..\public\hung.jpg'
                     alt="Quoc Hung Pham"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -118,7 +118,7 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }
               <div className="relative mb-10 group">
                 <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-cyan-500/50 p-2 relative z-10 overflow-hidden bg-white dark:bg-gray-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                   <img
-                    src="https://media.licdn.com/dms/image/v2/D4D03AQEPlzOn9dprng/profile-displayphoto-shrink_400_400/B4DZbFGIH2GwAk-/0/1747063441083?e=1779926400&v=beta&t=5kC5frwQjQ69EbZG9bFsJ08HUUPlUEv-W629MBVV3D8"
+                    src="..\..\public\tulika.jpeg"
                     alt="Tulika Anand"
                     className="w-full h-full object-cover rounded-full"
                   />
@@ -149,9 +149,9 @@ export const LeadershipView = memo(({ isDarkMode, goToMainView, toggleDarkMode }
               <div className="relative mb-10 group">
                 <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-cyan-500/50 p-2 relative z-10 overflow-hidden bg-white dark:bg-gray-900 shadow-[0_0_30px_rgba(6,182,212,0.3)] group-hover:shadow-[0_0_50px_rgba(6,182,212,0.5)] transition-shadow duration-500">
                   <img
-                    src="https://media.licdn.com/dms/image/v2/D5603AQFAERQCXltxIA/profile-displayphoto-crop_800_800/B56Ztgsx7kJ8AM-/0/1766853911525?e=1779926400&v=beta&t=RBBUJJSk3WWKk5DxCWLIWtpwO0Qxtms2oX3gBeld-pA"
-                    alt="Raphael Enriquez"
-                    className="w-full h-full object-cover rounded-full"
+                      src="..\..\public\raph.jpg"
+                      alt="Raphael Enriquez"
+                      className="w-full h-full object-cover rounded-full"
                   />
                 </div>
               </div>

@@ -125,17 +125,17 @@ export const AboutView = memo(({ isDarkMode, goToMainView }: Props) => (
 
             <div className="pt-8 mt-8 border-t border-gray-800">
               <div className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-6">THE TEAM</div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {/* Team Member 1 */}
                 <div className="flex flex-col items-center text-center group">
                   <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gray-800 border border-gray-700 mb-4 overflow-hidden relative transition-transform duration-300 group-hover:scale-105 group-hover:border-cyan-500/50">
                     <img
-                      src="https://media.licdn.com/dms/image/v2/D5603AQE0zZOefLjE8A/profile-displayphoto-scale_400_400/B56Z0NlYk8KYAk-/0/1774049399283?e=1779926400&v=beta&t=ztVq3EM1CK4vBkuaLBg7ULDotXpF2ob5jV1sQRxyhGo"
+                      src="/hung.jpg"
                       alt="Quoc Hung Pham"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="font-bold text-gray-900 dark:text-white text-sm md:text-base">Quoc Hung Pham</div>
+                  <div className="font-bold text-white text-sm md:text-base">Quoc Hung Pham</div>
                   <div className="text-cyan-400 text-[10px] uppercase tracking-widest font-semibold mb-2">Core Team</div>
                   <a
                     href="https://www.linkedin.com/in/quoc-hung-pham-7b1023191/"
@@ -153,12 +153,12 @@ export const AboutView = memo(({ isDarkMode, goToMainView }: Props) => (
                 <div className="flex flex-col items-center text-center group">
                   <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gray-800 border border-gray-700 mb-4 overflow-hidden relative transition-transform duration-300 group-hover:scale-105 group-hover:border-cyan-500/50">
                     <img
-                      src="https://media.licdn.com/dms/image/v2/D5603AQFAERQCXltxIA/profile-displayphoto-crop_800_800/B56Ztgsx7kJ8AM-/0/1766853911525?e=1779926400&v=beta&t=RBBUJJSk3WWKk5DxCWLIWtpwO0Qxtms2oX3gBeld-pA"
+                      src="/raph.jpg"
                       alt="Raphael Enriquez"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="font-bold text-gray-900 dark:text-white text-sm md:text-base">Raphael Enriquez</div>
+                  <div className="font-bold text-white text-sm md:text-base">Raphael Enriquez</div>
                   <div className="text-cyan-400 text-[10px] uppercase tracking-widest font-semibold mb-2">Core Team</div>
                   <a
                     href="http://linkedin.com/in/raph-enriquez"
@@ -176,12 +176,12 @@ export const AboutView = memo(({ isDarkMode, goToMainView }: Props) => (
                 <div className="flex flex-col items-center text-center group">
                   <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-gray-800 border border-gray-700 mb-4 overflow-hidden relative transition-transform duration-300 group-hover:scale-105 group-hover:border-cyan-500/50">
                     <img
-                      src="https://media.licdn.com/dms/image/v2/D4D03AQEPlzOn9dprng/profile-displayphoto-shrink_400_400/B4DZbFGIH2GwAk-/0/1747063441083?e=1779926400&v=beta&t=5kC5frwQjQ69EbZG9bFsJ08HUUPlUEv-W629MBVV3D8"
+                      src="/tulika.jpeg"
                       alt="Tulika Anand"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="font-bold text-gray-900 dark:text-white text-sm md:text-base">Tulika Anand</div>
+                  <div className="font-bold text-white text-sm md:text-base">Tulika Anand</div>
                   <div className="text-cyan-400 text-[10px] uppercase tracking-widest font-semibold mb-2">Core Team</div>
                   <a
                     href="https://www.linkedin.com/in/tulika-anand-643332311/"

@@ -9,7 +9,7 @@ export const ListingsSection = memo(() => (
           <h3 className="text-sm font-medium text-gray-400 dark:text-gray-500 italic">Featured on leading AI directories</h3>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center lg:justify-end gap-3 sm:gap-4 max-w-4xl">
+        <div className="flex flex-wrap items-center justify-center lg:justify-end gap-2 sm:gap-3 lg:gap-4 max-w-4xl">
           {[
             {
               name: 'Product Hunt',
