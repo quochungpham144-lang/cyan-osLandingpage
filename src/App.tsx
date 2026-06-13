@@ -1415,7 +1415,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="desktop-nav-links hidden sm:flex items-center gap-2 sm:gap-4 flex-wrap">
+              <div className="desktop-nav-links hidden xl:flex items-center gap-2 xl:gap-4 whitespace-nowrap">
                 <a
                   href="#hero"
                   onClick={(e) => {
@@ -1625,7 +1625,7 @@ function App() {
                           alt={userInfo.name}
                           className="w-6 h-6 rounded-full"
                         />
-                        <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px]">
+                        <span className="text-gray-700 dark:text-gray-300 font-medium text-[13px] max-w-[120px] truncate">
                           {userInfo.name}
                         </span>
                       </button>
@@ -1644,7 +1644,7 @@ function App() {
               <div className="flex items-center gap-2">
                 {/* Mobile Account/Login Button */}
                 {isLoggedIn && userInfo ? (
-                  <div className="relative sm:hidden">
+                  <div className="relative xl:hidden">
                     <button
                       type="button"
                       onClick={() => setMobileAccountOpen((open) => !open)}
@@ -1702,7 +1702,7 @@ function App() {
                 ) : (
                   <button
                     onClick={() => setShowLoginModal(true)}
-                    className="sm:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
+                    className="xl:hidden px-3 py-1.5 rounded-lg bg-cyan-600 text-yellow-300 text-xs font-bold shadow-md"
                   >
                     Login
                   </button>
@@ -1710,7 +1710,7 @@ function App() {
 
                 <button
                   onClick={() => setIsDarkMode(!isDarkMode)}
-                  className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
+                  className="xl:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-gray-700 dark:text-white"
                   aria-label="Toggle dark mode"
                 >
                   {isDarkMode ? (
@@ -1721,7 +1721,7 @@ function App() {
                 </button>
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="sm:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
+                  className="xl:hidden p-2 rounded-lg bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-white transition-colors"
                 >
                   {mobileMenuOpen ? (
                     <X className="w-5 h-5" />
@@ -1734,7 +1734,7 @@ function App() {
 
             {/* Mobile Sidebar */}
             <div
-              className={`sm:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+              className={`xl:hidden fixed inset-0 z-[150] h-screen bg-white dark:bg-slate-900 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-slate-800">
