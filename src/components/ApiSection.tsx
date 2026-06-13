@@ -20,7 +20,7 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
       <div className="text-center mb-16 relative">
         <div className="inline-flex items-center gap-2 bg-cyan-600/10 dark:bg-cyan-600/20 border border-cyan-600/30 dark:border-cyan-600/40 rounded-full px-4 py-2 mb-4 backdrop-blur-sm">
           <Code className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-          <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400 text-center">CYAN OS<span className="tm-symbol">™</span> Lite API</span>
+          <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400 text-center">API Reference</span>
         </div>
         <button
           onClick={() => setShowApiSection(false)}
@@ -28,16 +28,16 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
         >
           ✕
         </button>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN OS<span className="tm-symbol">™</span> Lite API Overview</h2>
+        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN OS<span className="tm-symbol">™</span> Lite API</h2>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
-          Powerful Text-to-Speech API with Voice Cloning and Real-time Streaming
+          Text-to-Speech API with voice cloning and real-time streaming
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
         {/* Core Features */}
         <div>
-          <h3 className="text-2xl font-bold mb-6 text-cyan-600 dark:text-cyan-400">🎯 Core Features</h3>
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-cyan-600 dark:text-cyan-400"><Code className="w-6 h-6" /> Features</h3>
           <div className="space-y-4">
             {[
               { icon: Mic, title: 'Multi-provider Text-to-Speech', desc: 'Azure, ElevenLabs, Google' },
@@ -60,7 +60,7 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
 
         {/* API Endpoints */}
         <div>
-          <h3 className="text-2xl font-bold mb-6 text-cyan-600 dark:text-cyan-400">🚀 API Endpoints</h3>
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-3 text-cyan-600 dark:text-cyan-400"><Code className="w-6 h-6" /> API Endpoints</h3>
           <div className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 font-mono text-sm">
             <div className="space-y-3">
               {[
@@ -79,14 +79,14 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
           </div>
 
           <div className="mt-6">
-            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">💰 Pricing Plans</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2"><Zap className="w-4 h-4" /> Pricing</h4>
             <div className="space-y-2">
               <div className="bg-gray-50 dark:bg-gray-800/60 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                <span className="font-bold text-gray-900 dark:text-gray-100">BASIC:</span>
+                <span className="font-bold text-gray-900 dark:text-gray-100">Pay-as-you-go:</span>
                 <span className="text-gray-600 dark:text-gray-400 ml-2">$0.00010/request (TTS only)</span>
               </div>
               <div className="bg-gray-50 dark:bg-gray-800/60 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                <span className="font-bold text-gray-900 dark:text-gray-100">PRO:</span>
+                <span className="font-bold text-gray-900 dark:text-gray-100">Pro Plan:</span>
                 <span className="text-gray-600 dark:text-gray-400 ml-2">$79/month (all features, 500K requests)</span>
               </div>
             </div>
@@ -96,7 +96,7 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
 
       {/* User Benefits */}
       <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border-2 border-cyan-600/30 dark:border-cyan-400/30 rounded-3xl p-8 md:p-12 shadow-xl shadow-cyan-600/10">
-        <h3 className="text-2xl md:text-3xl font-bold mb-8 text-center text-cyan-600 dark:text-cyan-400">🎯 Features & User Benefits</h3>
+        <h3 className="text-2xl md:text-3xl font-bold mb-8 text-center text-cyan-600 dark:text-cyan-400">Use Cases</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
@@ -127,17 +127,15 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
             </div>
           ))}
         </div>
-
-        {/* ROI Calculator */}
         <div className="mt-12 bg-gradient-to-r from-cyan-600/10 to-purple-600/10 dark:from-cyan-600/20 dark:to-purple-600/20 rounded-2xl p-8 border border-cyan-600/30 dark:border-cyan-400/30">
-          <h4 className="text-xl font-bold mb-4 text-center text-gray-900 dark:text-gray-100">📊 ROI Calculator</h4>
+          <h4 className="text-xl font-bold mb-4 text-center text-gray-900 dark:text-gray-100 flex items-center justify-center gap-2"><Clock className="w-5 h-5" /> Cost Comparison</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             {[
-              { value: '$100/hour', label: 'Manual recording' },
-              { value: '$0.10/1000 chars', label: <span className="flex items-center justify-center">CYAN OS<span className="tm-symbol">™</span> API</span>, highlight: true },
-              { value: 'Up to 80%', label: 'Potential cost reduction', green: true },
+              { value: '$100/hour', label: 'Manual voice recording' },
+              { value: '$0.10/1000 chars', label: <span className="flex items-center justify-center">CYAN API</span>, highlight: true },
+              { value: '80%', label: 'Typical savings', green: true },
             ].map(({ value, label, highlight, green }) => (
-              <div key={label}>
+              <div key={typeof label === 'string' ? label : 'cyan-api'}>
                 <div className={`text-2xl font-bold mb-1 ${highlight ? 'text-cyan-600 dark:text-cyan-400' : green ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-gray-100'}`}>{value}</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">{label}</div>
               </div>

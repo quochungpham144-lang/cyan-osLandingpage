@@ -55,6 +55,9 @@ const LeadershipView = lazy(() =>
     default: m.LeadershipView,
   })),
 );
+const DownloadView = lazy(() =>
+  import("./components/DownloadView").then((m) => ({ default: m.DownloadView })),
+);
 import { ArrowUp, Sun, Moon, Menu, X } from "lucide-react";
 import { SignJWT } from "jose";
 
@@ -84,6 +87,7 @@ export type AppView =
   | "video"
   | "about"
   | "docs"
+  | "download"
   | "leadership";
 
 type GoogleTokenResponse = {
@@ -234,6 +238,7 @@ function App() {
         "about",
         "docs",
         "leadership",
+        "download",
       ];
       if (validViews.includes(path as AppView)) {
         setView(path as AppView);
@@ -1543,6 +1548,17 @@ function App() {
                     )}
                   </button>
 
+                  <a
+                    href="/download"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateTo("download");
+                    }}
+                    className="bg-cyan-600 dark:bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
+                  >
+                    Try CYAN OS
+                  </a>
+
                   <div className="relative group">
                     <button
                       onClick={() => {
@@ -1933,6 +1949,18 @@ function App() {
                   </div>
 
                   <div className="mt-auto pt-4 flex flex-col gap-2">
+                    <a
+                      href="/download"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMobileMenuOpen(false);
+                        navigateTo("download");
+                      }}
+                      className="w-full bg-cyan-600 text-white py-4 rounded-xl font-bold text-center shadow-md border border-cyan-500"
+                    >
+                      Try CYAN OS
+                    </a>
+
                     <button
                       onClick={() => {
                         setMobileMenuOpen(false);
@@ -2030,6 +2058,14 @@ function App() {
             />
           ) : view === "docs" ? (
             <DocsView goToMainView={goToMainView} />
+          ) : view === "download" ? (
+            <DownloadView 
+              isDarkMode={isDarkMode} 
+              goToMainView={goToMainView} 
+              openPricingSection={openPricingSection}
+              setShowApiSection={setShowApiSection}
+              copyToClipboard={copyToClipboard}
+            />
           ) : (
             <div
               className="min-h-screen bg-gradient-to-b from-emerald-50 via-emerald-50/25 to-cyan-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 text-gray-900 dark:text-white transition-colors duration-300 relative overflow-hidden"
