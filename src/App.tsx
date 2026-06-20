@@ -147,7 +147,9 @@ interface UserSession {
   subscriptions?: SubscriptionRecord[];
 }
 
-const BACKEND_URL = "https://translator-backend-pi.vercel.app";
+const BACKEND_URL =
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env
+    ?.VITE_BACKEND_URL || "";
 const GOOGLE_CLIENT_ID =
   (import.meta as unknown as { env?: Record<string, string | undefined> }).env
     ?.VITE_GOOGLE_CLIENT_ID ||
@@ -510,7 +512,7 @@ function App() {
         const cryptoCancelUrl = `${window.location.origin}${window.location.pathname}?crypto=cancel`;
 
         const response = await fetch(
-          `${BACKEND_URL}/api/payment/now/plan/create`,
+          `${BACKEND_URL}/api/v1/payment/nowpayments/orders`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -589,7 +591,7 @@ function App() {
       }
 
       const response = await fetch(
-        `${BACKEND_URL}/api/payment/subscription/create`,
+        `${BACKEND_URL}/api/v1/payment/paypal/subscriptions`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -602,9 +604,11 @@ function App() {
         },
       );
 
-      const data = await response.json();
-      if (!response.ok || !data?.approval_url || !data?.subscription_id) {
-        throw new Error(data?.error || "Unable to create PayPal subscription.");
+      const resData = await response.json();
+      const payload = resData?.data || resData;
+      
+      if (!response.ok || !payload?.approval_url || !payload?.subscription_id) {
+        throw new Error(resData?.message || resData?.error || "Unable to create PayPal subscription.");
       }
 
       localStorage.setItem(
@@ -612,7 +616,7 @@ function App() {
         JSON.stringify({
           userId: session.id,
           planKey,
-          subscriptionId: data.subscription_id,
+          subscriptionId: payload.subscription_id,
           createdAt: Date.now(),
         }),
       );
@@ -622,7 +626,7 @@ function App() {
         method: "paypal",
         price_label: PLAN_PRICE[planKey],
       });
-      window.location.href = data.approval_url;
+      window.location.href = payload.approval_url;
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Checkout failed.";
@@ -686,7 +690,7 @@ function App() {
 
     setCryptoActivationBusy(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/payment/now/activate`, {
+      const response = await fetch(`${BACKEND_URL}/api/v1/payment/nowpayments/capture`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -796,19 +800,19 @@ function App() {
       const activateEndpoint = hasPaymentId ? "activate" : "activate-order";
       const body = hasPaymentId
         ? {
-            user_id: pending.userId,
-            plan_key: pending.planKey,
-            payment_id: pending.paymentId,
-            order_id: pending.orderId,
-          }
+          user_id: pending.userId,
+          plan_key: pending.planKey,
+          payment_id: pending.paymentId,
+          order_id: pending.orderId,
+        }
         : {
-            user_id: pending.userId,
-            plan_key: pending.planKey,
-            order_id: pending.orderId,
-          };
+          user_id: pending.userId,
+          plan_key: pending.planKey,
+          order_id: pending.orderId,
+        };
 
       const response = await fetch(
-        `${BACKEND_URL}/api/payment/now/${activateEndpoint}`,
+        `${BACKEND_URL}/api/v1/payment/nowpayments/${activateEndpoint}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -909,7 +913,7 @@ function App() {
       };
 
       const response = await fetch(
-        `${BACKEND_URL}/api/payment/subscription/activate`,
+        `${BACKEND_URL}/api/v1/payment/paypal/subscriptions/activate`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -921,9 +925,11 @@ function App() {
         },
       );
 
-      const data = await response.json();
-      if (!response.ok || !data?.ok) {
-        throw new Error(data?.error || "Payment not active yet.");
+      const resData = await response.json();
+      const payload = resData?.data || resData;
+      
+      if (!response.ok || !payload?.ok) {
+        throw new Error(resData?.message || resData?.error || "Payment not active yet.");
       }
 
       const activeSession = ensureSession();
@@ -1104,8 +1110,8 @@ function App() {
             setCheckoutMessage(
               String(
                 resp.error_description ||
-                  resp.error ||
-                  "Google login failed. Please try again.",
+                resp.error ||
+                "Google login failed. Please try again.",
               ),
             );
             setShowLoginModal(true);
@@ -1294,8 +1300,8 @@ function App() {
           setCheckoutMessage(
             String(
               tokenData?.error_description ||
-                tokenData?.error ||
-                "Google login failed. Please try again.",
+              tokenData?.error ||
+              "Google login failed. Please try again.",
             ),
           );
           setShowLoginModal(true);
@@ -1387,11 +1393,10 @@ function App() {
         {/* Navigation - Only show on main view */}
         {view === "main" && (
           <nav
-            className={`fixed top-0 w-full transition-all duration-300 z-[100] ${
-              scrolled
-                ? "bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3"
-                : "bg-transparent py-4 sm:py-6 border-b-2 border-gray-200/60 dark:border-slate-700/50"
-            }`}
+            className={`fixed top-0 w-full transition-all duration-300 z-[100] ${scrolled
+              ? "bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2 sm:py-3"
+              : "bg-transparent py-4 sm:py-6 border-b-2 border-gray-200/60 dark:border-slate-700/50"
+              }`}
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
               <div
@@ -2059,9 +2064,9 @@ function App() {
           ) : view === "docs" ? (
             <DocsView goToMainView={goToMainView} />
           ) : view === "download" ? (
-            <DownloadView 
-              isDarkMode={isDarkMode} 
-              goToMainView={goToMainView} 
+            <DownloadView
+              isDarkMode={isDarkMode}
+              goToMainView={goToMainView}
               openPricingSection={openPricingSection}
               setShowApiSection={setShowApiSection}
               copyToClipboard={copyToClipboard}

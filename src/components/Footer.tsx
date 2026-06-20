@@ -218,13 +218,14 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
             >
               Get Started Free <ArrowRight className="w-4 h-4" />
             </a>
-            <button
-              type="button"
-              className="w-full sm:w-auto bg-slate-800/80 backdrop-blur-md text-cyan-100 border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:bg-slate-800 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
+            <a
+              href="https://drive.google.com/uc?export=download&id=1C4Cil3UlxqPq7VNSOr50e-yInvUCF1MG"
+              download
+              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
             >
-              <span className="text-sm">Download CYAN OS<span className="tm-symbol">™</span></span>
-              <span className="text-[10px] text-cyan-400/60 uppercase tracking-widest font-bold">Private Beta</span>
-            </button>
+              <span className="text-sm font-bold">Download CYAN OS<span className="tm-symbol">™</span></span>
+              <span className="text-[10px] text-cyan-100/80 uppercase tracking-widest font-bold">Private Beta</span>
+            </a>
           </div>
           <p className="text-center md:text-right text-gray-500 text-[10px] flex items-center justify-center md:justify-end">
             &copy; 2026 CYAN OS<span className="tm-symbol">™</span>, Inc. Ultra-Low Latency AI Translator. All rights reserved.

@@ -160,15 +160,14 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
             <a
-              href="/download"
-              onClick={(e) => {
-                e.preventDefault();
-                trackEvent('cta_click', { button_name: 'try_cyan_os', location: 'hero_section' });
-                setView('download');
+              href="https://drive.google.com/uc?export=download&id=1C4Cil3UlxqPq7VNSOr50e-yInvUCF1MG"
+              download
+              onClick={() => {
+                trackEvent('cta_click', { button_name: 'download_cyan_os', location: 'hero_section' });
               }}
               className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-cyan-500/25 text-center"
             >
-              Try CYAN OS
+              Download CYAN OS
             </a>
 
             <a

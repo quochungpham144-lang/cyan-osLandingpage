@@ -54,7 +54,7 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
         <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-8 md:px-10 md:py-12 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Download CYAN OS<span className="tm-symbol">™</span></h1>
           <p className="text-gray-400 mb-10 text-sm md:text-base">
-            Follow the instructions below to download and install the Cyan OS setup file from our secure Google Drive.
+            Follow the instructions below to download and install the Cyan OS setup file.
           </p>
 
           <div className="space-y-8 text-left max-w-xl mx-auto">
@@ -66,7 +66,7 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
               <div>
                 <h3 className="text-white font-semibold text-lg">Click the Download Button</h3>
                 <p className="text-gray-400 text-sm mt-1">
-                  Click the button below to be redirected to our Google Drive folder containing the setup file.
+                  Click the download button below to start downloading the setup file directly to your computer.
                 </p>
               </div>
             </div>
@@ -77,9 +77,9 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
                 2
               </div>
               <div>
-                <h3 className="text-white font-semibold text-lg">Locate and Download</h3>
+                <h3 className="text-white font-semibold text-lg">Save the File</h3>
                 <p className="text-gray-400 text-sm mt-1">
-                  In the Google Drive folder, look for <code className="bg-gray-800 px-2 py-0.5 rounded text-cyan-300">CYANOS Setup.exe</code>. Right-click on it and select <strong>Download</strong>, or click the download icon in the top right.
+                  Choose a location on your computer to save the <code className="bg-gray-800 px-2 py-0.5 rounded text-cyan-300">CYANOS Setup.exe</code> file when prompted.
                 </p>
               </div>
             </div>
@@ -100,12 +100,11 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
 
           <div className="mt-12">
             <a
-              href="https://drive.google.com/drive/folders/1_vvBZSYk2DhChQhskwcTu2CW1Fr4_qdi?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="https://drive.google.com/uc?export=download&id=1C4Cil3UlxqPq7VNSOr50e-yInvUCF1MG"
+              download
               className="inline-block w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg shadow-cyan-500/25"
             >
-              Go to Download Page
+              Download CYAN OS
             </a>
           </div>
         </main>
