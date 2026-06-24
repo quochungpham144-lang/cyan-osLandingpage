@@ -219,7 +219,7 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
               Get Started Free <ArrowRight className="w-4 h-4" />
             </a>
             <a
-              href="https://drive.google.com/uc?export=download&id=1C4Cil3UlxqPq7VNSOr50e-yInvUCF1MG"
+              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-Setup.exe"
               download
               className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
             >

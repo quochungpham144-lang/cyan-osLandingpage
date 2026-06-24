@@ -54,53 +54,12 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
         <main className="bg-gray-900/80 border border-gray-800 rounded-2xl shadow-xl px-6 py-8 md:px-10 md:py-12 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Download CYAN OS<span className="tm-symbol">™</span></h1>
           <p className="text-gray-400 mb-10 text-sm md:text-base">
-            Follow the instructions below to download and install the Cyan OS setup file.
+            Click below to download the Cyan OS setup file.
           </p>
-
-          <div className="space-y-8 text-left max-w-xl mx-auto">
-            {/* Step 1 */}
-            <div className="flex gap-4 items-start">
-              <div className="w-8 h-8 rounded-full bg-cyan-600/20 border border-cyan-500 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0 mt-1">
-                1
-              </div>
-              <div>
-                <h3 className="text-white font-semibold text-lg">Click the Download Button</h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  Click the download button below to start downloading the setup file directly to your computer.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex gap-4 items-start">
-              <div className="w-8 h-8 rounded-full bg-cyan-600/20 border border-cyan-500 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0 mt-1">
-                2
-              </div>
-              <div>
-                <h3 className="text-white font-semibold text-lg">Save the File</h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  Choose a location on your computer to save the <code className="bg-gray-800 px-2 py-0.5 rounded text-cyan-300">CYANOS Setup.exe</code> file when prompted.
-                </p>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex gap-4 items-start">
-              <div className="w-8 h-8 rounded-full bg-cyan-600/20 border border-cyan-500 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0 mt-1">
-                3
-              </div>
-              <div>
-                <h3 className="text-white font-semibold text-lg">Run the Installer</h3>
-                <p className="text-gray-400 text-sm mt-1">
-                  Once downloaded, double-click the <code className="bg-gray-800 px-2 py-0.5 rounded text-cyan-300">CYANOS Setup.exe</code> file on your computer to install Cyan OS Lite.
-                </p>
-              </div>
-            </div>
-          </div>
 
           <div className="mt-12">
             <a
-              href="https://drive.google.com/uc?export=download&id=1C4Cil3UlxqPq7VNSOr50e-yInvUCF1MG"
+              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-Setup.exe"
               download
               className="inline-block w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg shadow-cyan-500/25"
             >

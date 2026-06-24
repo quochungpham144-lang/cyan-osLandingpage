@@ -160,7 +160,7 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
             <a
-              href="https://drive.google.com/uc?export=download&id=1C4Cil3UlxqPq7VNSOr50e-yInvUCF1MG"
+              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-Setup.exe"
               download
               onClick={() => {
                 trackEvent('cta_click', { button_name: 'download_cyan_os', location: 'hero_section' });
