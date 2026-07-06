@@ -143,6 +143,7 @@ interface UserSession {
   picture?: string;
   provider: "google" | "email" | "guest";
   access_token?: string;
+  legacy_token?: string;
   plan?: PlanKey;
   subscriptions?: SubscriptionRecord[];
 }
@@ -150,10 +151,7 @@ interface UserSession {
 const BACKEND_URL =
   (import.meta as unknown as { env?: Record<string, string | undefined> }).env
     ?.VITE_BACKEND_URL || "";
-const GOOGLE_CLIENT_ID =
-  (import.meta as unknown as { env?: Record<string, string | undefined> }).env
-    ?.VITE_GOOGLE_CLIENT_ID ||
-  "464363772737-silqko8n7qq49f1ikg5o23t33ds4nh11.apps.googleusercontent.com";
+
 
 const PLAN_PRICE: Record<PlanKey, string> = {
   free: "$0",
@@ -210,8 +208,7 @@ function App() {
   const [cryptoActivationBusy, setCryptoActivationBusy] = useState(false);
   const [autoOpenApp, setAutoOpenApp] = useState(false);
   const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
-  const googleIdentityLoaderRef = useRef<Promise<void> | null>(null);
-  const googleTokenClientRef = useRef<GoogleTokenClient | null>(null);
+
   const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
   const [view, setView] = useState<AppView>("main");
 
@@ -308,6 +305,31 @@ function App() {
     return guestSession;
   }, [saveSession, userInfo]);
 
+  const fetchUserQuota = useCallback(async (token: string) => {
+    const quotaPaths = ["/api/v1/user/quota", "/api/user/quota"];
+
+    for (const path of quotaPaths) {
+      const response = await fetch(
+        `${BACKEND_URL}${path}`,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.ok) {
+        return response;
+      }
+
+      if (response.status !== 404) {
+        return response;
+      }
+    }
+
+    return null;
+  }, []);
+
   useEffect(() => {
     if (!userInfo?.id) return;
     if (userInfo.provider === "guest") return;
@@ -316,10 +338,10 @@ function App() {
 
     (async () => {
       try {
-        const r = await fetch(
-          `${BACKEND_URL}/api/user/quota?user_id=${encodeURIComponent(userInfo.id)}`,
-        );
-        if (!r.ok) return;
+        const token = userInfo.access_token || localStorage.getItem("token");
+        if (!token) return;
+        const r = await fetchUserQuota(token);
+        if (!r?.ok) return;
         const data = (await r.json()) as { plan?: PlanKey };
         const backendPlan = data?.plan;
         if (!backendPlan) return;
@@ -338,7 +360,7 @@ function App() {
     return () => {
       cancelled = true;
     };
-  }, [userInfo, saveSession]);
+  }, [fetchUserQuota, userInfo, saveSession]);
 
   useEffect(() => {
     const { origin, hostname, pathname, search, hash } = window.location;
@@ -354,9 +376,7 @@ function App() {
 
   const checkBackendConnection = useCallback(async () => {
     try {
-      const response = await fetch(
-        "https://translator-backend-pi.vercel.app/api/health",
-      );
+      const response = await fetch(`${BACKEND_URL}/api/health`);
       const data = await response.json();
       console.log("Backend connection:", data);
       return data.ok;
@@ -487,6 +507,8 @@ function App() {
     }
   }, []);
 
+  const checkoutOrigin = CANONICAL_PROD_ORIGIN;
+
   const startPlanCheckout = async (
     planKey: PlanKey,
     method: PaymentMethod = "paypal",
@@ -504,8 +526,8 @@ function App() {
 
     try {
       const session = ensureSession();
-      const returnUrl = `${window.location.origin}${window.location.pathname}?checkout=success`;
-      const cancelUrl = `${window.location.origin}${window.location.pathname}?checkout=cancel`;
+      const returnUrl = `${checkoutOrigin}${window.location.pathname}?checkout=success`;
+      const cancelUrl = `${checkoutOrigin}${window.location.pathname}?checkout=cancel`;
 
       if (method === "crypto") {
         const cryptoReturnUrl = `${window.location.origin}${window.location.pathname}?crypto=success`;
@@ -971,160 +993,142 @@ function App() {
     }
   }, [ensureSession, saveSession, trackEvent]);
 
-  const handleEmailAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleEmailAuthSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
     const formData = new FormData(form);
     const email = String(formData.get("EMAIL") || "").trim();
+    const password = String(formData.get("PASSWORD") || "");
     const fullName = String(formData.get("FIRSTNAME") || "").trim();
 
-    if (!email) return;
+    if (!email || !password) return;
 
-    const displayName = fullName || email.split("@")[0] || "User";
-    const sessionData: UserSession = {
-      id: `email-${email.toLowerCase()}`,
-      email,
-      name: displayName,
-      picture: "/logoCYAN.png",
-      provider: "email",
-      plan: "free",
-      subscriptions: [],
-    };
+    setCheckoutMessage("Authenticating...");
 
-    saveSession(sessionData);
-    setShowLoginModal(false);
+    try {
+      if (!isLoginMode) {
+        // Register flow
+        const username = fullName.toLowerCase().replace(/[^a-z0-9]/g, "") || email.split("@")[0].replace(/[^a-z0-9]/g, "");
+        const nameParts = fullName.split(" ");
+        const first_name = nameParts[0] || "User";
+        const last_name = nameParts.slice(1).join(" ") || first_name;
 
-    trackEvent("email_auth_success", {
-      action: isLoginMode ? "login" : "register",
-      user_email: email,
-    });
+        const regRes = await fetch(`${BACKEND_URL}/api/v1/auth/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, username, password, first_name, last_name })
+        });
+
+        const regData = await regRes.json();
+
+        if (!regRes.ok) {
+          throw new Error(regData.message || "Registration failed");
+        }
+      }
+
+      // Login flow (runs after register or if isLoginMode)
+      const loginRes = await fetch(`${BACKEND_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const loginData = await loginRes.json();
+
+      if (!loginRes.ok) {
+        throw new Error(loginData.message || "Login failed");
+      }
+
+      const user = loginData.data?.user;
+      const token = loginData.data?.token;
+      const legacy_token = loginData.data?.legacy_token;
+
+      if (!user || !token) {
+        throw new Error("Invalid login response format");
+      }
+
+      const sessionData: UserSession = {
+        id: user.id,
+        email: user.email,
+        name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username,
+        picture: "/logoCYAN.png",
+        provider: "email",
+        plan: user.plan || "free",
+        subscriptions: [],
+        access_token: token,
+        legacy_token: legacy_token,
+      };
+
+      if (token) localStorage.setItem("token", token);
+      if (legacy_token) localStorage.setItem("legacy_token", legacy_token);
+
+      saveSession(sessionData);
+      setShowLoginModal(false);
+      setCheckoutMessage(null);
+
+      trackEvent("email_auth_success", {
+        action: isLoginMode ? "login" : "register",
+        user_email: email,
+      });
+    } catch (err: any) {
+      console.error("Auth error:", err);
+      setCheckoutMessage(err.message || "Authentication failed");
+    }
   };
 
-  // Handle Google OAuth callback (Frontend Direct - Token flow)
-  const handleGoogleCallback = useCallback(
-    async (accessToken: string) => {
-      try {
-        // Get user info directly from Google using access token
-        const userResponse = await fetch(
-          "https://www.googleapis.com/oauth2/v2/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          },
-        );
+  // Handle Google OAuth (Popup Window Flow)
+  useEffect(() => {
+    const handleAuthMessage = (event: MessageEvent) => {
+      // Allow messages from backend origin or ignore origin check if we trust the payload structure
+      if (event.data?.type === "CYAN_AUTH_SUCCESS") {
+        const { user, token, legacy_token } = event.data;
+        if (user && token) {
+          const sessionData: UserSession = {
+            id: user.id,
+            email: user.email,
+            name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username,
+            picture: "/logoCYAN.png",
+            provider: "google",
+            plan: user.plan || "free",
+            subscriptions: [],
+            access_token: token,
+            legacy_token: legacy_token,
+          };
 
-        const userData = await userResponse.json();
+          if (token) localStorage.setItem("token", token);
+          if (legacy_token) localStorage.setItem("legacy_token", legacy_token);
 
-        // Create simple session
-        const sessionData: UserSession = {
-          id: userData.id,
-          email: userData.email,
-          name: userData.name,
-          picture: userData.picture,
-          provider: "google",
-          plan: "free",
-          subscriptions: [],
-          access_token: accessToken,
-        };
+          saveSession(sessionData);
+          setShowLoginModal(false);
+          setCheckoutMessage(null);
 
-        saveSession(sessionData);
+          trackEvent("oauth_success", {
+            provider: "google",
+            user_email: user.email,
+          });
 
-        // Close modal
-        setShowLoginModal(false);
-
-        // Track success
-        trackEvent("oauth_success", {
-          provider: "google",
-          user_email: userData.email,
-        });
-
-        console.log("Google login successful:", userData);
-      } catch (error) {
-        console.error("OAuth callback error:", error);
-        trackEvent("oauth_error", {
-          provider: "google",
-          error: "Frontend OAuth failed",
-        });
+          console.log("Google login successful via popup:", user);
+        }
       }
-    },
-    [saveSession, trackEvent],
-  );
+    };
 
-  const ensureGoogleIdentity = useCallback(() => {
-    if (window.google?.accounts?.oauth2) {
-      return Promise.resolve();
-    }
+    window.addEventListener("message", handleAuthMessage);
+    return () => window.removeEventListener("message", handleAuthMessage);
+  }, [saveSession, trackEvent]);
 
-    if (googleIdentityLoaderRef.current) {
-      return googleIdentityLoaderRef.current;
-    }
+  const openGoogleAuthPopup = () => {
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
 
-    googleIdentityLoaderRef.current = new Promise<void>((resolve, reject) => {
-      const existing = document.getElementById(
-        "google-identity-service",
-      ) as HTMLScriptElement | null;
-      if (existing) {
-        existing.addEventListener("load", () => resolve(), { once: true });
-        existing.addEventListener(
-          "error",
-          () => reject(new Error("google_identity_load_failed")),
-          { once: true },
-        );
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.id = "google-identity-service";
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error("google_identity_load_failed"));
-      document.head.appendChild(script);
-    });
-
-    return googleIdentityLoaderRef.current;
-  }, []);
-
-  const startGoogleLoginWithGis = useCallback(async () => {
-    await ensureGoogleIdentity();
-
-    const oauth2 = window.google?.accounts?.oauth2;
-    if (!oauth2) {
-      throw new Error("google_identity_unavailable");
-    }
-
-    if (!googleTokenClientRef.current) {
-      googleTokenClientRef.current = oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: "openid email profile",
-        callback: async (resp: GoogleTokenResponse) => {
-          const token = String(resp.access_token || "");
-          if (!token) {
-            trackEvent("oauth_error", {
-              provider: "google",
-              error: String(resp.error || "no_access_token"),
-            });
-            setCheckoutMessage(
-              String(
-                resp.error_description ||
-                resp.error ||
-                "Google login failed. Please try again.",
-              ),
-            );
-            setShowLoginModal(true);
-            return;
-          }
-
-          await handleGoogleCallback(token);
-        },
-      });
-    }
-
-    googleTokenClientRef.current.requestAccessToken({ prompt: "consent" });
-  }, [ensureGoogleIdentity, handleGoogleCallback, trackEvent]);
+    window.open(
+      `${BACKEND_URL}/api/v1/auth/google`,
+      "CyanGoogleAuth",
+      `width=${width},height=${height},left=${left},top=${top},popup=1`
+    );
+  };
 
   // Keep local storage in sync with current auth state
   useEffect(() => {
@@ -1232,114 +1236,7 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const hashParams = new URLSearchParams(
-      window.location.hash.replace(/^#/, ""),
-    );
-    const oauthError = urlParams.get("error") || hashParams.get("error");
-    const oauthErrorDescription =
-      urlParams.get("error_description") || hashParams.get("error_description");
-    const oauthCode = urlParams.get("code");
-    const oauthState = urlParams.get("state");
-    const accessToken = hashParams.get("access_token");
-
-    const clearUrl = () => {
-      window.history.replaceState({}, document.title, window.location.pathname);
-    };
-
-    const completeCodeFlow = async () => {
-      const storedVerifier =
-        window.localStorage.getItem("cyan_google_oauth_verifier") || "";
-      const storedState =
-        window.localStorage.getItem("cyan_google_oauth_state") || "";
-      window.localStorage.removeItem("cyan_google_oauth_verifier");
-      window.localStorage.removeItem("cyan_google_oauth_state");
-
-      if (
-        !storedVerifier ||
-        !storedState ||
-        !oauthState ||
-        storedState !== oauthState
-      ) {
-        trackEvent("oauth_error", {
-          provider: "google",
-          error: "state_mismatch",
-        });
-        setCheckoutMessage("Google login failed. Please try again.");
-        setShowLoginModal(true);
-        clearUrl();
-        return;
-      }
-
-      const tokenBody = new URLSearchParams({
-        client_id: GOOGLE_CLIENT_ID,
-        code: oauthCode || "",
-        code_verifier: storedVerifier,
-        redirect_uri: window.location.origin,
-        grant_type: "authorization_code",
-      });
-
-      try {
-        const tokenResponse = await fetch(
-          "https://oauth2.googleapis.com/token",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: tokenBody.toString(),
-          },
-        );
-
-        const tokenData = await tokenResponse.json();
-        const token = String(tokenData?.access_token || "");
-        if (!token) {
-          trackEvent("oauth_error", {
-            provider: "google",
-            error: "token_exchange_failed",
-          });
-          setCheckoutMessage(
-            String(
-              tokenData?.error_description ||
-              tokenData?.error ||
-              "Google login failed. Please try again.",
-            ),
-          );
-          setShowLoginModal(true);
-          clearUrl();
-          return;
-        }
-
-        await handleGoogleCallback(token);
-        clearUrl();
-      } catch {
-        trackEvent("oauth_error", {
-          provider: "google",
-          error: "token_exchange_failed",
-        });
-        setCheckoutMessage("Google login failed. Please try again.");
-        setShowLoginModal(true);
-        clearUrl();
-      }
-    };
-
-    if (oauthCode) {
-      void completeCodeFlow();
-      return;
-    }
-
-    if (accessToken) {
-      void handleGoogleCallback(accessToken);
-      clearUrl();
-      return;
-    }
-
-    if (oauthError) {
-      trackEvent("oauth_error", { provider: "google", error: oauthError });
-      setCheckoutMessage(String(oauthErrorDescription || oauthError));
-      setShowLoginModal(true);
-      clearUrl();
-    }
-  }, [handleGoogleCallback, trackEvent]);
+  // Removed legacy frontend google callback URL parsing
 
   // Check backend on mount
   useEffect(() => {
@@ -2336,14 +2233,14 @@ function App() {
                       {/* Google Sign-In Button */}
                       <button
                         type="button"
-                        onClick={async () => {
+                        onClick={() => {
                           trackEvent("oauth_click", {
                             provider: "google",
                             action: isLoginMode ? "login" : "register",
                           });
 
                           try {
-                            await startGoogleLoginWithGis();
+                            openGoogleAuthPopup();
                             return;
                           } catch (error) {
                             const message =
