@@ -765,16 +765,24 @@ function App() {
         data = { raw };
       }
 
-      if (response.status === 202) {
+      // Treat 202 or backend error messages indicating 'waiting' as pending
+      const rawMsg = String(data?.error || data?.raw || "").toLowerCase();
+      const isPendingMsg = rawMsg.includes("waiting") || rawMsg.includes("not completed") || rawMsg.includes("not completed yet") || rawMsg.includes("payment not completed");
+
+      if (response.status === 202 || isPendingMsg) {
         setCheckoutMessage(
           "Chưa nhận được thanh toán. Vui lòng đợi vài phút rồi bấm “Tôi đã thanh toán” lại.",
         );
+        trackEvent("checkout_activation_pending", {
+          method: "crypto",
+          plan: pending.planKey,
+          payment_id: pending.paymentId,
+        });
         return;
       }
 
       if (!response.ok || !data?.ok) {
-        const detailMessage =
-          data?.error || data?.raw || "Crypto payment not active yet.";
+        const detailMessage = data?.error || data?.raw || "Crypto payment not active yet.";
         setCheckoutMessage(String(detailMessage));
         return;
       }
@@ -877,7 +885,13 @@ function App() {
       );
 
       const data = await response.json();
-      if (response.status === 202) {
+      // Some backends return 500 with an error message when payment is still
+      // pending (e.g. "payment not completed yet (status: waiting)"). Treat
+      // those as pending like a 202 response so the UI shows the correct state.
+      const respErr = String(data?.error || data?.raw || "").toLowerCase();
+      const isPendingErr = respErr.includes("waiting") || respErr.includes("not completed") || respErr.includes("not completed yet") || respErr.includes("payment not completed");
+
+      if (response.status === 202 || isPendingErr) {
         setCheckoutMessage(
           "Chưa nhận được thanh toán. Vui lòng đợi vài phút rồi thử lại.",
         );
