@@ -533,6 +533,17 @@ function App() {
         const cryptoReturnUrl = `${window.location.origin}${window.location.pathname}?crypto=success`;
         const cryptoCancelUrl = `${window.location.origin}${window.location.pathname}?crypto=cancel`;
 
+        // Open a blank tab immediately to ensure the payment page can be opened
+        // without being blocked by popup blockers. We'll navigate it to the
+        // provider payment_url when we receive it. If we don't get a redirect
+        // URL we close this tab.
+        let newTab: Window | null = null;
+        try {
+          newTab = window.open("", "_blank", "noopener,noreferrer");
+        } catch {
+          newTab = null;
+        }
+
         const response = await fetch(
           `${BACKEND_URL}/api/v1/payment/nowpayments/orders`,
           {
@@ -554,9 +565,7 @@ function App() {
         } catch {
           data = { raw };
         }
-        const paymentUrl = String(data?.payment_url || "")
-          .trim()
-          .replace(/`/g, "");
+        const paymentUrl = String(data?.payment_url || "").trim().replace(/`/g, "");
 
         const payAddress = String(data?.pay_address || "").trim();
         const payAmount = String(data?.pay_amount || "").trim();
@@ -569,6 +578,12 @@ function App() {
             data?.error ||
             data?.raw ||
             "Unable to create crypto payment.";
+          // Close the blank tab if open
+          try {
+            newTab?.close();
+          } catch {
+            /* ignore */
+          }
           throw new Error(String(detailMessage));
         }
 
@@ -591,11 +606,27 @@ function App() {
         });
 
         if (paymentUrl) {
-          window.location.href = paymentUrl;
+          try {
+            // If we opened a blank tab earlier, navigate it there; otherwise open new tab
+            if (newTab) {
+              newTab.location.href = paymentUrl;
+            } else {
+              window.open(paymentUrl, "_blank", "noopener,noreferrer");
+            }
+          } catch {
+            // Fallback: navigate current window if popup navigation was blocked
+            window.location.href = paymentUrl;
+          }
           return;
         }
 
         if (payAddress && payAmount && payCurrency) {
+          // No hosted redirect; close the blank tab and show manual payment UI
+          try {
+            newTab?.close();
+          } catch {
+            /* ignore */
+          }
           setCryptoCheckout({
             planKey,
             paymentId: String(data?.payment_id || ""),
@@ -606,10 +637,13 @@ function App() {
           return;
         }
 
-        throw new Error(
-          "NOWPayments không trả về link/địa chỉ thanh toán hợp lệ.",
-        );
-        return;
+        try {
+          newTab?.close();
+        } catch {
+          /* ignore */
+        }
+
+        throw new Error("NOWPayments không trả về link/địa chỉ thanh toán hợp lệ.");
       }
 
       const response = await fetch(
@@ -1071,9 +1105,9 @@ function App() {
         action: isLoginMode ? "login" : "register",
         user_email: email,
       });
-    } catch (err: any) {
+    } catch (err) {
       console.error("Auth error:", err);
-      setCheckoutMessage(err.message || "Authentication failed");
+      setCheckoutMessage("Authentication failed");
     }
   };
 
