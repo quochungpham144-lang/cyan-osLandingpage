@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import {
   FormEvent,
   memo,
@@ -58,6 +59,9 @@ const LeadershipView = lazy(() =>
 const DownloadView = lazy(() =>
   import("./components/DownloadView").then((m) => ({ default: m.DownloadView })),
 );
+const DashboardView = lazy(() =>
+  import("./components/DashboardView").then((m) => ({ default: m.DashboardView })),
+);
 import { ArrowUp, Sun, Moon, Menu, X } from "lucide-react";
 import { SignJWT } from "jose";
 
@@ -88,7 +92,8 @@ export type AppView =
   | "about"
   | "docs"
   | "download"
-  | "leadership";
+  | "leadership"
+  | "dashboard";
 
 type GoogleTokenResponse = {
   access_token?: string;
@@ -193,6 +198,18 @@ function App() {
   const [showTeamContactForm, setShowTeamContactForm] = useState(false);
   const [teamFormSubmitted, setTeamFormSubmitted] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (showLoginModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showLoginModal]);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(Boolean(initialSession));
   const [userInfo, setUserInfo] = useState<UserSession | null>(initialSession);
@@ -238,6 +255,7 @@ function App() {
         "docs",
         "leadership",
         "download",
+        "dashboard",
       ];
       if (validViews.includes(path as AppView)) {
         setView(path as AppView);
@@ -662,7 +680,7 @@ function App() {
 
       const resData = await response.json();
       const payload = resData?.data || resData;
-      
+
       if (!response.ok || !payload?.approval_url || !payload?.subscription_id) {
         throw new Error(resData?.message || resData?.error || "Unable to create PayPal subscription.");
       }
@@ -997,7 +1015,7 @@ function App() {
 
       const resData = await response.json();
       const payload = resData?.data || resData;
-      
+
       if (!response.ok || !payload?.ok) {
         throw new Error(resData?.message || resData?.error || "Payment not active yet.");
       }
@@ -1052,7 +1070,7 @@ function App() {
 
     if (!email || !password) return;
 
-    setCheckoutMessage("Authenticating...");
+    setAuthError(null);
 
     try {
       if (!isLoginMode) {
@@ -1121,7 +1139,7 @@ function App() {
       });
     } catch (err) {
       console.error("Auth error:", err);
-      setCheckoutMessage("Authentication failed");
+      setAuthError(err instanceof Error ? err.message : "Authentication failed");
     }
   };
 
@@ -1510,57 +1528,68 @@ function App() {
                   </a>
 
                   <div className="relative group">
-                    <button
-                      onClick={() => {
-                        trackEvent("cta_click", {
-                          button_name: "early_access_nav",
-                          location: "navigation",
-                        });
-                      }}
-                      className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
-                    >
-                      Early Access
-                    </button>
-
-                    <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                      <div className="p-4">
-                        <h3 className="font-bold text-gray-900 dark:text-white mb-1">
-                          Join the Waitlist
-                        </h3>
-                        <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">
-                          Get exclusive updates and priority access.
-                        </p>
-                        <form
-                          action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
-                          method="POST"
-                          className="space-y-3"
+                    {isLoggedIn ? (
+                      <button
+                        onClick={() => navigateTo("dashboard")}
+                        className="bg-cyan-600 dark:bg-cyan-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
+                      >
+                        Dashboard
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => {
+                            trackEvent("cta_click", {
+                              button_name: "early_access_nav",
+                              location: "navigation",
+                            });
+                          }}
+                          className="bg-cyan-600 dark:bg-cyan-600 text-yellow-300 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-cyan-700 transition-all"
                         >
-                          <input
-                            type="text"
-                            name="FIRSTNAME"
-                            placeholder="Your Name"
-                            required
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
-                          />
-                          <input
-                            type="email"
-                            name="EMAIL"
-                            placeholder="Your Email"
-                            required
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
-                          />
-                          <button
-                            type="submit"
-                            className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20"
-                          >
-                            Join Waitlist
-                          </button>
-                          <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">
-                            500+ members • No spam
+                          Early Access
+                        </button>
+
+                        <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                          <div className="p-4">
+                            <h3 className="font-bold text-gray-900 dark:text-white mb-1">
+                              Join the Waitlist
+                            </h3>
+                            <p className="text-xs text-gray-600 dark:text-gray-300 mb-4">
+                              Get exclusive updates and priority access.
+                            </p>
+                            <form
+                              action="https://a072605e.sibforms.com/serve/MUIFAI1nyV2qSAKSJGAspKvR0KiSgiYLdxeXxiqY6AgJQUt3pOresHoQgavDvKQ8Y7jrxfGZngDjEgEjPaU7EwbuEqhSFITodewdb1SPUwLDO67w-WzCb0UYX8qSD9pk8j97gy1kM9XbpHjsa7asCp6_kuv-YyWhFTNfMSr138l9fl17lxbpbAgVfg3eKQICoYGmIumYYmbAi-A0Eg=="
+                              method="POST"
+                              className="space-y-3"
+                            >
+                              <input
+                                type="text"
+                                name="FIRSTNAME"
+                                placeholder="Your Name"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
+                              />
+                              <input
+                                type="email"
+                                name="EMAIL"
+                                placeholder="Your Email"
+                                required
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-sm"
+                              />
+                              <button
+                                type="submit"
+                                className="w-full bg-cyan-600 text-yellow-300 py-2 rounded-lg font-bold hover:bg-cyan-700 transition-all text-sm shadow-lg shadow-cyan-600/20"
+                              >
+                                Join Waitlist
+                              </button>
+                              <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center font-medium">
+                                500+ members • No spam
+                              </div>
+                            </form>
                           </div>
-                        </form>
-                      </div>
-                    </div>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   {isLoggedIn && userInfo ? (
@@ -1579,13 +1608,54 @@ function App() {
                           {userInfo.name}
                         </span>
                       </button>
+
+                      {mobileAccountOpen && (
+                        <div className="absolute right-0 mt-2 w-56 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl py-2.5 z-[135]">
+                          <div className="px-4 pb-2 border-b border-gray-100 dark:border-slate-800">
+                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">
+                              {userInfo.name}
+                            </p>
+                            <div className="mt-1 flex items-center justify-between">
+                              <span className="inline-flex items-center rounded-full bg-cyan-600/10 text-cyan-700 dark:text-cyan-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                                {userInfo.plan || "free"}
+                              </span>
+                              <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                                {PLAN_PRICE[userInfo.plan || "free"]}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="px-4 pt-3 flex flex-col gap-2">
+                            <a
+                              href="#pricing"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setMobileAccountOpen(false);
+                                openPricingSection();
+                              }}
+                              className="text-sm text-cyan-600 dark:text-cyan-400 font-bold hover:text-cyan-700"
+                            >
+                              Upgrade Plan
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                saveSession(null);
+                                setMobileAccountOpen(false);
+                              }}
+                              className="text-left text-sm text-red-500 font-bold"
+                            >
+                              Logout
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <button
                       onClick={() => setShowLoginModal(true)}
                       className="text-[13px] font-bold text-cyan-600 dark:text-cyan-400 px-2"
                     >
-                      Join
+                      Login
                     </button>
                   )}
                 </div>
@@ -1911,17 +1981,29 @@ function App() {
                       Try CYAN OS
                     </a>
 
-                    <button
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        trackEvent("cta_click", {
-                          button_name: "early_access_mobile",
-                        });
-                      }}
-                      className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800"
-                    >
-                      Email Early Access
-                    </button>
+                    {isLoggedIn ? (
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          navigateTo("dashboard");
+                        }}
+                        className="w-full bg-cyan-600 text-white py-4 rounded-xl font-bold text-center shadow-md border border-cyan-500 mt-2"
+                      >
+                        Dashboard
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          trackEvent("cta_click", {
+                            button_name: "early_access_mobile",
+                          });
+                        }}
+                        className="w-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 py-4 rounded-xl font-bold text-center border border-cyan-200 dark:border-cyan-800 mt-2"
+                      >
+                        Email Early Access
+                      </button>
+                    )}
 
                     {isLoggedIn && userInfo ? (
                       <div className="flex flex-col gap-4">
@@ -1958,7 +2040,7 @@ function App() {
                         }}
                         className="w-full bg-cyan-600 text-yellow-300 py-4 rounded-xl font-bold text-xl shadow-xl shadow-cyan-600/20"
                       >
-                        Join / Login
+                        Login
                       </button>
                     )}
                   </div>
@@ -2015,6 +2097,26 @@ function App() {
               openPricingSection={openPricingSection}
               setShowApiSection={setShowApiSection}
               copyToClipboard={copyToClipboard}
+            />
+          ) : view === "dashboard" ? (
+            <DashboardView
+              userInfo={userInfo}
+              isLoggedIn={isLoggedIn}
+              goToMainView={goToMainView}
+              startPlanCheckout={startPlanCheckout}
+              checkoutBusy={checkoutBusy}
+              setShowLoginModal={setShowLoginModal}
+              setView={setView}
+              openPricingSection={openPricingSection}
+              setShowApiSection={setShowApiSection}
+              copyToClipboard={copyToClipboard}
+              showTeamContactForm={showTeamContactForm}
+              teamFormSubmitted={teamFormSubmitted}
+              setRef={setRef}
+              trackEvent={trackEvent}
+              setShowTeamContactForm={setShowTeamContactForm}
+              setTeamFormSubmitted={setTeamFormSubmitted}
+              handleTeamContactSubmit={handleTeamContactSubmit}
             />
           ) : (
             <div
@@ -2238,7 +2340,7 @@ function App() {
               />
 
               {/* Login/Register Modal */}
-              {showLoginModal && (
+              {showLoginModal && createPortal(
                 <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 overflow-y-auto">
                   <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[88vh] overflow-y-auto">
                     {/* Close Button */}
@@ -2384,6 +2486,12 @@ function App() {
                           value={isLoginMode ? "login" : "register"}
                         />
 
+                        {authError && (
+                          <div className="text-red-500 text-sm font-semibold text-center mb-2 capitalize">
+                            {authError}
+                          </div>
+                        )}
+
                         <button
                           type="submit"
                           className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-colors"
@@ -2422,7 +2530,8 @@ function App() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>,
+                document.body
               )}
 
               {showCookieBanner && (
