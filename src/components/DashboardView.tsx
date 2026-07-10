@@ -202,9 +202,26 @@ export const DashboardView = memo(function DashboardView({
                     </div>
                     
                     {loadingQuota ? (
-                         <div className="flex justify-center items-center py-8">
-                            <Loader2 className="w-8 h-8 text-cyan-500 animate-spin" />
-                         </div>
+                        <div className="space-y-6 relative z-10 animate-pulse">
+                            <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                                <div className="flex justify-between text-sm mb-2">
+                                    <div className="h-3 w-32 bg-slate-700/50 rounded-full"></div>
+                                    <div className="h-3 w-24 bg-slate-700/50 rounded-full"></div>
+                                </div>
+                                <div className="h-2 w-full bg-slate-800/50 rounded-full mt-4 border border-dashed border-white/5"></div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                                    <div className="h-2.5 w-24 bg-slate-700/50 rounded-full mb-3"></div>
+                                    <div className="h-6 w-20 bg-slate-700/50 rounded-lg"></div>
+                                </div>
+                                <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
+                                    <div className="h-2.5 w-20 bg-slate-700/50 rounded-full mb-3"></div>
+                                    <div className="h-6 w-16 bg-slate-700/50 rounded-lg"></div>
+                                </div>
+                            </div>
+                        </div>
                     ) : quota ? (
                         <div className="space-y-6 relative z-10">
                             <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
