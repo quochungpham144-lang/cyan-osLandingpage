@@ -139,6 +139,7 @@ export default function ApiDocs() {
         scrolled={true}
         alwaysSolid={true}
         fixedLayout={true}
+        fullWidth={true}
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
         goToMainView={() => { window.location.href = '/'; }}

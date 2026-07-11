@@ -38,6 +38,7 @@ export interface HeaderProps {
   trackEvent?: (eventName: string, properties?: Record<string, unknown>) => void;
   alwaysSolid?: boolean;
   fixedLayout?: boolean;
+  fullWidth?: boolean;
 }
 
 const PLAN_PRICE: Record<string, string> = {
@@ -65,6 +66,7 @@ export function Header({
   trackEvent,
   alwaysSolid = false,
   fixedLayout = false,
+  fullWidth = false,
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
@@ -155,7 +157,7 @@ export function Header({
           : "bg-white py-4 sm:py-2.5 border-b-2 border-gray-200/60 dark:border-slate-700/50"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+      <div className={`${fullWidth ? "w-full px-4 sm:px-6 lg:px-8" : "max-w-7xl mx-auto px-4 sm:px-6"} flex items-center justify-between`}>
         <div
           className="flex items-center gap-2 sm:gap-3 cursor-pointer"
           onClick={handleLogoClick}
@@ -419,7 +421,7 @@ export function Header({
             <div className="flex items-center gap-2">
               <button
                 onClick={(e) => handleViewNav(e, "dashboard")}
-                className="bg-cyan-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-cyan-700 shadow-md shadow-cyan-600/20 transition-all"
+                className="bg-cyan-600 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-cyan-700 shadow-md shadow-cyan-600/20 transition-all"
               >
                 Dashboard
               </button>

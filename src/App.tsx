@@ -60,7 +60,7 @@ const DownloadView = lazy(() =>
   import("./components/DownloadView").then((m) => ({ default: m.DownloadView })),
 );
 const DashboardView = lazy(() =>
-  import("./components/DashboardView").then((m) => ({ default: m.DashboardView })),
+  import("./pages/Dashboard").then((m) => ({ default: m.DashboardView })),
 );
 import { ArrowUp } from "lucide-react";
 import { Header } from "./components/Header";
