@@ -32,6 +32,25 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
           Text-to-Speech API with voice cloning and real-time streaming
         </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <a
+            href="https://rapidapi.com/cyan-os-cyan-os-default/api/cyan-os-lite"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-cyan-100 text-sm hover:bg-slate-800 dark:bg-slate-900 dark:text-cyan-105 dark:hover:bg-cyan-900 border border-slate-700/80 shadow-md transition-all duration-300 font-medium"
+          >
+            <img src="/tap-search-icon.svg" alt="Tap to view API" className="w-4 h-4" />
+            <span>View API on RapidAPI</span>
+          </a>
+          <a
+            href="/api-docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold shadow-md shadow-cyan-600/10 transition-all duration-300"
+          >
+            <span>View Full Docs</span>
+          </a>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -64,10 +83,10 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
           <div className="bg-gray-900 dark:bg-gray-950 rounded-2xl p-6 font-mono text-sm">
             <div className="space-y-3">
               {[
-                { method: 'POST', path: '/api/tts/speak', desc: '- Basic TTS' },
-                { method: 'POST', path: '/api/tts/clone-and-speak', desc: '- Clone voice + speak' },
-                { method: 'POST', path: '/api/tts/clone-and-stream', desc: '- Clone voice + stream' },
-                { method: 'POST', path: '/api/tts/speak-chunked', desc: '- Fast chunked TTS' },
+                { method: 'POST', path: '/api/v1/tts/speak', desc: '- Basic TTS' },
+                { method: 'POST', path: '/api/v1/tts/clone-and-speak', desc: '- Clone voice + speak' },
+                { method: 'POST', path: '/api/v1/tts/clone-and-stream', desc: '- Clone voice + stream' },
+                { method: 'POST', path: '/api/v1/tts/speak-chunked', desc: '- Fast chunked TTS' },
               ].map(({ method, path, desc }) => (
                 <div key={path} className="flex items-center gap-2">
                   <span className="text-pink-400">{method}</span>

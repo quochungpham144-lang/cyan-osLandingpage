@@ -160,10 +160,11 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row flex-wrap gap-4 justify-center items-center px-4 max-w-4xl mx-auto">
             <a
-              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-Setup.exe"
-              download
-              onClick={() => {
-                trackEvent('cta_click', { button_name: 'download_cyan_os', location: 'hero_section' });
+              href="/download"
+              onClick={(e) => {
+                e.preventDefault();
+                trackEvent('cta_click', { button_name: 'download_view', location: 'hero_section', destination: 'download_view' });
+                setView('download');
               }}
               className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg hover:shadow-cyan-500/25 text-center"
             >
@@ -195,15 +196,12 @@ export const HeroSection = memo(({ setView, openPricingSection, trackEvent, setR
             </a>
 
             <a
-              href="/about"
-              onClick={(e) => {
-                e.preventDefault();
-                trackEvent('cta_click', { button_name: 'learn_more', location: 'hero_section', destination: 'about_view' });
-                setView('about');
-              }}
-              className="w-full sm:w-auto bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:-translate-y-1 backdrop-blur-sm shadow-sm text-center"
+              href="/api-docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white px-6 py-3 rounded-full font-semibold text-sm sm:text-base border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all hover:-translate-y-1 backdrop-blur-sm shadow-sm text-center font-semibold"
             >
-              Learn More
+              API Docs
             </a>
           </div>
 

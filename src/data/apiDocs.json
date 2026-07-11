@@ -1,0 +1,1480 @@
+{
+  "meta": {
+    "title": "Cyan API Reference",
+    "version": "v1",
+    "baseUrl": "https://api.cyan-os.cc/api/v1",
+    "protocol": "HTTPS only",
+    "description": "Cyan provides a set of REST APIs for Text-to-Speech, Speech-to-Text, and AI-powered meeting summarization. All APIs are accessible using a direct API key."
+  },
+  "sections": [
+    {
+      "id": "authentication",
+      "label": "Authentication",
+      "icon": "Key",
+      "description": "All Cyan API requests require an API key sent in the Authorization header using the Bearer scheme.",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "API keys are prefixed with cyan_live_ and are generated from your <a href=\"/?view=dashboard\" class=\"text-cyan-600 dark:text-cyan-400 font-semibold hover:underline\">dashboard</a>. Each key is tied to your account plan and quota."
+        },
+        {
+          "type": "callout",
+          "variant": "warning",
+          "text": "Your API key is shown only once at the time of creation. Store it securely in your environment variables. Cyan does not store the raw key and cannot recover it."
+        },
+        {
+          "type": "code",
+          "language": "HTTP",
+          "code": "Authorization: Bearer cyan_live_a3f9c28e1d047b6f..."
+        },
+        {
+          "type": "heading",
+          "text": "How to get an API key"
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Log in to the <a href=\"/?view=dashboard\" class=\"text-cyan-600 dark:text-cyan-400 font-semibold hover:underline\">Cyan dashboard</a>",
+            "Navigate to Settings -> API Keys",
+            "Click Generate New Key, provide a name and optional expiry",
+            "Copy the key - it will not be shown again"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quickstart",
+      "label": "Quickstart",
+      "icon": "Play",
+      "description": "The fastest way to test the API. This example converts text to audio in a single request.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Step 1 - Generate your API key"
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "code": "curl -X POST https://api.cyan-os.cc/api/v1/user/api-keys \\\n  -H \"Authorization: Bearer <your-jwt-token>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\": \"My First Key\"}'"
+        },
+        {
+          "type": "code",
+          "language": "json",
+          "label": "Response",
+          "code": "{\n  \"id\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n  \"name\": \"My First Key\",\n  \"key\": \"cyan_live_a3f9c28e1d047b6fabcd1234ef567890abcdef1234567890\",\n  \"key_prefix\": \"cyan_live\",\n  \"expires_at\": null,\n  \"created_at\": \"2026-07-11T14:00:00Z\"\n}"
+        },
+        {
+          "type": "heading",
+          "text": "Step 2 - Synthesize speech"
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "code": "curl -X POST https://api.cyan-os.cc/api/v1/tts/speak \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"text\": \"Welcome to Cyan. Your AI voice layer.\", \"provider\": \"google\", \"languageCode\": \"en-US\"}'"
+        },
+        {
+          "type": "code",
+          "language": "json",
+          "label": "Response",
+          "code": "{\n  \"audio\": \"//NExAANqAJsAUkQAFYMu8hV...\",\n  \"contentType\": \"audio/mpeg\"\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "Decode the audio field from base64 and save as .mp3 - that is it."
+        }
+      ]
+    },
+    {
+      "id": "core-concepts",
+      "label": "Core Concepts",
+      "icon": "Server",
+      "description": "Understanding plans, quotas, key types, and request tracing.",
+      "content": [
+        {
+          "type": "heading",
+          "text": "Plans and Quotas"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every API key inherits its owner account plan. Quotas are counted in characters for TTS and seconds for STT. When a quota is exhausted, requests return 429 Too Many Requests with code character_limit_exceeded."
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Plan",
+            "Monthly TTS Characters",
+            "Monthly STT Minutes"
+          ],
+          "rows": [
+            [
+              "basic",
+              "500,000",
+              "60"
+            ],
+            [
+              "standard",
+              "2,000,000",
+              "300"
+            ],
+            [
+              "pro",
+              "10,000,000",
+              "1,500"
+            ],
+            [
+              "team",
+              "50,000,000",
+              "10,000"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "API Key vs. JWT"
+        },
+        {
+          "type": "table",
+          "headers": [
+            "",
+            "JWT",
+            "API Key"
+          ],
+          "rows": [
+            [
+              "Use case",
+              "Dashboard / frontend sessions",
+              "Direct API integrations"
+            ],
+            [
+              "Format",
+              "eyJ...",
+              "cyan_live_..."
+            ],
+            [
+              "Expiry",
+              "24 hours",
+              "Configurable (or none)"
+            ],
+            [
+              "Revocable",
+              "No",
+              "Yes, any time"
+            ],
+            [
+              "Quota",
+              "Account quota",
+              "Same account quota"
+            ]
+          ]
+        },
+        {
+          "type": "heading",
+          "text": "Request ID"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every request receives a X-Request-ID header in the response. If you provide your own X-Request-ID in the request, Cyan will echo it back. Use this for tracing and debugging."
+        },
+        {
+          "type": "code",
+          "language": "http",
+          "code": "X-Request-ID: my-app-request-abc123"
+        }
+      ]
+    },
+    {
+      "id": "key-management",
+      "label": "Key Management",
+      "icon": "Key",
+      "description": "These endpoints require a JWT (first-party auth). API keys themselves cannot be used to create other API keys.",
+      "endpoints": [
+        {
+          "id": "key-generate",
+          "method": "POST",
+          "path": "/user/api-keys",
+          "label": "Generate API Key",
+          "description": "Creates a new API key for your account. The plaintext key is returned once only.",
+          "auth": "JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <jwt>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "requestBody": {
+            "label": "Request Body Schema",
+            "fields": [
+              {
+                "field": "name",
+                "type": "string",
+                "required": true,
+                "description": "Human-readable label (max 100 chars)"
+              },
+              {
+                "field": "expires_at",
+                "type": "string",
+                "required": false,
+                "description": "Expiry as RFC3339 timestamp. Omit for no expiry."
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/user/api-keys \\\n  -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\": \"Production Backend\", \"expires_at\": \"2027-01-01T00:00:00Z\"}'"
+          },
+          "responses": [
+            {
+              "status": "201 Created",
+              "code": "{\n  \"id\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\",\n  \"name\": \"Production Backend\",\n  \"key\": \"cyan_live_a3f9c28e1d047b6fabcd1234ef567890\",\n  \"key_prefix\": \"cyan_live\",\n  \"expires_at\": \"2027-01-01T00:00:00Z\",\n  \"created_at\": \"2026-07-11T14:00:00Z\"\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "id",
+              "type": "string (UUID)",
+              "description": "Key identifier - use this to revoke"
+            },
+            {
+              "field": "name",
+              "type": "string",
+              "description": "Label you provided"
+            },
+            {
+              "field": "key",
+              "type": "string",
+              "description": "The full API key. Shown once only."
+            },
+            {
+              "field": "key_prefix",
+              "type": "string",
+              "description": "Safe prefix for display in UI"
+            },
+            {
+              "field": "expires_at",
+              "type": "string | null",
+              "description": "Expiry timestamp or null"
+            },
+            {
+              "field": "created_at",
+              "type": "string",
+              "description": "ISO8601 creation timestamp"
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "key-list",
+          "method": "GET",
+          "path": "/user/api-keys",
+          "label": "List API Keys",
+          "description": "Returns all keys for your account. Key hashes are never returned.",
+          "auth": "JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <jwt>"
+            }
+          ],
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl https://api.cyan-os.cc/api/v1/user/api-keys \\\n  -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\""
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"count\": 2,\n  \"keys\": [\n    { \"id\": \"f47ac10b-58cc-4372-a567-0e02b2c3d479\", \"user_id\": \"9b2e6a1c-33d4-4f7a-b812-1e5a9c2d3f0e\", \"name\": \"Production Backend\", \"key_prefix\": \"cyan_live\", \"is_active\": true, \"expires_at\": \"2027-01-01T00:00:00Z\", \"created_at\": \"2026-07-11T14:00:00Z\", \"last_used_at\": \"2026-07-11T18:45:00Z\" },\n    { \"id\": \"b8a2c3d4-e5f6-7890-abcd-ef1234567890\", \"user_id\": \"9b2e6a1c-33d4-4f7a-b812-1e5a9c2d3f0e\", \"name\": \"Dev Testing\", \"key_prefix\": \"cyan_live\", \"is_active\": true, \"expires_at\": null, \"created_at\": \"2026-06-01T09:00:00Z\", \"last_used_at\": null }\n  ]\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "id",
+              "type": "string",
+              "description": "Key ID"
+            },
+            {
+              "field": "user_id",
+              "type": "string",
+              "description": "Owning user ID"
+            },
+            {
+              "field": "name",
+              "type": "string",
+              "description": "Label"
+            },
+            {
+              "field": "key_prefix",
+              "type": "string",
+              "description": "Display prefix (not usable as a key)"
+            },
+            {
+              "field": "is_active",
+              "type": "boolean",
+              "description": "Whether key is valid"
+            },
+            {
+              "field": "expires_at",
+              "type": "string | null",
+              "description": "Expiry or null"
+            },
+            {
+              "field": "created_at",
+              "type": "string",
+              "description": "Creation time"
+            },
+            {
+              "field": "last_used_at",
+              "type": "string | null",
+              "description": "Last usage time or null if never used"
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "key-revoke",
+          "method": "DELETE",
+          "path": "/user/api-keys/:id",
+          "label": "Revoke API Key",
+          "description": "Permanently deactivates a key. Cannot be undone.",
+          "auth": "JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <jwt>"
+            }
+          ],
+          "pathParams": [
+            {
+              "param": "id",
+              "type": "string (UUID)",
+              "description": "ID of the key to revoke"
+            }
+          ],
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X DELETE \\\n  https://api.cyan-os.cc/api/v1/user/api-keys/f47ac10b-58cc-4372-a567-0e02b2c3d479 \\\n  -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\""
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"status\": true,\n  \"message\": \"key revoked\",\n  \"data\": null\n}"
+            }
+          ],
+          "errors": [
+            {
+              "status": "401",
+              "code": "unauthorized",
+              "description": "JWT missing or expired"
+            },
+            {
+              "status": "404",
+              "code": "not_found",
+              "description": "Key ID not found or belongs to another account"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tts",
+      "label": "Text-to-Speech (TTS)",
+      "icon": "FileAudio",
+      "description": "Convert text to high-quality speech audio. Supports multiple providers, voice cloning, streaming, and chunked delivery. All TTS endpoints accept both a JWT and a direct API key.",
+      "endpoints": [
+        {
+          "id": "tts-speak",
+          "method": "POST",
+          "path": "/tts/speak",
+          "label": "Speak - Base64 Response",
+          "description": "The standard TTS endpoint. Returns the full audio as a base64-encoded string in a JSON response. Best for short texts and situations where you need the full audio before playback.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Request-ID",
+              "value": "your-trace-id (optional)"
+            }
+          ],
+          "requestBody": {
+            "label": "Request Body Schema",
+            "fields": [
+              {
+                "field": "text",
+                "aliases": "-",
+                "type": "string",
+                "required": true,
+                "description": "Text to synthesize"
+              },
+              {
+                "field": "provider",
+                "aliases": "ttsEngine, tts_engine",
+                "type": "string",
+                "required": false,
+                "description": "google (default), elevenlabs, azure"
+              },
+              {
+                "field": "voiceId",
+                "aliases": "voice_id",
+                "type": "string",
+                "required": false,
+                "description": "Provider-specific voice ID"
+              },
+              {
+                "field": "languageCode",
+                "aliases": "language_code, language",
+                "type": "string",
+                "required": false,
+                "description": "BCP-47 code e.g. en-US. Default: en-US"
+              },
+              {
+                "field": "gender",
+                "aliases": "-",
+                "type": "string",
+                "required": false,
+                "description": "MALE, FEMALE, NEUTRAL"
+              },
+              {
+                "field": "sampleRate",
+                "aliases": "sample_rate_hertz",
+                "type": "integer",
+                "required": false,
+                "description": "Output sample rate Hz (e.g. 24000)"
+              },
+              {
+                "field": "deviceId",
+                "aliases": "device_id",
+                "type": "string",
+                "required": false,
+                "description": "Device ID for voice clone lookup"
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/tts/speak \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"text\": \"The quarterly earnings report has been finalized.\",\n    \"provider\": \"elevenlabs\",\n    \"voiceId\": \"21m00Tcm4TlvDq8ikWAM\",\n    \"languageCode\": \"en-US\",\n    \"sampleRate\": 44100\n  }'"
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"audio\": \"//NExAANqAJsAUkQAFYMu8hVW2AC1QAABA...(truncated base64)...\",\n  \"contentType\": \"audio/mpeg\"\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "audio",
+              "type": "string (base64)",
+              "description": "Full audio encoded as base64"
+            },
+            {
+              "field": "contentType",
+              "type": "string",
+              "description": "MIME type - audio/mpeg, audio/wav"
+            }
+          ],
+          "errors": [
+            {
+              "status": "400",
+              "code": "text_too_long",
+              "description": "Text exceeds provider maximum length"
+            },
+            {
+              "status": "401",
+              "code": "unauthorized",
+              "description": "Invalid or missing API key"
+            },
+            {
+              "status": "402",
+              "code": "elevenlabs_credits_exhausted",
+              "description": "ElevenLabs account credit depleted"
+            },
+            {
+              "status": "429",
+              "code": "character_limit_exceeded",
+              "description": "Monthly character quota reached"
+            },
+            {
+              "status": "500",
+              "code": "internal_server",
+              "description": "Provider error or server fault"
+            }
+          ]
+        },
+        {
+          "id": "tts-speak-stream",
+          "method": "POST",
+          "path": "/tts/speak-stream",
+          "label": "Speak - Streaming",
+          "description": "Streams audio bytes as they are generated. Time-to-first-byte is typically under 400ms. Best for real-time playback in applications.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Request-ID",
+              "value": "your-trace-id (optional)"
+            }
+          ],
+          "requestBody": {
+            "label": "Request Body Schema",
+            "note": "Same schema as /tts/speak",
+            "fields": [
+              {
+                "field": "text",
+                "aliases": "-",
+                "type": "string",
+                "required": true,
+                "description": "Text to synthesize"
+              },
+              {
+                "field": "provider",
+                "aliases": "ttsEngine, tts_engine",
+                "type": "string",
+                "required": false,
+                "description": "google (default), elevenlabs, azure"
+              },
+              {
+                "field": "voiceId",
+                "aliases": "voice_id",
+                "type": "string",
+                "required": false,
+                "description": "Provider-specific voice ID"
+              },
+              {
+                "field": "languageCode",
+                "aliases": "language_code, language",
+                "type": "string",
+                "required": false,
+                "description": "BCP-47 code e.g. en-US. Default: en-US"
+              },
+              {
+                "field": "gender",
+                "aliases": "-",
+                "type": "string",
+                "required": false,
+                "description": "MALE, FEMALE, NEUTRAL"
+              },
+              {
+                "field": "sampleRate",
+                "aliases": "sample_rate_hertz",
+                "type": "integer",
+                "required": false,
+                "description": "Output sample rate Hz (e.g. 24000)"
+              },
+              {
+                "field": "deviceId",
+                "aliases": "device_id",
+                "type": "string",
+                "required": false,
+                "description": "Device ID for voice clone lookup"
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/tts/speak-stream \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -H \"Content-Type: application/json\" \\\n  --output output.mp3 \\\n  -d '{\"text\": \"Streaming audio in real time with sub-second latency.\", \"provider\": \"google\", \"voiceId\": \"en-US-Neural2-F\", \"languageCode\": \"en-US\"}'"
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "Content-Type: audio/mpeg\nTransfer-Encoding: chunked\nServer-Timing: ttfb;dur=312",
+              "note": "Raw audio bytes are streamed. The Server-Timing: ttfb;dur=<ms> header reports time to first audio byte in milliseconds."
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "tts-speak-chunked",
+          "method": "POST",
+          "path": "/tts/speak-chunked",
+          "label": "Speak - Chunked JSON",
+          "description": "Returns audio as an array of base64-encoded chunks. Useful for applications that want to decode and play audio progressively while tracking progress.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Request-ID",
+              "value": "your-trace-id (optional)"
+            }
+          ],
+          "requestBody": {
+            "label": "Request Body Schema",
+            "note": "Same schema as /tts/speak",
+            "fields": [
+              {
+                "field": "text",
+                "aliases": "-",
+                "type": "string",
+                "required": true,
+                "description": "Text to synthesize"
+              },
+              {
+                "field": "provider",
+                "aliases": "ttsEngine, tts_engine",
+                "type": "string",
+                "required": false,
+                "description": "google (default), elevenlabs, azure"
+              },
+              {
+                "field": "voiceId",
+                "aliases": "voice_id",
+                "type": "string",
+                "required": false,
+                "description": "Provider-specific voice ID"
+              },
+              {
+                "field": "languageCode",
+                "aliases": "language_code, language",
+                "type": "string",
+                "required": false,
+                "description": "BCP-47 code e.g. en-US. Default: en-US"
+              },
+              {
+                "field": "gender",
+                "aliases": "-",
+                "type": "string",
+                "required": false,
+                "description": "MALE, FEMALE, NEUTRAL"
+              },
+              {
+                "field": "sampleRate",
+                "aliases": "sample_rate_hertz",
+                "type": "integer",
+                "required": false,
+                "description": "Output sample rate Hz (e.g. 24000)"
+              },
+              {
+                "field": "deviceId",
+                "aliases": "device_id",
+                "type": "string",
+                "required": false,
+                "description": "Device ID for voice clone lookup"
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/tts/speak-chunked \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"text\": \"This response comes back as a JSON array of audio chunks.\", \"provider\": \"google\", \"languageCode\": \"en-US\"}'"
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"audioChunks\": [\n    \"//NExAANqAJsAUkQAFYMu8hVW2AC1...\",\n    \"//NExBcPWNZ4AUoYAFN0Qw52ICU...\",\n    \"//NExCobCRZ4AUsYAECRQBcVAXh...\"\n  ],\n  \"contentType\": \"audio/mpeg\"\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "audioChunks",
+              "type": "array of strings",
+              "description": "Ordered base64 audio segments - concatenate to reconstruct full audio"
+            },
+            {
+              "field": "contentType",
+              "type": "string",
+              "description": "MIME type of audio"
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "tts-clone-and-speak",
+          "method": "POST",
+          "path": "/tts/clone-and-speak",
+          "label": "Clone Voice and Speak",
+          "description": "Clone a voice from an audio sample, then synthesize text with that cloned voice. Returns the full audio buffer.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "multipart/form-data"
+            }
+          ],
+          "requestBody": {
+            "label": "Form Fields",
+            "fields": [
+              {
+                "field": "text",
+                "type": "string",
+                "required": true,
+                "description": "Text to synthesize with the cloned voice"
+              },
+              {
+                "field": "device_id",
+                "type": "string",
+                "required": true,
+                "description": "Device ID to bind the cloned voice to"
+              },
+              {
+                "field": "sample",
+                "type": "file",
+                "required": true,
+                "description": "Audio sample for voice cloning (WAV or MP3, 10s-3min recommended)"
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/tts/clone-and-speak \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -F \"text=Hello, this is my cloned voice speaking.\" \\\n  -F \"device_id=dev-9b2e6a1c-33d4\" \\\n  -F \"sample=@voice_sample.wav\""
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "Content-Type: audio/mpeg\nContent-Length: 84320",
+              "note": "Raw audio bytes returned directly. Save to a .mp3 file."
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "tts-clone-and-stream",
+          "method": "POST",
+          "path": "/tts/clone-and-stream",
+          "label": "Clone Voice and Stream",
+          "description": "Same as Clone and Speak but streams the synthesized audio response.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "multipart/form-data"
+            }
+          ],
+          "requestBody": {
+            "label": "Form Fields",
+            "note": "Same form fields as /tts/clone-and-speak",
+            "fields": [
+              {
+                "field": "text",
+                "type": "string",
+                "required": true,
+                "description": "Text to synthesize with the cloned voice"
+              },
+              {
+                "field": "device_id",
+                "type": "string",
+                "required": true,
+                "description": "Device ID to bind the cloned voice to"
+              },
+              {
+                "field": "sample",
+                "type": "file",
+                "required": true,
+                "description": "Audio sample for voice cloning (WAV or MP3, 10s-3min recommended)"
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/tts/clone-and-stream \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -F \"text=Streaming my cloned voice now.\" \\\n  -F \"device_id=dev-9b2e6a1c-33d4\" \\\n  -F \"sample=@voice_sample.wav\""
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "Content-Type: audio/mpeg\nTransfer-Encoding: chunked"
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "tts-ocean",
+          "method": null,
+          "path": null,
+          "label": "Ocean TTS Endpoints",
+          "description": "The Ocean variants mirror the standard TTS endpoints but route through Cyan managed Ocean service context. Use these when integrating with Ocean-aware workflows.",
+          "auth": "API Key or JWT",
+          "oceanTable": {
+            "headers": [
+              "Endpoint",
+              "Equivalent"
+            ],
+            "rows": [
+              [
+                "POST /ocean/tts/speak",
+                "/tts/speak"
+              ],
+              [
+                "POST /ocean/tts/speak-chunked",
+                "/tts/speak-chunked"
+              ],
+              [
+                "POST /ocean/tts/clone-and-speak",
+                "/tts/clone-and-speak"
+              ],
+              [
+                "POST /ocean/tts/clone-and-stream",
+                "/tts/clone-and-stream"
+              ]
+            ],
+            "note": "All Ocean endpoints use the same request/response schemas as their standard counterparts."
+          },
+          "errors": []
+        },
+        {
+          "id": "tts-voices",
+          "method": null,
+          "path": null,
+          "label": "Voices Reference",
+          "description": "Common voice IDs for each provider.",
+          "auth": null,
+          "voiceTables": [
+            {
+              "provider": "Google TTS",
+              "headers": [
+                "Voice ID",
+                "Language",
+                "Gender"
+              ],
+              "rows": [
+                [
+                  "en-US-Neural2-A",
+                  "English (US)",
+                  "Male"
+                ],
+                [
+                  "en-US-Neural2-F",
+                  "English (US)",
+                  "Female"
+                ],
+                [
+                  "hi-IN-Neural2-A",
+                  "Hindi",
+                  "Female"
+                ],
+                [
+                  "es-ES-Neural2-A",
+                  "Spanish (ES)",
+                  "Female"
+                ],
+                [
+                  "fr-FR-Neural2-A",
+                  "French",
+                  "Female"
+                ]
+              ]
+            },
+            {
+              "provider": "ElevenLabs",
+              "headers": [
+                "Voice ID",
+                "Name"
+              ],
+              "rows": [
+                [
+                  "21m00Tcm4TlvDq8ikWAM",
+                  "Rachel (default)"
+                ],
+                [
+                  "EXAVITQu4vr4xnSDxMaL",
+                  "Bella"
+                ],
+                [
+                  "ErXwobaYiN019PkySvjV",
+                  "Antoni"
+                ],
+                [
+                  "VR6AewLTigWG4xSOukaG",
+                  "Arnold"
+                ]
+              ]
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "stt",
+      "label": "Speech-to-Text (STT)",
+      "icon": "Mic",
+      "description": "Convert audio files or streams to text transcripts. Supports JSON (base64 audio) and multipart file upload modes.",
+      "endpoints": [
+        {
+          "id": "stt-recognize",
+          "method": "POST",
+          "path": "/stt/recognize",
+          "label": "Recognize",
+          "description": "Transcribes audio to text. Accepts either a JSON body with base64-encoded audio or a multipart form with a file upload.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json or multipart/form-data"
+            }
+          ],
+          "modes": [
+            {
+              "label": "Mode A - JSON with base64 audio",
+              "requestBody": {
+                "fields": [
+                  {
+                    "field": "content",
+                    "type": "string (base64)",
+                    "required": true,
+                    "description": "Base64-encoded audio bytes"
+                  },
+                  {
+                    "field": "language",
+                    "type": "string",
+                    "required": false,
+                    "description": "BCP-47 language code. Default: en-US"
+                  },
+                  {
+                    "field": "sample_rate",
+                    "type": "integer",
+                    "required": false,
+                    "description": "Sample rate in Hz. Default: 16000"
+                  }
+                ]
+              },
+              "exampleRequest": {
+                "language": "bash",
+                "code": "curl -X POST https://api.cyan-os.cc/api/v1/stt/recognize \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"content\": \"UklGRiQAAABXQVZFZm10IBAAAA...(base64 audio)...\", \"language\": \"en-US\", \"sample_rate\": 16000}'"
+              }
+            },
+            {
+              "label": "Mode B - Multipart file upload",
+              "requestBody": {
+                "fields": [
+                  {
+                    "field": "audio",
+                    "type": "file",
+                    "required": true,
+                    "description": "Audio file - WAV, MP3, FLAC, OGG"
+                  },
+                  {
+                    "field": "language",
+                    "type": "string",
+                    "required": false,
+                    "description": "BCP-47 language code. Default: en-US"
+                  },
+                  {
+                    "field": "sample_rate",
+                    "type": "string",
+                    "required": false,
+                    "description": "Sample rate in Hz. Default: 16000"
+                  }
+                ]
+              },
+              "exampleRequest": {
+                "language": "bash",
+                "code": "curl -X POST https://api.cyan-os.cc/api/v1/stt/recognize \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -F \"audio=@meeting_recording.wav\" \\\n  -F \"language=en-US\" \\\n  -F \"sample_rate=16000\""
+              }
+            }
+          ],
+          "responses": [
+            {
+              "status": "200 OK",
+              "note": "Same response for both modes",
+              "code": "{\n  \"transcript\": \"Good morning everyone. Today we will be reviewing the Q3 roadmap and discussing priorities for the next sprint.\",\n  \"language\": \"en-US\",\n  \"chars\": 109,\n  \"confidence\": 0.97,\n  \"totalMs\": 1842\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "transcript",
+              "type": "string",
+              "description": "Recognized text"
+            },
+            {
+              "field": "language",
+              "type": "string",
+              "description": "Detected or specified language code"
+            },
+            {
+              "field": "chars",
+              "type": "integer",
+              "description": "Character count of the transcript"
+            },
+            {
+              "field": "confidence",
+              "type": "float (0-1)",
+              "description": "Recognition confidence score"
+            },
+            {
+              "field": "totalMs",
+              "type": "integer",
+              "description": "Total processing time in milliseconds"
+            }
+          ],
+          "errors": [
+            {
+              "status": "400",
+              "code": "invalid_input",
+              "description": "Missing audio or invalid base64"
+            },
+            {
+              "status": "401",
+              "code": "unauthorized",
+              "description": "Invalid or missing API key"
+            },
+            {
+              "status": "500",
+              "code": "internal_server",
+              "description": "STT provider error"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "summarization",
+      "label": "Summarization",
+      "icon": "FileText",
+      "description": "Generate AI-powered summaries from session transcripts. Ideal for meeting notes, call summaries, and conversation insights. All summarization endpoints accept both a JWT and a direct API key.",
+      "endpoints": [
+        {
+          "id": "summarization-request",
+          "method": "POST",
+          "path": "/summarization/request",
+          "label": "Generate Summary",
+          "description": "Submit an array of session transcripts and receive a structured AI summary.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "requestBody": {
+            "label": "Request Body Schema",
+            "fields": [
+              {
+                "field": "sessionId",
+                "type": "string",
+                "required": true,
+                "description": "Unique identifier for this session"
+              },
+              {
+                "field": "transcripts",
+                "type": "array",
+                "required": false,
+                "description": "Array of transcript entries from the session"
+              },
+              {
+                "field": "transcripts[].source",
+                "type": "string",
+                "required": false,
+                "description": "Original utterance text"
+              },
+              {
+                "field": "transcripts[].target",
+                "type": "string",
+                "required": false,
+                "description": "Translated text (if applicable)"
+              },
+              {
+                "field": "transcripts[].isFinal",
+                "type": "boolean",
+                "required": false,
+                "description": "Whether this segment is finalized"
+              },
+              {
+                "field": "transcripts[].capturedAt",
+                "type": "integer",
+                "required": false,
+                "description": "Unix timestamp of the utterance"
+              },
+              {
+                "field": "transcripts[].sessionId",
+                "type": "string",
+                "required": false,
+                "description": "Session ID for this segment"
+              },
+              {
+                "field": "metadata",
+                "type": "object",
+                "required": false,
+                "description": "Additional context for the summarization model"
+              },
+              {
+                "field": "metadata.count",
+                "type": "integer",
+                "required": false,
+                "description": "Number of transcript turns"
+              },
+              {
+                "field": "metadata.timestamp",
+                "type": "string",
+                "required": false,
+                "description": "Session timestamp"
+              },
+              {
+                "field": "metadata.sourceLang",
+                "type": "string",
+                "required": false,
+                "description": "Source language code"
+              },
+              {
+                "field": "metadata.targetLang",
+                "type": "string",
+                "required": false,
+                "description": "Target language code"
+              }
+            ]
+          },
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl -X POST https://api.cyan-os.cc/api/v1/summarization/request \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"sessionId\": \"sess_7f3a9b2c-1d4e-5f6a-8b7c-9d0e1f2a3b4c\",\n    \"transcripts\": [\n      { \"source\": \"Let us kick off the sprint review.\", \"target\": \"Commençons la revue de sprint.\", \"isFinal\": true, \"capturedAt\": 1720699200, \"sessionId\": \"sess_7f3a9b2c\" },\n      { \"source\": \"We completed 18 out of 21 story points.\", \"target\": \"Nous avons complété 18 sur 21 points.\", \"isFinal\": true, \"capturedAt\": 1720699260, \"sessionId\": \"sess_7f3a9b2c\" },\n      { \"source\": \"The remaining tasks will carry over.\", \"target\": \"Les tâches restantes seront reportées.\", \"isFinal\": true, \"capturedAt\": 1720699320, \"sessionId\": \"sess_7f3a9b2c\" }\n    ],\n    \"metadata\": { \"count\": 3, \"timestamp\": \"2026-07-11T08:00:00Z\", \"sourceLang\": \"en\", \"targetLang\": \"fr\" }\n  }'"
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"sessionId\": \"sess_7f3a9b2c-1d4e-5f6a-8b7c-9d0e1f2a3b4c\",\n  \"summary\": \"The team conducted a sprint review. Out of 21 planned story points, 18 were completed.\",\n  \"summary_title\": \"Sprint Review - July 11\",\n  \"keyTopics\": [\"sprint review\", \"story points\", \"backlog carryover\"],\n  \"sentiment\": \"neutral\",\n  \"status\": \"completed\",\n  \"turn_count\": 3,\n  \"validation_passed\": true,\n  \"metadata\": { \"sourceLang\": \"en\", \"targetLang\": \"fr\", \"processedAt\": \"2026-07-11T08:00:45Z\" },\n  \"summary_with_sources\": {\n    \"summary\": \"The team completed 18/21 story points in the sprint.\",\n    \"key_points\": [\"18 of 21 story points completed\", \"3 tasks carried over to next sprint\"],\n    \"main_topics\": [\"sprint velocity\", \"backlog management\"],\n    \"participants\": [\"Speaker A\", \"Speaker B\"]\n  }\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "sessionId",
+              "type": "string",
+              "description": "Echoed session ID"
+            },
+            {
+              "field": "summary",
+              "type": "string",
+              "description": "Plain-text summary"
+            },
+            {
+              "field": "summary_title",
+              "type": "string",
+              "description": "AI-generated title for the session"
+            },
+            {
+              "field": "keyTopics",
+              "type": "array of strings",
+              "description": "Main topics identified"
+            },
+            {
+              "field": "sentiment",
+              "type": "string",
+              "description": "positive, neutral, or negative"
+            },
+            {
+              "field": "status",
+              "type": "string",
+              "description": "completed or failed"
+            },
+            {
+              "field": "turn_count",
+              "type": "integer",
+              "description": "Number of transcript turns processed"
+            },
+            {
+              "field": "validation_passed",
+              "type": "boolean",
+              "description": "Whether the response passed quality checks"
+            },
+            {
+              "field": "metadata",
+              "type": "object",
+              "description": "Processing metadata"
+            },
+            {
+              "field": "summary_with_sources",
+              "type": "object",
+              "description": "Detailed breakdown with key points and participants"
+            },
+            {
+              "field": "summary_with_sources.key_points",
+              "type": "array",
+              "description": "Bulleted key takeaways"
+            },
+            {
+              "field": "summary_with_sources.main_topics",
+              "type": "array",
+              "description": "Topic tags"
+            },
+            {
+              "field": "summary_with_sources.participants",
+              "type": "array",
+              "description": "Identified speakers"
+            }
+          ],
+          "errors": [
+            {
+              "status": "400",
+              "code": "invalid_input",
+              "description": "Missing sessionId or malformed body"
+            },
+            {
+              "status": "401",
+              "code": "unauthorized",
+              "description": "Invalid or missing API key"
+            },
+            {
+              "status": "500",
+              "code": "something_went_wrong",
+              "description": "AI backend failure"
+            }
+          ]
+        },
+        {
+          "id": "summarization-get",
+          "method": "GET",
+          "path": "/summarization/summary/:session_id",
+          "label": "Get Summary",
+          "description": "Retrieve a previously generated summary by session ID.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            }
+          ],
+          "pathParams": [
+            {
+              "param": "session_id",
+              "type": "string",
+              "description": "Session ID used in the summarization request"
+            }
+          ],
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl https://api.cyan-os.cc/api/v1/summarization/summary/sess_7f3a9b2c-1d4e-5f6a-8b7c-9d0e1f2a3b4c \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\""
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"id\": 42,\n  \"session_id\": \"sess_7f3a9b2c-1d4e-5f6a-8b7c-9d0e1f2a3b4c\",\n  \"user_id\": \"9b2e6a1c-33d4-4f7a-b812-1e5a9c2d3f0e\",\n  \"summary\": \"The team conducted a sprint review. Out of 21 planned story points, 18 were completed.\",\n  \"summary_title\": \"Sprint Review - July 11\",\n  \"metadata\": { \"sourceLang\": \"en\", \"targetLang\": \"fr\" },\n  \"created_at\": \"2026-07-11T08:00:45Z\",\n  \"updated_at\": \"2026-07-11T08:00:45Z\"\n}"
+            }
+          ],
+          "errors": []
+        },
+        {
+          "id": "summarization-list",
+          "method": "GET",
+          "path": "/summarization/list",
+          "label": "List Summaries",
+          "description": "Paginated list of all summaries for the authenticated account.",
+          "auth": "API Key or JWT",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer cyan_live_..."
+            }
+          ],
+          "queryParams": [
+            {
+              "param": "page",
+              "type": "integer",
+              "default": "1",
+              "description": "Page number (1-indexed)"
+            },
+            {
+              "param": "page_size",
+              "type": "integer",
+              "default": "10",
+              "description": "Results per page (max 100)"
+            }
+          ],
+          "exampleRequest": {
+            "language": "bash",
+            "code": "curl \"https://api.cyan-os.cc/api/v1/summarization/list?page=1&page_size=5\" \\\n  -H \"Authorization: Bearer cyan_live_a3f9c28e1d047b6f...\""
+          },
+          "responses": [
+            {
+              "status": "200 OK",
+              "code": "{\n  \"total\": 18,\n  \"page\": 1,\n  \"size\": 5,\n  \"data\": [\n    { \"id\": 42, \"session_id\": \"sess_7f3a9b2c\", \"user_id\": \"9b2e6a1c\", \"summary\": \"The team conducted a sprint review...\", \"summary_title\": \"Sprint Review - July 11\", \"created_at\": \"2026-07-11T08:00:45Z\", \"updated_at\": \"2026-07-11T08:00:45Z\" },\n    { \"id\": 41, \"session_id\": \"sess_2a1b3c4d\", \"user_id\": \"9b2e6a1c\", \"summary\": \"Sales call with Acme Corp discussed renewal terms...\", \"summary_title\": \"Acme Corp Renewal Call\", \"created_at\": \"2026-07-10T15:30:00Z\", \"updated_at\": \"2026-07-10T15:30:00Z\" }\n  ]\n}"
+            }
+          ],
+          "responseSchema": [
+            {
+              "field": "total",
+              "type": "integer",
+              "description": "Total number of summaries for this account"
+            },
+            {
+              "field": "page",
+              "type": "integer",
+              "description": "Current page"
+            },
+            {
+              "field": "size",
+              "type": "integer",
+              "description": "Results in this page"
+            },
+            {
+              "field": "data",
+              "type": "array",
+              "description": "Summary records"
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "id": "error-handling",
+      "label": "Error Handling",
+      "icon": "AlertTriangle",
+      "description": "All error responses follow a consistent JSON structure.",
+      "content": [
+        {
+          "type": "code",
+          "language": "json",
+          "code": "{\n  \"status\": false,\n  \"message\": \"A human-readable description of the error\",\n  \"error\": \"error_code\",\n  \"data\": null\n}"
+        },
+        {
+          "type": "table",
+          "label": "Common error codes",
+          "headers": [
+            "Code",
+            "HTTP Status",
+            "Description"
+          ],
+          "rows": [
+            [
+              "unauthorized",
+              "401",
+              "API key or JWT is missing, invalid, or expired"
+            ],
+            [
+              "invalid_input",
+              "400",
+              "Request body is malformed or missing required fields"
+            ],
+            [
+              "text_too_long",
+              "400",
+              "Text exceeds the provider character limit per request"
+            ],
+            [
+              "character_limit_exceeded",
+              "429",
+              "Monthly quota exhausted"
+            ],
+            [
+              "elevenlabs_credits_exhausted",
+              "402",
+              "ElevenLabs account has no remaining credits"
+            ],
+            [
+              "pcm_stream_unavailable",
+              "403",
+              "PCM streaming not available for this provider"
+            ],
+            [
+              "invalid_api_key",
+              "401",
+              "API key does not exist or has been revoked"
+            ],
+            [
+              "api_key_expired",
+              "401",
+              "API key has passed its expiry date"
+            ],
+            [
+              "api_key_revoked",
+              "401",
+              "API key was manually revoked"
+            ],
+            [
+              "not_found",
+              "404",
+              "Requested resource does not exist"
+            ],
+            [
+              "internal_server",
+              "500",
+              "Unexpected server or provider error"
+            ],
+            [
+              "something_went_wrong",
+              "500",
+              "AI backend processing failure"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rate-limits",
+      "label": "Rate Limits",
+      "icon": "Activity",
+      "description": "Rate limits are applied per user account based on plan tier, using a sliding window.",
+      "content": [
+        {
+          "type": "table",
+          "headers": [
+            "Plan",
+            "Requests / minute"
+          ],
+          "rows": [
+            [
+              "basic",
+              "30"
+            ],
+            [
+              "standard",
+              "60"
+            ],
+            [
+              "pro",
+              "120"
+            ],
+            [
+              "team",
+              "300"
+            ]
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "When rate limited, the API returns HTTP 429 Too Many Requests."
+        },
+        {
+          "type": "code",
+          "language": "json",
+          "code": "{\n  \"status\": false,\n  \"message\": \"rate limit exceeded\",\n  \"error\": \"rate_limit_exceeded\",\n  \"data\": null\n}"
+        },
+        {
+          "type": "heading",
+          "text": "Best practices"
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Implement exponential backoff on 429 responses",
+            "Cache GET /user/api-keys and GET /summarization/list responses where appropriate",
+            "Use streaming (/tts/speak-stream) for long texts to reduce perceived latency"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -13,7 +13,7 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
   const snippets = {
     curl: [
       { line: '01', content: <><span className="text-purple-400">curl</span> <span className="text-gray-400">--request</span> POST \</> },
-      { line: '02', content: <><span className="text-gray-400 ml-4">--url</span> <span className="text-green-300">'https://api.cyan-os.com/v1/stream'</span> \</> },
+      { line: '02', content: <><span className="text-gray-400 ml-4">--url</span> <span className="text-green-300">'https://api.cyan-os.cc/api/v1/tts/clone-and-stream'</span> \</> },
       { line: '03', content: <><span className="text-gray-400 ml-4">--header</span> <span className="text-green-300">'Authorization: Bearer YOUR_KEY'</span> \</> },
       { line: '04', content: <><span className="text-gray-400 ml-4">--header</span> <span className="text-green-300">'Content-Type: application/json'</span> \</> },
       { line: '05', content: <><span className="text-gray-400 ml-4">--data</span> <span className="text-gray-300">'{'{'}</span></> },
@@ -23,7 +23,7 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
       { line: '09', content: <><span className="text-gray-300 ml-4">{'}'}'</span></> }
     ],
     javascript: [
-      { line: '01', content: <><span className="text-purple-400">const</span> <span className="text-blue-300">response</span> <span className="text-gray-300">=</span> <span className="text-purple-400">await</span> <span className="text-yellow-200">fetch</span>(<span className="text-green-300">'https://api.cyan-os.com/v1/stream'</span>, {'{'} </> },
+      { line: '01', content: <><span className="text-purple-400">const</span> <span className="text-blue-300">response</span> <span className="text-gray-300">=</span> <span className="text-purple-400">await</span> <span className="text-yellow-200">fetch</span>(<span className="text-green-300">'https://api.cyan-os.cc/api/v1/tts/clone-and-stream'</span>, {'{'} </> },
       { line: '02', content: <><span className="text-blue-300 ml-4">method</span><span className="text-gray-300">:</span> <span className="text-green-300">'POST'</span>,</> },
       { line: '03', content: <><span className="text-blue-300 ml-4">headers</span><span className="text-gray-300">:</span> {'{'} </> },
       { line: '04', content: <><span className="text-green-300 ml-8">'Authorization'</span><span className="text-gray-300">:</span> <span className="text-green-300">'Bearer YOUR_KEY'</span>,</> },
@@ -38,7 +38,7 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
     python: [
       { line: '01', content: <><span className="text-purple-400">import</span> <span className="text-gray-300">requests</span></> },
       { line: '02', content: <><span className="text-gray-300"> </span></> },
-      { line: '03', content: <><span className="text-blue-300">url</span> <span className="text-gray-300">=</span> <span className="text-green-300">"https://api.cyan-os.com/v1/stream"</span></> },
+      { line: '03', content: <><span className="text-blue-300">url</span> <span className="text-gray-300">=</span> <span className="text-green-300">"https://api.cyan-os.cc/api/v1/tts/clone-and-stream"</span></> },
       { line: '04', content: <><span className="text-blue-300">payload</span> <span className="text-gray-300">=</span> {'{'}</> },
       { line: '05', content: <><span className="text-green-300 ml-4">"text"</span><span className="text-gray-300">:</span> <span className="text-green-300">"Accelerating global communication."</span>,</> },
       { line: '06', content: <><span className="text-green-300 ml-4">"voice_id"</span><span className="text-gray-300">:</span> <span className="text-green-300">"ultra_low_latency_01"</span></> },
@@ -66,16 +66,24 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
             Simple, powerful API that scales from prototype to production
           </p>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex flex-wrap justify-center gap-4">
             <a
-              href="https://rapidapi.com/quochungpham144/api/cyan-os-lite"
+              href="https://rapidapi.com/cyan-os-cyan-os-default/api/cyan-os-lite"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent('cta_click', { button_name: 'rapidapi_cyan_os_lite', location: 'developer_api' })}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-50 text-cyan-900 text-sm hover:bg-cyan-100 dark:bg-slate-900 dark:text-cyan-100 dark:hover:bg-cyan-800 border border-cyan-500/80 shadow-sm transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-900 text-cyan-100 text-sm hover:bg-slate-800 dark:bg-slate-900 dark:text-cyan-105 dark:hover:bg-cyan-900 border border-slate-700/80 shadow-md transition-all duration-300"
             >
               <img src="/tap-search-icon.svg" alt="Tap to view API" className="w-4 h-4" />
               <span>View API on RapidAPI</span>
+            </a>
+            <a
+              href="/api-docs"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold shadow-md shadow-cyan-600/10 transition-all duration-300"
+            >
+              <span>View Full Docs</span>
             </a>
           </div>
         </div>
@@ -105,7 +113,7 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
                 </div>
               </div>
               <div className="text-[10px] text-gray-500 font-mono hidden xs:block">
-                POST /v1/stream
+                POST /api/v1/tts/clone-and-stream
               </div>
             </div>
 
