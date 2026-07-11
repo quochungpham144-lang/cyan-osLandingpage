@@ -59,7 +59,7 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
 
           <div className="mt-12">
             <a
-              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-Setup.exe"
+              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-1.0.0%20Setup.exe"
               download
               className="inline-block w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-700 hover:to-blue-700 transition-all hover:-translate-y-1 shadow-lg shadow-cyan-500/25"
             >
@@ -71,13 +71,13 @@ export const DownloadView = memo(({ isDarkMode, goToMainView, openPricingSection
 
       {/* Footer component reuse */}
       <div className="mt-auto">
-        <Footer 
+        <Footer
           setView={(v) => {
             if (v === 'main') goToMainView();
-          }} 
-          openPricingSection={openPricingSection || (() => {})} 
-          setShowApiSection={setShowApiSection || (() => {})} 
-          copyToClipboard={copyToClipboard || (async () => false)} 
+          }}
+          openPricingSection={openPricingSection || (() => { })}
+          setShowApiSection={setShowApiSection || (() => { })}
+          copyToClipboard={copyToClipboard || (async () => false)}
         />
       </div>
     </div>
