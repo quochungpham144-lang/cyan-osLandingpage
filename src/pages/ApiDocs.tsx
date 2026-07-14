@@ -11,7 +11,19 @@ import {
 } from './ui';
 
 export default function ApiDocs() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    return stored ? stored === "dark" : false;
+  });
+  const [userInfo, setUserInfo] = useState<any>(() => {
+    const raw = localStorage.getItem("user_session");
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeId, setActiveId] = useState('authentication');
   const sections = (apiData as { sections: Section[] }).sections;
@@ -19,12 +31,52 @@ export default function ApiDocs() {
   const allNavItems = sections.map(s => ({ id: s.id, label: s.label, icon: s.icon }));
 
   useEffect(() => {
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const handleThemeEvent = (e: Event) => {
+      if (e instanceof CustomEvent && typeof e.detail === "boolean") {
+        setIsDarkMode(e.detail);
+      } else {
+        const stored = localStorage.getItem("theme");
+        if (stored) setIsDarkMode(stored === "dark");
+      }
+    };
+    const handleAuthEvent = () => {
+      const raw = localStorage.getItem("user_session");
+      if (!raw) setUserInfo(null);
+      else {
+        try { setUserInfo(JSON.parse(raw)); } catch { setUserInfo(null); }
+      }
+    };
+    window.addEventListener("theme-change", handleThemeEvent);
+    window.addEventListener("auth-change", handleAuthEvent);
+    window.addEventListener("storage", handleThemeEvent);
+    window.addEventListener("storage", handleAuthEvent);
+    return () => {
+      window.removeEventListener("theme-change", handleThemeEvent);
+      window.removeEventListener("auth-change", handleAuthEvent);
+      window.removeEventListener("storage", handleThemeEvent);
+      window.removeEventListener("storage", handleAuthEvent);
+    };
+  }, []);
+
+  const saveSession = useCallback((session: any) => {
+    if (session) {
+      localStorage.setItem("user_session", JSON.stringify(session));
+      setUserInfo(session);
+    } else {
+      localStorage.removeItem("user_session");
+      setUserInfo(null);
+    }
+    window.dispatchEvent(new Event("auth-change"));
+  }, []);
 
   useEffect(() => {
     const mainEl = document.getElementById("api-main-content");
@@ -142,6 +194,9 @@ export default function ApiDocs() {
         fullWidth={true}
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
+        isLoggedIn={Boolean(userInfo)}
+        userInfo={userInfo}
+        saveSession={saveSession}
         goToMainView={() => { window.location.href = '/'; }}
         navigateTo={(view) => {
           if (view === 'main') window.location.href = '/';

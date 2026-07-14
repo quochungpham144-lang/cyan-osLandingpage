@@ -16,8 +16,8 @@ export const ProblemSection = memo(({ isVisible, setRef }: Props) => (
   >
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">The Challenges We Solve</h2>
-        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">The Challenges We Solve</h2>
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
           Breaking down the barriers that prevent seamless global communication
         </p>
       </div>
@@ -46,10 +46,12 @@ export const ProblemSection = memo(({ isVisible, setRef }: Props) => (
             cardBorderClass: 'border-violet-300/70 dark:border-violet-400/40'
           }
         ].map((challenge, idx) => (
-          <div key={idx} className={`bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md border rounded-2xl p-8 ${challenge.cardBorderClass} hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all hover:shadow-lg hover:shadow-cyan-500/10`}>
-            <challenge.icon className="w-12 h-12 text-cyan-600 dark:text-cyan-400 mb-4" />
-            <h3 className={`inline-flex rounded-full px-4 py-1.5 text-sm font-bold mb-4 border bg-gradient-to-r ${challenge.pillClass}`}>{challenge.title}</h3>
-            <p className="text-gray-600 dark:text-gray-400">{challenge.desc}</p>
+          <div key={idx} className={`bg-white/90 dark:bg-slate-900/80 backdrop-blur-md border border-gray-200/80 dark:border-slate-800/80 rounded-2xl p-8 ${challenge.cardBorderClass} hover:border-cyan-500/50 dark:hover:border-cyan-400/50 shadow-sm hover:shadow-md hover:shadow-cyan-500/10 transition-all duration-300`}>
+            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 shadow-sm">
+              <challenge.icon className="w-6 h-6" />
+            </div>
+            <h3 className={`inline-flex rounded-full px-3.5 py-1 text-xs sm:text-sm font-bold mb-3 border bg-gradient-to-r ${challenge.pillClass}`}>{challenge.title}</h3>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">{challenge.desc}</p>
           </div>
         ))}
       </div>

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Copy, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { AppView } from '../App';
 
 interface Props {
@@ -9,14 +9,14 @@ interface Props {
   copyToClipboard: (text: string) => Promise<boolean>;
 }
 
-export const Footer = memo(({ setView, openPricingSection, setShowApiSection, copyToClipboard }: Props) => {
+export const Footer = memo(({ setView, openPricingSection, setShowApiSection }: Props) => {
   return (
     <footer className="bg-gray-900 dark:bg-gray-950 text-white pt-24  px-6 relative overflow-hidden backdrop-blur-sm border-t border-gray-800/50">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16 mb-20">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-cyan-600 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+              <div className="w-10 h-10 bg-cyan-600 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
                 <img src="/logoCYAN.png" alt="CYAN Logo" className="w-full h-full object-cover" />
               </div>
               <div>
@@ -127,28 +127,6 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                   Teams
                 </button>
               </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Logic for Blog
-                  }}
-                  className="hover:text-cyan-400 transition-colors text-left"
-                >
-                  Blog
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Logic for Careers
-                  }}
-                  className="hover:text-cyan-400 transition-colors text-left"
-                >
-                  Careers
-                </button>
-              </li>
             </ul>
           </div>
 
@@ -214,14 +192,17 @@ export const Footer = memo(({ setView, openPricingSection, setShowApiSection, co
                 e.preventDefault();
                 openPricingSection();
               }}
-              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-cyan-700 text-white px-8 py-4 rounded-full font-bold shadow-2xl shadow-cyan-900/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-cyan-700 text-white px-8 py-4 rounded-xl font-bold shadow-md hover:shadow-cyan-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2"
             >
               Get Started Free <ArrowRight className="w-4 h-4" />
             </a>
             <a
-              href="https://pub-2b9c36332bf24e9bb266cfdf0af3665d.r2.dev/CyanOS-1.0.0%20Setup.exe"
-              download
-              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white border border-cyan-400/20 px-8 py-3 rounded-full font-medium hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-xl"
+              href="/download"
+              onClick={(e) => {
+                e.preventDefault();
+                setView('download');
+              }}
+              className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-blue-600 text-white border border-cyan-400/20 px-8 py-3 rounded-xl font-bold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 flex flex-col items-center gap-0.5 text-xs shadow-md hover:shadow-cyan-500/20"
             >
               <span className="text-sm font-bold">Download CYAN OS<span className="tm-symbol">™</span></span>
               <span className="text-[10px] text-cyan-100/80 uppercase tracking-widest font-bold">Private Beta</span>

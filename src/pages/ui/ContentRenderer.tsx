@@ -10,7 +10,7 @@ export function ContentRenderer({ blocks }: ContentRendererProps) {
   const renderBlock = (block: ContentBlock, i: number) => {
     if (block.type === 'paragraph') {
       return (
-        <p key={i} className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: block.text }} />
+        <p key={i} className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm sm:text-base" dangerouslySetInnerHTML={{ __html: block.text || "" }} />
       );
     }
     if (block.type === 'heading') {
@@ -33,7 +33,7 @@ export function ContentRenderer({ blocks }: ContentRendererProps) {
               : 'bg-cyan-500/10 border-cyan-500 text-cyan-900 dark:text-cyan-200 border-t border-b border-r border-cyan-500/20'
           }`}
         >
-          <p className="text-sm leading-relaxed font-medium" dangerouslySetInnerHTML={{ __html: block.text }}></p>
+          <p className="text-sm leading-relaxed font-medium" dangerouslySetInnerHTML={{ __html: block.text || "" }}></p>
         </div>
       );
     }

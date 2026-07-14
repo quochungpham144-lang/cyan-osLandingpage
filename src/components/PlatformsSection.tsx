@@ -14,10 +14,10 @@ export const PlatformsSection = memo(({ isVisible: _isVisible, setRef }: Props) 
           <div className="text-xs font-semibold tracking-[0.25em] text-gray-500 dark:text-gray-400 uppercase">
             For Platforms
           </div>
-          <h3 className="mt-4 text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          <h2 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
             Drop CYAN into the tools you already use
-          </h3>
-          <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-400 max-w-xl">
+          </h2>
+          <p className="mt-3 text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-xl leading-relaxed">
             CYAN plugs straight into your existing meeting, streaming and collaboration tools via a
             lightweight extension, so you do not have to change your workflow.
           </p>
@@ -79,18 +79,18 @@ export const PlatformsSection = memo(({ isVisible: _isVisible, setRef }: Props) 
         ].map((item, idx) => (
           <div
             key={idx}
-            className={`flex flex-col h-full rounded-2xl border backdrop-blur-md p-4 shadow-sm hover:shadow-lg hover:border-cyan-300/80 transition-all ${item.bgClass} ${item.borderClass}`}
+            className={`flex flex-col h-full rounded-2xl border backdrop-blur-md p-5 shadow-sm hover:shadow-md hover:border-cyan-300/80 transition-all duration-300 ${item.bgClass} ${item.borderClass}`}
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
+              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white shadow-sm">
                 <item.icon className="w-5 h-5" />
               </div>
               <div>
-                <div className={`text-sm font-semibold ${item.titleClass}`}>{item.title}</div>
+                <div className={`text-base font-bold ${item.titleClass}`}>{item.title}</div>
                 <div className={`text-xs ${item.subtitleClass}`}>{item.subtitle}</div>
               </div>
             </div>
-            <p className={`text-xs leading-relaxed ${item.descClass}`}>{item.description}</p>
+            <p className={`text-sm leading-relaxed ${item.descClass}`}>{item.description}</p>
           </div>
         ))}
       </div>

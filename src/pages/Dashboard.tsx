@@ -1,5 +1,5 @@
 import { memo, useEffect, useState, useCallback } from "react";
-import { User, Activity, CreditCard, Loader2, Key, Terminal, Trash2, Plus, Copy, Check, Shield, RefreshCw, ChevronLeft, ChevronRight, AlertCircle, ChevronDown } from "lucide-react";
+import { User, Activity, CreditCard, Loader2, Key, Terminal, Trash2, Plus, Copy, Check, Shield, RefreshCw, ChevronLeft, ChevronRight, AlertCircle, ChevronDown, Zap, BarChart3, Edit2, X as XIcon } from "lucide-react";
 import { Header } from "../components/Header";
 import { PricingPopUp } from "../components/PricingPopUp";
 
@@ -37,7 +37,7 @@ export interface DashboardProps {
   startPlanCheckout: (planKey: PlanKey, method?: "paypal" | "crypto") => Promise<void>;
   checkoutBusy: boolean;
   setShowLoginModal: (show: boolean) => void;
-  setView: (view: unknown) => void;
+  setView: (view: any) => void;
   openPricingSection: () => void;
   setShowApiSection: (show: boolean) => void;
   copyToClipboard: (text: string) => Promise<boolean>;
@@ -45,9 +45,12 @@ export interface DashboardProps {
   teamFormSubmitted: boolean;
   setRef: (id: string) => (el: HTMLElement | null) => void;
   trackEvent: (event: string, data?: Record<string, unknown>) => void;
-  setShowTeamContactForm: (fn: (prev: boolean) => boolean) => void;
+  setShowTeamContactForm: (fn: any) => void;
   setTeamFormSubmitted: (v: boolean) => void;
-  handleTeamContactSubmit: (e: React.FormEvent<HTMLFormElement> | unknown) => void;
+  handleTeamContactSubmit: (e: any) => void;
+  isDarkMode?: boolean;
+  setIsDarkMode?: React.Dispatch<React.SetStateAction<boolean>>;
+  saveSession?: (session: UserSession | null) => void;
 }
 
 export interface QuotaInfo {
@@ -134,24 +137,24 @@ function DashboardSidebar({
   return (
     <>
       {/* Mobile Sub-bar for Sidebar toggle */}
-      <div className="lg:hidden shrink-0 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-4 py-2.5 flex items-center justify-between z-30">
-        <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+      <div className="lg:hidden shrink-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 px-4 py-2.5 flex items-center justify-between z-30">
+        <div className="flex items-center gap-2 text-xs font-bold text-cyan-500 dark:text-cyan-400 uppercase tracking-wider">
           <Activity className="w-4 h-4" />
           <span>{navItems.find((n) => n.id === activeTab)?.label || "Dashboard Navigation"}</span>
         </div>
         <button
           onClick={() => setMobileOpen((o) => !o)}
-          className="text-xs font-semibold text-gray-200 bg-slate-800 hover:bg-slate-750 px-3 py-1 rounded-lg border border-slate-700 flex items-center gap-1.5 shadow-sm"
+          className="text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-750 px-3 py-1 rounded-lg border border-gray-200 dark:border-slate-700 flex items-center gap-1.5 shadow-sm"
         >
           <span>{mobileOpen ? "Close Menu" : "Dashboard Menu"}</span>
-          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileOpen ? "rotate-180 text-cyan-400" : ""}`} />
+          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileOpen ? "rotate-180 text-cyan-500 dark:text-cyan-400" : ""}`} />
         </button>
       </div>
 
       {/* Sidebar - Desktop relative in fixed flex layout, Mobile fixed drawer */}
       <aside
         className={`
-        fixed inset-y-0 left-0 mt-16 md:mt-0 z-50 w-64 xl:w-72 bg-slate-950 border-r border-slate-800/80
+        fixed inset-y-0 left-0 mt-16 md:mt-0 z-50 w-64 xl:w-72 bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800/80
         flex flex-col transition-transform duration-300 shadow-2xl lg:shadow-none
         lg:relative lg:inset-auto lg:h-full lg:shrink-0 lg:z-10 lg:translate-x-0
         ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
@@ -161,7 +164,7 @@ function DashboardSidebar({
 
         {/* Navigation Section */}
         <div className="px-3 py-5 flex-1 overflow-y-auto custom-scrollbar">
-          <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2.5 px-3">
+          <div className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2.5 px-3">
             Navigation
           </div>
           <nav className="space-y-1">
@@ -177,15 +180,15 @@ function DashboardSidebar({
                   }}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-all duration-150 text-left ${
                     active
-                      ? "bg-cyan-500/15 text-cyan-400 font-bold border-l-2 border-cyan-400 pl-3 shadow-sm"
-                      : "text-gray-400 hover:text-white hover:bg-white/5 font-medium"
+                      ? "bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 font-bold border-l-2 border-cyan-500 dark:border-cyan-400 pl-3 shadow-sm"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 font-medium"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 ${active ? "text-cyan-400" : "text-gray-400"}`} />
+                    <Icon className={`w-4 h-4 ${active ? "text-cyan-500 dark:text-cyan-400" : "text-gray-500 dark:text-gray-400"}`} />
                     <span>{item.label}</span>
                   </div>
-                  {active && <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />}
+                  {active && <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 shrink-0" />}
                 </button>
               );
             })}
@@ -193,23 +196,23 @@ function DashboardSidebar({
         </div>
 
         {/* Quick Stats & Quota Mini Bar */}
-        <div className="px-5 py-4 border-t border-slate-800/80 bg-slate-900/40 space-y-3">
+        <div className="px-5 py-4 border-t border-gray-200 dark:border-slate-800/80 bg-gray-50/40 dark:bg-slate-900/40 space-y-3">
           {quota ? (
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-bold">
-                <span className="text-gray-400">TTS Quota</span>
-                <span className="text-cyan-400 font-mono text-[11px]">
+                <span className="text-gray-555 dark:text-gray-400">TTS Quota</span>
+                <span className="text-cyan-600 dark:text-cyan-400 font-mono text-[11px]">
                   {((quota.chars_percent || 0)).toFixed(0)}% Used
                 </span>
               </div>
-              <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden border border-white/5">
+              <div className="h-1.5 w-full bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden border border-gray-300/50 dark:border-white/5">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${
                     (quota.chars_percent || 0) > 90
                       ? "bg-red-500"
                       : (quota.chars_percent || 0) > 75
                       ? "bg-amber-400"
-                      : "bg-cyan-400"
+                      : "bg-cyan-500 dark:bg-cyan-400"
                   }`}
                   style={{ width: `${Math.min(100, quota.chars_percent || 0)}%` }}
                 />
@@ -224,15 +227,15 @@ function DashboardSidebar({
           )}
 
           {isHighestPlan ? (
-            <div className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 text-emerald-300 rounded-xl text-center flex flex-col gap-1.5">
-              <div className="flex items-center justify-center gap-1.5 text-xs font-black tracking-wide uppercase text-emerald-400">
+            <div className="w-full py-2.5 px-3 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 rounded-xl text-center flex flex-col gap-1.5">
+              <div className="flex items-center justify-center gap-1.5 text-xs font-black tracking-wide uppercase text-emerald-500 dark:text-emerald-400">
                 <span>Highest Plan Active</span>
               </div>
-              <div className="text-[10px] text-gray-400 leading-tight">
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
                 Need custom request?{" "}
                 <a
                   href="mailto:contact@cyan-os.cc"
-                  className="text-cyan-400 underline font-bold hover:text-cyan-300"
+                  className="text-cyan-600 dark:text-cyan-400 underline font-bold hover:text-cyan-500 dark:hover:text-cyan-300"
                 >
                   contact@cyan-os.cc
                 </a>
@@ -244,7 +247,7 @@ function DashboardSidebar({
                 setShowPricingModal(true);
                 setMobileOpen(false);
               }}
-              className="w-full py-2 bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 hover:from-cyan-600/30 hover:to-cyan-500/30 border border-cyan-500/30 text-cyan-300 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5"
+              className="w-full py-2 bg-gradient-to-r from-cyan-600/20 to-cyan-500/20 hover:from-cyan-600/30 hover:to-cyan-500/30 border border-cyan-500/30 text-cyan-600 dark:text-cyan-300 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5"
             >
               <CreditCard className="w-3.5 h-3.5" />
               <span>Upgrade Subscription</span>
@@ -280,12 +283,20 @@ export const Dashboard = memo(function Dashboard({
   trackEvent,
   setShowTeamContactForm,
   setTeamFormSubmitted,
-  handleTeamContactSubmit
+  handleTeamContactSubmit,
+  isDarkMode: propIsDarkMode,
+  setIsDarkMode: propSetIsDarkMode,
+  saveSession
 }: DashboardProps) {
   const [quota, setQuota] = useState<QuotaInfo | null>(null);
   const [loadingQuota, setLoadingQuota] = useState(true);
   const [showPricingModal, setShowPricingModal] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [localIsDarkMode, setLocalIsDarkMode] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    return stored ? stored === "dark" : false;
+  });
+  const isDarkMode = propIsDarkMode !== undefined ? propIsDarkMode : localIsDarkMode;
+  const setIsDarkMode = propSetIsDarkMode || setLocalIsDarkMode;
   const [activeTab, setActiveTab] = useState<"overview" | "api_keys" | "history">("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -304,6 +315,86 @@ export const Dashboard = memo(function Dashboard({
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [historyPage, setHistoryPage] = useState(1);
   const [historyTotal, setHistoryTotal] = useState(0);
+
+  // Edit Profile state
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [firstNameInput, setFirstNameInput] = useState("");
+  const [lastNameInput, setLastNameInput] = useState("");
+  const [updatingProfile, setUpdatingProfile] = useState(false);
+  const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null);
+  const [profileErrorMsg, setProfileErrorMsg] = useState<string | null>(null);
+
+  const handleOpenEditProfile = () => {
+    const parts = (userInfo?.name || "").trim().split(/\s+/);
+    if (parts.length > 1) {
+      setFirstNameInput(parts[0]);
+      setLastNameInput(parts.slice(1).join(" "));
+    } else {
+      setFirstNameInput(parts[0] || "");
+      setLastNameInput("");
+    }
+    setProfileErrorMsg(null);
+    setProfileSuccessMsg(null);
+    setIsEditingProfile(true);
+  };
+
+  const handleUpdateProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userInfo?.access_token) {
+      setProfileErrorMsg("No authentication token found. Please log in again.");
+      return;
+    }
+    setUpdatingProfile(true);
+    setProfileErrorMsg(null);
+    setProfileSuccessMsg(null);
+
+    const payload = {
+      first_name: firstNameInput.trim(),
+      last_name: lastNameInput.trim()
+    };
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/v1/user/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.access_token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        const updatedData = data.data || data;
+        const newFirstName = updatedData.first_name !== undefined ? updatedData.first_name : payload.first_name;
+        const newLastName = updatedData.last_name !== undefined ? updatedData.last_name : payload.last_name;
+        const newFullName = [newFirstName, newLastName].filter(Boolean).join(" ").trim() || userInfo.name;
+
+        const updatedSession: UserSession = {
+          ...userInfo,
+          name: newFullName
+        };
+
+        if (saveSession) {
+          saveSession(updatedSession);
+        } else {
+          localStorage.setItem("user_session", JSON.stringify(updatedSession));
+          window.dispatchEvent(new Event("auth-change"));
+        }
+
+        setProfileSuccessMsg("Profile updated successfully!");
+        setIsEditingProfile(false);
+      } else {
+        setProfileErrorMsg(data.message || data.error || "Failed to update profile.");
+      }
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      setProfileErrorMsg("Network error occurred while updating profile.");
+    } finally {
+      setUpdatingProfile(false);
+    }
+  };
 
   const fetchApiKeys = useCallback(async () => {
     if (!userInfo?.access_token) return;
@@ -419,12 +510,30 @@ export const Dashboard = memo(function Dashboard({
   }, [activeTab, fetchApiKeys, fetchHistory, historyPage]);
 
   useEffect(() => {
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const handleThemeEvent = (e: Event) => {
+      if (e instanceof CustomEvent && typeof e.detail === "boolean") {
+        if (!propSetIsDarkMode) setLocalIsDarkMode(e.detail);
+      } else {
+        const stored = localStorage.getItem("theme");
+        if (stored && !propSetIsDarkMode) setLocalIsDarkMode(stored === "dark");
+      }
+    };
+    window.addEventListener("theme-change", handleThemeEvent);
+    window.addEventListener("storage", handleThemeEvent);
+    return () => {
+      window.removeEventListener("theme-change", handleThemeEvent);
+      window.removeEventListener("storage", handleThemeEvent);
+    };
+  }, [propSetIsDarkMode]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -484,7 +593,7 @@ export const Dashboard = memo(function Dashboard({
 
   return (
     <div
-      className={`h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-gray-100 flex flex-col overflow-hidden transition-colors duration-300 ${
+      className={`h-screen bg-gradient-to-b from-emerald-50 via-emerald-50/25 to-cyan-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-black text-gray-900 dark:text-gray-100 flex flex-col overflow-hidden transition-colors duration-300 ${
         isDarkMode ? "dark" : ""
       }`}
       style={{ fontFamily: "'Inter', system-ui, sans-serif" }}
@@ -570,6 +679,7 @@ export const Dashboard = memo(function Dashboard({
         }}
         isLoggedIn={isLoggedIn}
         userInfo={userInfo}
+        saveSession={saveSession}
         setShowLoginModal={setShowLoginModal}
         openPricingSection={openPricingSection}
         setShowApiSection={setShowApiSection}
@@ -592,22 +702,21 @@ export const Dashboard = memo(function Dashboard({
         <main id="dash-main-content" className="flex-1 h-full overflow-y-auto min-w-0 relative flex flex-col justify-between custom-scrollbar">
           <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-10 py-8 w-full">
             {/* Breadcrumb Navigation */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800/80">
-              <div className="flex items-center gap-2 text-xs font-semibold text-gray-400">
-                <span onClick={goToMainView} className="hover:text-white cursor-pointer transition-colors">Home</span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-gray-200 dark:border-slate-800/80">
+              <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
+                <span onClick={goToMainView} className="hover:text-gray-900 dark:hover:text-white cursor-pointer transition-colors">Home</span>
                 <span>›</span>
-                <span className="text-gray-300 font-bold">Dashboard</span>
+                <span className="text-gray-600 dark:text-gray-300 font-bold">Dashboard</span>
                 <span>›</span>
-                <span className="text-cyan-400 font-black tracking-wide uppercase">
+                <span className="text-cyan-600 dark:text-cyan-400 font-black tracking-wide uppercase">
                   {activeTab === "overview" && "Overview"}
                   {activeTab === "api_keys" && "API Keys"}
                   {activeTab === "history" && "Logs & History"}
                 </span>
               </div>
-
               <div className="flex items-center gap-2">
                 <span className="text-xs text-gray-500 hidden sm:inline">Active Plan:</span>
-                <span className="px-2.5 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span className="px-2.5 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
                   {planDisplay}
                 </span>
               </div>
@@ -615,181 +724,330 @@ export const Dashboard = memo(function Dashboard({
 
             {/* Overview Tab */}
             {activeTab === "overview" && (
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-            {/* Left Column */}
-            <div className="space-y-8">
-              {/* Profile Details */}
-              <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 blur-[80px] -mr-32 -mt-32 rounded-full pointer-events-none" />
+              <div className="space-y-8 animate-fadeIn">
+               
 
-                <div className="flex items-center justify-between mb-6 relative z-10">
-                  <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                    <User className="w-4 h-4 text-cyan-400" />
-                    Identity
-                  </h4>
-                </div>
-
-                <div className="flex items-center gap-6 relative z-10">
-                  <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center text-2xl font-black text-cyan-400 border border-dashed border-cyan-500/30 shrink-0">
-                    {userInfo?.name?.[0]?.toUpperCase() || "U"}
-                  </div>
-                  <div>
-                    <div className="font-bold text-white text-xl">
-                      {userInfo?.name || "User"}
-                    </div>
-                    <div className="text-gray-400 text-sm mt-1">{userInfo?.email}</div>
-                    <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-gray-300">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                      Active Account
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quotas */}
-              <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm">
-                <div className="flex items-center justify-between mb-6 relative z-10">
-                  <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-cyan-400" />
-                    Quotas
-                  </h4>
-                </div>
-
-                {loadingQuota ? (
-                  <div className="space-y-6 relative z-10 animate-pulse">
-                    <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
-                      <div className="flex justify-between text-sm mb-2">
-                        <div className="h-3 w-32 bg-slate-700/50 rounded-full"></div>
-                        <div className="h-3 w-24 bg-slate-700/50 rounded-full"></div>
-                      </div>
-                      <div className="h-2 w-full bg-slate-800/50 rounded-full mt-4 border border-dashed border-white/5"></div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
-                        <div className="h-2.5 w-24 bg-slate-700/50 rounded-full mb-3"></div>
-                        <div className="h-6 w-20 bg-slate-700/50 rounded-lg"></div>
-                      </div>
-                      <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
-                        <div className="h-2.5 w-20 bg-slate-700/50 rounded-full mb-3"></div>
-                        <div className="h-6 w-16 bg-slate-700/50 rounded-lg"></div>
+                {/* 2. Live Quota Rings & Usage Metrics Grid (4 Glassmorphic Cards) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                  {/* Card 1: Characters Meter */}
+                  <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-5 relative overflow-hidden backdrop-blur-sm group hover:border-cyan-500/30 transition-all shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[11px] font-black uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500">Characters Quota</span>
+                      <div className="p-2 bg-cyan-500/10 rounded-xl text-cyan-600 dark:text-cyan-400">
+                        <Activity className="w-4 h-4" />
                       </div>
                     </div>
+                    {loadingQuota ? (
+                      <div className="space-y-3 animate-pulse py-1">
+                        <div className="h-7 w-32 bg-gray-200 dark:bg-slate-700/60 rounded-lg" />
+                        <div className="h-2 w-full bg-gray-200 dark:bg-slate-700/60 rounded-full" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-baseline gap-1.5 font-mono">
+                          <span className="text-2xl font-black text-gray-900 dark:text-white">
+                            {(quota?.chars_used || 0).toLocaleString()}
+                          </span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500 font-bold">
+                            / {(quota?.chars_limit || 0).toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="mt-3.5 space-y-1.5">
+                          <div className="h-2 w-full bg-gray-150 dark:bg-slate-900/60 rounded-full overflow-hidden border border-gray-200/60 dark:border-slate-700/40">
+                            <div
+                              className={`h-full rounded-full transition-all duration-1000 ${(quota?.chars_percent || 0) > 90 ? "bg-red-500" : (quota?.chars_percent || 0) > 75 ? "bg-amber-400" : "bg-gradient-to-r from-cyan-500 to-emerald-400"} shadow-[0_0_8px_currentColor]`}
+                              style={{ width: `${Math.min(100, quota?.chars_percent || 0)}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-[10px] font-bold text-gray-400 dark:text-gray-500">
+                            <span>{Math.round(quota?.chars_percent || 0)}% used</span>
+                            <span>{quota?.reset_date ? `Resets ${new Date(quota.reset_date).toLocaleDateString()}` : "Monthly cycle"}</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
-                ) : quota ? (
-                  <div className="space-y-6 relative z-10">
-                    <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
-                      <div className="flex justify-between text-sm mb-2 font-bold">
-                        <span className="text-gray-400 uppercase tracking-widest text-[10px]">Monthly TTS Generation</span>
-                        <span className="text-cyan-400 font-mono">
-                          {(quota.chars_used || 0).toLocaleString()}
-                          <span className="text-gray-500"> / {(quota.chars_limit || 0).toLocaleString()} chars</span>
+
+                  {/* Card 2: ElevenLabs Credits */}
+                  <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-5 relative overflow-hidden backdrop-blur-sm group hover:border-cyan-500/30 transition-all shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[11px] font-black uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500">Audio Credits</span>
+                      <div className="p-2 bg-purple-500/10 rounded-xl text-purple-600 dark:text-purple-400">
+                        <BarChart3 className="w-4 h-4" />
+                      </div>
+                    </div>
+                    {loadingQuota ? (
+                      <div className="space-y-3 animate-pulse py-1">
+                        <div className="h-7 w-24 bg-gray-200 dark:bg-slate-700/60 rounded-lg" />
+                        <div className="h-2 w-full bg-gray-200 dark:bg-slate-700/60 rounded-full" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-baseline gap-1.5 font-mono">
+                          <span className="text-2xl font-black text-gray-900 dark:text-white">
+                            {quota?.eleven_credits_used?.toLocaleString() || 0}
+                          </span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500 font-bold">
+                            / {quota?.eleven_credits_limit?.toLocaleString() || "Unlimited"}
+                          </span>
+                        </div>
+                        <div className="mt-3.5 space-y-1.5">
+                          <div className="h-2 w-full bg-gray-150 dark:bg-slate-900/60 rounded-full overflow-hidden border border-gray-200/60 dark:border-slate-700/40">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-400 shadow-[0_0_8px_currentColor]"
+                              style={{ width: `${quota?.eleven_credits_limit ? Math.min(100, ((quota?.eleven_credits_used || 0) / Number(quota.eleven_credits_limit || 1)) * 100) : 15}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-[10px] font-bold text-gray-400 dark:text-gray-500">
+                            <span>High-fidelity voice synth</span>
+                            <span className="text-purple-600 dark:text-purple-400 font-black">ACTIVE</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Card 3: Generation Minutes */}
+                  <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-5 relative overflow-hidden backdrop-blur-sm group hover:border-cyan-500/30 transition-all shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-[11px] font-black uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500">Audio Time Used</span>
+                      <div className="p-2 bg-amber-500/10 rounded-xl text-amber-600 dark:text-amber-400">
+                        <Activity className="w-4 h-4" />
+                      </div>
+                    </div>
+                    {loadingQuota ? (
+                      <div className="space-y-3 animate-pulse py-1">
+                        <div className="h-7 w-20 bg-gray-200 dark:bg-slate-700/60 rounded-lg" />
+                        <div className="h-2 w-full bg-gray-200 dark:bg-slate-700/60 rounded-full" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-baseline gap-1.5 font-mono">
+                          <span className="text-2xl font-black text-gray-900 dark:text-white">
+                            {quota?.minutes_used || 0}
+                          </span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500 font-bold">
+                            / {quota?.minutes_limit || 0} min
+                          </span>
+                        </div>
+                        <div className="mt-3.5 space-y-1.5">
+                          <div className="h-2 w-full bg-gray-150 dark:bg-slate-900/60 rounded-full overflow-hidden border border-gray-200/60 dark:border-slate-700/40">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_currentColor]"
+                              style={{ width: `${quota?.minutes_limit ? Math.min(100, ((quota?.minutes_used || 0) / quota.minutes_limit) * 100) : 10}%` }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-[10px] font-bold text-gray-400 dark:text-gray-500">
+                            <span>Total runtime</span>
+                            <span>Optimal efficiency</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Card 4: API Keys & Security */}
+                  <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-5 relative overflow-hidden backdrop-blur-sm group hover:border-cyan-500/30 transition-all shadow-sm flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500">Security & Keys</span>
+                        <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
+                          <Shield className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <div className="flex items-baseline gap-2 font-mono">
+                        <span className="text-2xl font-black text-gray-900 dark:text-white">
+                          {apiKeys.filter(k => k.is_active !== false).length}
+                        </span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500 font-bold">Active Keys</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700/50 flex items-center justify-between text-xs">
+                      <span className="text-gray-500 dark:text-gray-400 font-mono truncate max-w-[140px]">
+                        {apiKeys.find(k => k.is_active !== false)
+                          ? `${apiKeys.find(k => k.is_active !== false)!.key_prefix}••••`
+                          : "No active keys"}
+                      </span>
+                      <button
+                        onClick={() => setActiveTab("api_keys")}
+                        className="text-cyan-600 dark:text-cyan-400 hover:underline font-bold text-xs flex items-center gap-1"
+                      >
+                        Manage →
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Account Profile & Subscription Tier Command Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                  {/* Identity Card */}
+                  <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm shadow-sm flex flex-col justify-between">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 blur-[60px] -mr-20 -mt-20 rounded-full pointer-events-none" />
+                    <div>
+                      <div className="flex items-center justify-between mb-4 relative z-10">
+                        <h4 className="text-xs font-black text-gray-500 dark:text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                          <User className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+                          Account Profile
+                        </h4>
+                        <span className="px-2.5 py-1 rounded text-xs font-black uppercase bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
+                          {planDisplay}
                         </span>
                       </div>
-                      <div className="h-2 w-full bg-black/50 rounded-full overflow-hidden border border-dashed border-white/5">
-                        <div
-                          className={`h-full rounded-full transition-all duration-1000 ${(quota.chars_percent || 0) > 90 ? "bg-red-500" : (quota.chars_percent || 0) > 75 ? "bg-amber-400" : "bg-cyan-500"} shadow-[0_0_10px_currentColor]`}
-                          style={{ width: `${Math.min(100, quota.chars_percent || 0)}%` }}
-                        />
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-2">ElevenLabs Credits</span>
-                        <div className="text-lg font-black text-white font-mono flex items-baseline gap-1">
-                          {quota.eleven_credits_used?.toLocaleString() || 0}
-                          <span className="text-gray-500 font-medium text-xs">/ {quota.eleven_credits_limit?.toLocaleString() || "Unlimited"}</span>
+                      {profileSuccessMsg && !isEditingProfile && (
+                        <div className="mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold flex items-center justify-between relative z-10 animate-fade-in">
+                          <div className="flex items-center gap-2">
+                            <Check className="w-4 h-4 shrink-0" />
+                            <span>{profileSuccessMsg}</span>
+                          </div>
+                          <button onClick={() => setProfileSuccessMsg(null)} className="text-emerald-600/70 hover:text-emerald-600">
+                            <XIcon className="w-3.5 h-3.5" />
+                          </button>
                         </div>
-                      </div>
-                      <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-700/50">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-2">Time Used</span>
-                        <div className="text-lg font-black text-white font-mono flex items-baseline gap-1">
-                          {quota.minutes_used || 0}
-                          <span className="text-gray-500 font-medium text-xs">/ {quota.minutes_limit || 0} min</span>
+                      )}
+
+                      {isEditingProfile ? (
+                        <form onSubmit={handleUpdateProfile} className="relative z-10 my-3 flex flex-col gap-3">
+                          {profileErrorMsg && (
+                            <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+                              <AlertCircle className="w-4 h-4 shrink-0" />
+                              <span>{profileErrorMsg}</span>
+                            </div>
+                          )}
+                          <div className="grid grid-cols-2 gap-2.5">
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                                First Name
+                              </label>
+                              <input
+                                type="text"
+                                value={firstNameInput}
+                                onChange={(e) => setFirstNameInput(e.target.value)}
+                                placeholder="First Name"
+                                className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-all"
+                                required
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                                Last Name
+                              </label>
+                              <input
+                                type="text"
+                                value={lastNameInput}
+                                onChange={(e) => setLastNameInput(e.target.value)}
+                                placeholder="Last Name"
+                                className="w-full px-3 py-1.5 rounded-lg bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-xs font-semibold text-gray-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-all"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 mt-1 justify-end">
+                            <button
+                              type="button"
+                              onClick={() => setIsEditingProfile(false)}
+                              className="px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700/60 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="submit"
+                              disabled={updatingProfile || (!firstNameInput.trim() && !lastNameInput.trim())}
+                              className="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 disabled:opacity-50"
+                            >
+                              {updatingProfile ? (
+                                <>
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                  <span>Saving...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Check className="w-3.5 h-3.5" />
+                                  <span>Save Profile</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <div className="flex items-center gap-4 relative z-10 my-4">
+                          <div className="w-14 h-14 rounded-full bg-cyan-500/20 flex items-center justify-center text-xl font-black text-cyan-600 dark:text-cyan-400 border border-dashed border-cyan-500/30 shrink-0">
+                            {userInfo?.name?.[0]?.toUpperCase() || "U"}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between">
+                              <div className="font-bold text-gray-900 dark:text-white text-base truncate">
+                                {userInfo?.name || "User"}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleOpenEditProfile}
+                                className="p-1 rounded-md text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors shrink-0"
+                                title="Edit Name"
+                              >
+                                <Edit2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                            <div className="text-gray-500 dark:text-gray-400 text-xs truncate mt-0.5">{userInfo?.email}</div>
+                            <div className="mt-2.5 flex items-center justify-between">
+                              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                Active Account
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleOpenEditProfile}
+                                className="text-cyan-600 dark:text-cyan-400 hover:underline font-bold text-xs flex items-center gap-1"
+                              >
+                                Edit Profile →
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-sm text-gray-400 py-4">
-                    Quota information is not available at the moment.
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right Column: Plan */}
-            <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm flex flex-col">
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-600/10 blur-[80px] -ml-32 -mb-32 rounded-full pointer-events-none" />
-
-              <div className="flex items-center justify-between mb-6 relative z-10 shrink-0">
-                <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-cyan-400" />
-                  Plan Details
-                </h4>
-              </div>
-
-              <div className="flex-1 flex flex-col justify-center items-center relative z-10 py-6">
-                <div className="text-center w-full max-w-sm mx-auto">
-                  <div className="bg-slate-900/50 border border-slate-700/50 rounded-2xl p-8 mb-8 relative group overflow-hidden">
-                    <span className="text-gray-400 text-[10px] font-bold tracking-[0.3em] uppercase block mb-3 relative z-10">Current Plan</span>
-                    <div className="text-xs md:text-xl font-black text-cyan-400 tracking-widest uppercase relative z-10">
-                      {planDisplay}
+                      )}
                     </div>
                   </div>
 
-                  {isHighestPlan ? (
-                    <div className="mt-4 p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-2xl text-center flex flex-col gap-2">
-                      <div className="inline-flex items-center justify-center gap-2 text-sm font-black tracking-wider uppercase text-emerald-400">
-                        <span>You are already on the highest plan</span>
+                  {/* Subscription & Upgrade Card */}
+                  <div className="bg-gradient-to-br from-gray-900 via-slate-900 to-black dark:from-slate-900/90 dark:via-slate-800/60 dark:to-slate-900/90 border border-cyan-500/30 rounded-2xl p-6 relative overflow-hidden text-white shadow-xl flex flex-col justify-between">
+                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-cyan-500/20 blur-[50px] rounded-full pointer-events-none" />
+                    <div>
+                      <div className="flex items-center justify-between mb-3 relative z-10">
+                        <span className="text-[10px] font-black tracking-[0.25em] uppercase text-cyan-400">Subscription Tier</span>
+                        <Zap className="w-4 h-4 text-yellow-400 fill-current animate-pulse" />
                       </div>
-                      <p className="text-xs text-gray-300 leading-relaxed">
-                        Need higher limits or a custom enterprise request? Contact us at{" "}
+                      <h3 className="text-xl font-black text-white tracking-wide uppercase relative z-10">
+                        {planDisplay} TIER
+                      </h3>
+                      <p className="text-xs text-gray-300 dark:text-gray-300 mt-1.5 leading-relaxed relative z-10">
+                        {isHighestPlan
+                          ? "You have access to top-tier rate limits, custom voices, and priority support."
+                          : "Unlock high-speed generation, 500k+ monthly characters, and direct REST API access."}
+                      </p>
+                    </div>
+
+                    <div className="mt-5 relative z-10">
+                      {isHighestPlan ? (
                         <a
                           href="mailto:contact@cyan-os.cc"
-                          className="text-cyan-400 underline font-bold hover:text-cyan-300"
+                          className="block w-full text-center py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold rounded-xl transition-all"
                         >
-                          contact@cyan-os.cc
+                          Enterprise Support →
                         </a>
-                      </p>
-                    </div>
-                  ) : (
-                    <>
-                      <p className="mb-6 text-[11px] text-gray-400 font-medium tracking-widest uppercase text-center">
-                        Need more quota? Upgrade your plan.
-                      </p>
-
-                      <div className="mt-4">
+                      ) : (
                         <button
                           onClick={() => setShowPricingModal(true)}
                           disabled={checkoutBusy}
-                          className="w-full py-4 bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 shadow-md hover:from-cyan-500 hover:to-cyan-600 border border-cyan-400 text-sm font-black tracking-wider uppercase rounded-xl transition-all disabled:opacity-50"
+                          className="w-full py-3.5 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                         >
-                          Upgrade Plan
+                          <span>Upgrade Plan Now</span>
+                          <ChevronRight className="w-4 h-4" />
                         </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {quota?.reset_date && (
-                <div className="mt-auto pt-6 border-t border-dashed border-gray-700/50 text-xs text-gray-400 uppercase tracking-widest font-bold flex flex-col gap-3 shrink-0">
-                  <div className="flex items-center justify-between bg-slate-900/40 border border-slate-700/50 p-4 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                      <span>Resets</span>
+                      )}
                     </div>
-                    <span className="text-white bg-white/10 px-3 py-1 rounded-md">
-                      {new Date(quota.reset_date).toLocaleDateString()}
-                    </span>
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
-        )}
+              </div>
+            )}
 
         {/* API Keys Tab */}
         {activeTab === "api_keys" && (
@@ -797,13 +1055,13 @@ export const Dashboard = memo(function Dashboard({
             {currentPlanKey === "free" && (
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-sm">
                 <div className="flex items-start sm:items-center gap-4">
-                  <div className="p-3 bg-amber-500/20 rounded-xl text-amber-400">
+                  <div className="p-3 bg-amber-500/20 rounded-xl text-amber-600 dark:text-amber-400">
                     <Shield className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-amber-300 text-base">API Key Generation Restricted</h4>
-                    <p className="text-sm text-amber-200/80 mt-1">
-                      Generating API keys requires a paid subscription plan (<span className="text-white font-mono text-xs">basic</span>, <span className="text-white font-mono text-xs">pro</span>, or <span className="text-white font-mono text-xs">team</span>).
+                    <h4 className="font-bold text-amber-800 dark:text-amber-300 text-base">API Key Generation Restricted</h4>
+                    <p className="text-sm text-amber-705 dark:text-amber-200/80 mt-1">
+                      Generating API keys requires a paid subscription plan (<span className="text-gray-900 dark:text-white font-mono text-xs">basic</span>, <span className="text-gray-900 dark:text-white font-mono text-xs">pro</span>, or <span className="text-gray-900 dark:text-white font-mono text-xs">team</span>).
                     </p>
                   </div>
                 </div>
@@ -817,25 +1075,25 @@ export const Dashboard = memo(function Dashboard({
             )}
 
             {newlyCreatedKey && (
-              <div className="bg-cyan-950/80 border border-cyan-400/50 rounded-2xl p-6 relative overflow-hidden shadow-2xl shadow-cyan-500/10">
+              <div className="bg-cyan-50/80 dark:bg-cyan-950/80 border border-cyan-200 dark:border-cyan-400/50 rounded-2xl p-6 relative overflow-hidden shadow-2xl shadow-cyan-500/10">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase tracking-wider">
-                    <Check className="w-5 h-5 text-emerald-400" />
+                  <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 font-bold text-sm uppercase tracking-wider">
+                    <Check className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                     API Key Created Successfully: {newlyCreatedKey.name}
                   </div>
                   <button
                     onClick={() => setNewlyCreatedKey(null)}
-                    className="text-xs font-bold text-gray-400 hover:text-white bg-white/5 px-2.5 py-1 rounded"
+                    className="text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-gray-200/50 dark:bg-white/5 px-2.5 py-1 rounded"
                   >
                     Close
                   </button>
                 </div>
-                <p className="text-xs text-amber-300 mb-4 flex items-center gap-1.5 font-medium">
+                <p className="text-xs text-amber-800 dark:text-amber-300 mb-4 flex items-center gap-1.5 font-medium">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   Please copy your API key right now. For security reasons, the full secret will never be displayed again.
                 </p>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-black/60 border border-cyan-500/30 rounded-xl p-3">
-                  <code className="flex-1 font-mono text-sm text-cyan-300 break-all select-all">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-gray-100 dark:bg-black/60 border border-cyan-500/30 rounded-xl p-3">
+                  <code className="flex-1 font-mono text-sm text-cyan-600 dark:text-cyan-300 break-all select-all">
                     {newlyCreatedKey.key}
                   </code>
                   <button
@@ -857,14 +1115,14 @@ export const Dashboard = memo(function Dashboard({
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Generate Key Form */}
-              <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm lg:col-span-1 h-fit">
-                <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-4">
-                  <Plus className="w-4 h-4 text-cyan-400" />
+              <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm lg:col-span-1 h-fit">
+                <h4 className="text-xs font-black text-gray-500 dark:text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-4">
+                  <Plus className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
                   Generate New Key
                 </h4>
                 <form onSubmit={handleCreateApiKey} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-300 mb-1.5">
+                    <label className="block text-xs font-medium text-gray-600 dark:text-gray-300 mb-1.5">
                       Key Name / Description
                     </label>
                     <input
@@ -873,11 +1131,11 @@ export const Dashboard = memo(function Dashboard({
                       value={newKeyName}
                       onChange={(e) => setNewKeyName(e.target.value)}
                       disabled={creatingKey || currentPlanKey === "free"}
-                      className="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 disabled:opacity-50"
+                      className="w-full bg-gray-50/80 dark:bg-slate-900/80 border border-gray-250 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-cyan-400 disabled:opacity-50"
                     />
                   </div>
                   {keyError && (
-                    <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2.5 flex items-center gap-2">
+                    <div className="text-xs text-red-500 dark:text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-2.5 flex items-center gap-2">
                       <AlertCircle className="w-4 h-4 shrink-0" />
                       <span>{keyError}</span>
                     </div>
@@ -903,16 +1161,16 @@ export const Dashboard = memo(function Dashboard({
               </div>
 
               {/* API Keys List */}
-              <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm lg:col-span-2">
+              <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm lg:col-span-2">
                 <div className="flex items-center justify-between mb-6">
-                  <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                    <Key className="w-4 h-4 text-cyan-400" />
+                  <h4 className="text-xs font-black text-gray-500 dark:text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                    <Key className="w-4 h-4 text-cyan-505 dark:text-cyan-400" />
                     Active API Keys ({apiKeys.length})
                   </h4>
                   <button
                     onClick={fetchApiKeys}
                     disabled={loadingKeys}
-                    className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                    className="p-1.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors"
                     title="Refresh keys"
                   >
                     <RefreshCw className={`w-4 h-4 ${loadingKeys ? "animate-spin" : ""}`} />
@@ -922,13 +1180,13 @@ export const Dashboard = memo(function Dashboard({
                 {loadingKeys ? (
                   <div className="space-y-3 animate-pulse">
                     {[1, 2].map((i) => (
-                      <div key={i} className="h-16 bg-slate-900/50 rounded-xl border border-slate-700/40" />
+                      <div key={i} className="h-16 bg-gray-100/50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700/40" />
                     ))}
                   </div>
                 ) : apiKeys.length === 0 ? (
-                  <div className="text-center py-12 bg-slate-900/30 rounded-xl border border-dashed border-slate-700/50">
-                    <Key className="w-8 h-8 text-gray-600 mx-auto mb-3" />
-                    <p className="text-sm font-medium text-gray-400">No API keys created yet.</p>
+                  <div className="text-center py-12 bg-gray-50/50 dark:bg-slate-900/30 rounded-xl border border-dashed border-gray-250 dark:border-slate-700/50">
+                    <Key className="w-8 h-8 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No API keys created yet.</p>
                     <p className="text-xs text-gray-500 mt-1">Generate a key to authenticate direct API translation requests.</p>
                   </div>
                 ) : (
@@ -936,20 +1194,20 @@ export const Dashboard = memo(function Dashboard({
                     {apiKeys.map((key) => (
                       <div
                         key={key.id}
-                        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-slate-900/60 border border-slate-700/50 rounded-xl hover:border-slate-600 transition-colors"
+                        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-gray-50/80 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-700/50 rounded-xl hover:border-gray-300 dark:hover:border-slate-600 transition-colors"
                       >
                         <div>
                           <div className="flex items-center gap-2.5">
-                            <span className="font-bold text-white text-sm">{key.name || "API Key"}</span>
+                            <span className="font-bold text-gray-900 dark:text-white text-sm">{key.name || "API Key"}</span>
                             <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${
                               key.is_active !== false
-                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                                : "bg-red-500/10 text-red-400 border border-red-500/20"
+                                ? "bg-emerald-550/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                                : "bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/20"
                             }`}>
                               {key.is_active !== false ? "Active" : "Revoked"}
                             </span>
                           </div>
-                          <div className="font-mono text-xs text-cyan-400/90 mt-1 flex items-center gap-2">
+                          <div className="font-mono text-xs text-cyan-600 dark:text-cyan-400/90 mt-1 flex items-center gap-2">
                             <span>{key.key_prefix || "cyan_live"}••••••••••••••••••••••••••••••••••••••••</span>
                           </div>
                           <div className="text-[11px] text-gray-500 mt-1.5 flex flex-wrap gap-4">
@@ -967,7 +1225,7 @@ export const Dashboard = memo(function Dashboard({
                           <button
                             onClick={() => handleRevokeApiKey(key.id)}
                             disabled={revokingKeyId === key.id || key.is_active === false}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold rounded-lg transition-all disabled:opacity-40"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 dark:text-red-400 border border-red-500/30 text-xs font-bold rounded-lg transition-all disabled:opacity-40"
                           >
                             {revokingKeyId === key.id ? (
                               <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -989,21 +1247,21 @@ export const Dashboard = memo(function Dashboard({
         {/* Logs & History Tab */}
         {activeTab === "history" && (
           <div className="space-y-8 animate-fadeIn">
-            <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm">
+            <div className="bg-white/80 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-2xl p-6 relative overflow-hidden backdrop-blur-sm">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h4 className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                    <Terminal className="w-4 h-4 text-cyan-400" />
+                  <h4 className="text-xs font-black text-gray-500 dark:text-gray-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                    <Terminal className="w-4 h-4 text-cyan-505 dark:text-cyan-400" />
                     Translation & API History ({historyTotal} requests)
                   </h4>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                     Real-time transaction logs of texts translated across your account.
                   </p>
                 </div>
                 <button
                   onClick={() => fetchHistory(historyPage)}
                   disabled={loadingHistory}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-gray-300 border border-slate-700 rounded-lg text-xs font-medium transition-colors self-start sm:self-auto"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-slate-700 rounded-lg text-xs font-medium transition-colors self-start sm:self-auto"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loadingHistory ? "animate-spin" : ""}`} />
                   Refresh Logs
@@ -1013,13 +1271,13 @@ export const Dashboard = memo(function Dashboard({
               {loadingHistory ? (
                 <div className="space-y-3 animate-pulse">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="h-16 bg-slate-900/50 rounded-xl border border-slate-700/40" />
+                    <div key={i} className="h-16 bg-gray-100/50 dark:bg-slate-900/50 rounded-xl border border-gray-200 dark:border-slate-700/40" />
                   ))}
                 </div>
               ) : historyLogs.length === 0 ? (
-                <div className="text-center py-16 bg-slate-900/30 rounded-xl border border-dashed border-slate-700/50">
-                  <Terminal className="w-8 h-8 text-gray-600 mx-auto mb-3" />
-                  <p className="text-sm font-medium text-gray-400">No translation logs found.</p>
+                <div className="text-center py-16 bg-gray-550/30 dark:bg-slate-900/30 rounded-xl border border-dashed border-gray-250 dark:border-slate-700/50">
+                  <Terminal className="w-8 h-8 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
+                  <p className="text-sm font-medium text-gray-600 dark:text-gray-400">No translation logs found.</p>
                   <p className="text-xs text-gray-500 mt-1">API and UI translation requests will appear here once you start generating translations.</p>
                 </div>
               ) : (
@@ -1027,7 +1285,7 @@ export const Dashboard = memo(function Dashboard({
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
-                        <tr className="border-b border-slate-700/60 text-[11px] font-black uppercase tracking-wider text-gray-400">
+                        <tr className="border-b border-gray-200 dark:border-slate-700/60 text-[11px] font-black uppercase tracking-wider text-gray-505 dark:text-gray-400">
                           <th className="py-3 px-4">Language / Type</th>
                           <th className="py-3 px-4">Input Text</th>
                           <th className="py-3 px-4">Output / Details</th>
@@ -1035,7 +1293,7 @@ export const Dashboard = memo(function Dashboard({
                           <th className="py-3 px-4 text-right">Timestamp</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-700/40 text-sm">
+                      <tbody className="divide-y divide-gray-150 dark:divide-slate-700/40 text-sm">
                         {historyLogs.map((log, idx) => {
                           let metaInfo = "";
                           try {
@@ -1061,22 +1319,22 @@ export const Dashboard = memo(function Dashboard({
                           const charCount = log.chars ?? log.characters ?? 0;
 
                           return (
-                            <tr key={log.id || idx} className="hover:bg-slate-900/40 transition-colors">
+                            <tr key={log.id || idx} className="hover:bg-gray-50/60 dark:hover:bg-slate-900/40 transition-colors">
                               <td className="py-3.5 px-4 whitespace-nowrap">
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-bold font-mono">
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-300 text-xs font-bold font-mono">
                                   {langDisplay}
                                 </span>
                               </td>
-                              <td className="py-3.5 px-4 max-w-xs truncate text-gray-200 font-medium" title={sourceText}>
+                              <td className="py-3.5 px-4 max-w-xs truncate text-gray-800 dark:text-gray-200 font-medium" title={sourceText}>
                                 {sourceText}
                               </td>
-                              <td className="py-3.5 px-4 max-w-xs truncate text-cyan-200 font-medium" title={targetText}>
+                              <td className="py-3.5 px-4 max-w-xs truncate text-cyan-700 dark:text-cyan-200 font-medium" title={targetText}>
                                 {targetText}
                               </td>
-                              <td className="py-3.5 px-4 text-right font-mono text-xs text-gray-400">
+                              <td className="py-3.5 px-4 text-right font-mono text-xs text-gray-550 dark:text-gray-400">
                                 {charCount ? charCount.toLocaleString() : "0"}
                               </td>
-                              <td className="py-3.5 px-4 text-right whitespace-nowrap text-xs text-gray-500">
+                              <td className="py-3.5 px-4 text-right whitespace-nowrap text-xs text-gray-400 dark:text-gray-500">
                                 {log.created_at ? new Date(log.created_at).toLocaleString() : "—"}
                               </td>
                             </tr>
@@ -1088,10 +1346,10 @@ export const Dashboard = memo(function Dashboard({
 
                   {/* Pagination */}
                   {historyTotal > 10 && (
-                    <div className="flex items-center justify-between border-t border-slate-700/50 pt-4 mt-4">
-                      <div className="text-xs text-gray-400">
-                        Showing page <span className="text-white font-bold">{historyPage}</span> of{" "}
-                        <span className="text-white font-bold">{Math.ceil(historyTotal / 10)}</span>
+                    <div className="flex items-center justify-between border-t border-gray-200 dark:border-slate-700/50 pt-4 mt-4">
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
+                        Showing page <span className="text-gray-900 dark:text-white font-bold">{historyPage}</span> of{" "}
+                        <span className="text-gray-900 dark:text-white font-bold">{Math.ceil(historyTotal / 10)}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <button
@@ -1100,7 +1358,7 @@ export const Dashboard = memo(function Dashboard({
                             setHistoryPage(p);
                           }}
                           disabled={historyPage <= 1 || loadingHistory}
-                          className="p-1.5 bg-slate-900 hover:bg-slate-800 text-gray-300 border border-slate-700 rounded-lg transition-colors disabled:opacity-40"
+                          className="p-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-slate-700 rounded-lg transition-colors disabled:opacity-40"
                         >
                           <ChevronLeft className="w-4 h-4" />
                         </button>
@@ -1111,7 +1369,7 @@ export const Dashboard = memo(function Dashboard({
                             setHistoryPage(p);
                           }}
                           disabled={historyPage >= Math.ceil(historyTotal / 10) || loadingHistory}
-                          className="p-1.5 bg-slate-900 hover:bg-slate-800 text-gray-300 border border-slate-700 rounded-lg transition-colors disabled:opacity-40"
+                          className="p-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-slate-900 dark:hover:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-slate-700 rounded-lg transition-colors disabled:opacity-40"
                         >
                           <ChevronRight className="w-4 h-4" />
                         </button>

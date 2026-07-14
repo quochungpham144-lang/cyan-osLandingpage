@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Code, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface Props {
   goToMainView: () => void;

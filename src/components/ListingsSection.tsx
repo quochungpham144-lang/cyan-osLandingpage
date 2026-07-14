@@ -52,7 +52,7 @@ export const ListingsSection = memo(() => (
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm transition-all duration-300 ${item.color}`}
+              className={`group flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-gray-200/80 dark:border-slate-800/80 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm shadow-sm hover:shadow-md transition-all duration-300 ${item.color}`}
             >
               <div className="w-5 h-5 grayscale group-hover:grayscale-0 transition-all duration-300">
                 <img 

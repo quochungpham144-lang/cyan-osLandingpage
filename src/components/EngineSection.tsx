@@ -16,8 +16,8 @@ export const EngineSection = memo(({ isVisible, setRef }: Props) => (
   >
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Enterprise-Grade Infrastructure</h2>
-        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">Enterprise-Grade Infrastructure</h2>
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
           Scalable architecture designed for global deployment
         </p>
       </div>
@@ -55,8 +55,8 @@ export const EngineSection = memo(({ isVisible, setRef }: Props) => (
                 cardBorderClass: 'border-indigo-300/70 dark:border-indigo-400/40'
               }
             ].map((feature, idx) => (
-              <div key={idx} className={`flex gap-4 items-start bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md p-5 rounded-xl border ${feature.cardBorderClass} hover:border-cyan-500/60 dark:hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-glow/10 transition-all`}>
-                <div className="w-12 h-12 bg-cyan-glow dark:bg-cyan-glow rounded-lg flex items-center justify-center flex-shrink-0">
+              <div key={idx} className={`flex gap-4 items-start bg-gray-50/60 dark:bg-gray-800/60 backdrop-blur-md p-5 rounded-2xl border ${feature.cardBorderClass} hover:border-cyan-500/60 dark:hover:border-cyan-400/60 shadow-sm hover:shadow-md hover:shadow-cyan-500/10 transition-all duration-300`}>
+                <div className="w-12 h-12 bg-cyan-glow dark:bg-cyan-glow rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
                   <feature.icon className="w-6 h-6 text-gray-900 dark:text-gray-900" />
                 </div>
                 <div>
@@ -68,7 +68,7 @@ export const EngineSection = memo(({ isVisible, setRef }: Props) => (
           </div>
         </div>
 
-        <div className="bg-[#0D1117] rounded-3xl overflow-hidden border border-gray-800 shadow-2xl shadow-cyan-500/10 min-h-[300px] sm:min-h-[350px] lg:min-h-0">
+        <div className="bg-[#0D1117] rounded-2xl overflow-hidden border border-gray-800 shadow-2xl shadow-cyan-500/10 min-h-[300px] sm:min-h-[350px] lg:min-h-0">
           {/* Terminal Header */}
           <div className="bg-[#161B22] px-4 sm:px-6 py-4 border-b border-gray-800 flex items-center justify-between">
             <div className="flex items-center gap-2">

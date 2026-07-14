@@ -57,7 +57,9 @@ const LeadershipView = lazy(() =>
   })),
 );
 const DownloadView = lazy(() =>
-  import("./components/DownloadView").then((m) => ({ default: m.DownloadView })),
+  import("./components/DownloadView").then((m) => ({
+    default: m.DownloadView,
+  })),
 );
 const DashboardView = lazy(() =>
   import("./pages/Dashboard").then((m) => ({ default: m.DashboardView })),
@@ -158,7 +160,6 @@ const BACKEND_URL =
   (import.meta as unknown as { env?: Record<string, string | undefined> }).env
     ?.VITE_BACKEND_URL || "";
 
-
 const PLAN_PRICE: Record<PlanKey, string> = {
   free: "$0",
   basic: "$29/month",
@@ -191,7 +192,10 @@ function App() {
 
   const initialSession = getStoredSession();
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const stored = localStorage.getItem("theme");
+    return stored ? stored === "dark" : false;
+  });
   const [showApiSection, setShowApiSection] = useState(true);
   const [showRoiSection, setShowRoiSection] = useState(true);
   const [showPricingSection, setShowPricingSection] = useState(true);
@@ -240,6 +244,8 @@ function App() {
 
   useEffect(() => {
     const handleLocationChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const queryView = params.get("view");
       const path = window.location.pathname
         .replace(/^\//, "")
         .replace(/\/$/, "");
@@ -256,8 +262,9 @@ function App() {
         "download",
         "dashboard",
       ];
-      if (validViews.includes(path as AppView)) {
-        setView(path as AppView);
+      const target = queryView || path;
+      if (validViews.includes(target as AppView)) {
+        setView(target as AppView);
       } else {
         setView("main");
       }
@@ -326,14 +333,11 @@ function App() {
     const quotaPaths = ["/api/v1/user/quota", "/api/user/quota"];
 
     for (const path of quotaPaths) {
-      const response = await fetch(
-        `${BACKEND_URL}${path}`,
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        }
-      );
+      const response = await fetch(`${BACKEND_URL}${path}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.ok) {
         return response;
@@ -582,7 +586,9 @@ function App() {
         } catch {
           data = { raw };
         }
-        const paymentUrl = String(data?.payment_url || "").trim().replace(/`/g, "");
+        const paymentUrl = String(data?.payment_url || "")
+          .trim()
+          .replace(/`/g, "");
 
         const payAddress = String(data?.pay_address || "").trim();
         const payAmount = String(data?.pay_amount || "").trim();
@@ -660,7 +666,9 @@ function App() {
           /* ignore */
         }
 
-        throw new Error("NOWPayments không trả về link/địa chỉ thanh toán hợp lệ.");
+        throw new Error(
+          "NOWPayments không trả về link/địa chỉ thanh toán hợp lệ.",
+        );
       }
 
       const response = await fetch(
@@ -681,7 +689,11 @@ function App() {
       const payload = resData?.data || resData;
 
       if (!response.ok || !payload?.approval_url || !payload?.subscription_id) {
-        throw new Error(resData?.message || resData?.error || "Unable to create PayPal subscription.");
+        throw new Error(
+          resData?.message ||
+            resData?.error ||
+            "Unable to create PayPal subscription.",
+        );
       }
 
       localStorage.setItem(
@@ -763,16 +775,19 @@ function App() {
 
     setCryptoActivationBusy(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/v1/payment/nowpayments/capture`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: pending.userId,
-          plan_key: pending.planKey,
-          payment_id: pending.paymentId,
-          order_id: pending.orderId,
-        }),
-      });
+      const response = await fetch(
+        `${BACKEND_URL}/api/v1/payment/nowpayments/capture`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: pending.userId,
+            plan_key: pending.planKey,
+            payment_id: pending.paymentId,
+            order_id: pending.orderId,
+          }),
+        },
+      );
 
       const raw = await response.text();
       let data: CryptoPaymentResponse | null = null;
@@ -784,7 +799,11 @@ function App() {
 
       // Treat 202 or backend error messages indicating 'waiting' as pending
       const rawMsg = String(data?.error || data?.raw || "").toLowerCase();
-      const isPendingMsg = rawMsg.includes("waiting") || rawMsg.includes("not completed") || rawMsg.includes("not completed yet") || rawMsg.includes("payment not completed");
+      const isPendingMsg =
+        rawMsg.includes("waiting") ||
+        rawMsg.includes("not completed") ||
+        rawMsg.includes("not completed yet") ||
+        rawMsg.includes("payment not completed");
 
       if (response.status === 202 || isPendingMsg) {
         setCheckoutMessage(
@@ -799,7 +818,8 @@ function App() {
       }
 
       if (!response.ok || !data?.ok) {
-        const detailMessage = data?.error || data?.raw || "Crypto payment not active yet.";
+        const detailMessage =
+          data?.error || data?.raw || "Crypto payment not active yet.";
         setCheckoutMessage(String(detailMessage));
         return;
       }
@@ -881,16 +901,16 @@ function App() {
       const activateEndpoint = hasPaymentId ? "activate" : "activate-order";
       const body = hasPaymentId
         ? {
-          user_id: pending.userId,
-          plan_key: pending.planKey,
-          payment_id: pending.paymentId,
-          order_id: pending.orderId,
-        }
+            user_id: pending.userId,
+            plan_key: pending.planKey,
+            payment_id: pending.paymentId,
+            order_id: pending.orderId,
+          }
         : {
-          user_id: pending.userId,
-          plan_key: pending.planKey,
-          order_id: pending.orderId,
-        };
+            user_id: pending.userId,
+            plan_key: pending.planKey,
+            order_id: pending.orderId,
+          };
 
       const response = await fetch(
         `${BACKEND_URL}/api/v1/payment/nowpayments/${activateEndpoint}`,
@@ -906,7 +926,11 @@ function App() {
       // pending (e.g. "payment not completed yet (status: waiting)"). Treat
       // those as pending like a 202 response so the UI shows the correct state.
       const respErr = String(data?.error || data?.raw || "").toLowerCase();
-      const isPendingErr = respErr.includes("waiting") || respErr.includes("not completed") || respErr.includes("not completed yet") || respErr.includes("payment not completed");
+      const isPendingErr =
+        respErr.includes("waiting") ||
+        respErr.includes("not completed") ||
+        respErr.includes("not completed yet") ||
+        respErr.includes("payment not completed");
 
       if (response.status === 202 || isPendingErr) {
         setCheckoutMessage(
@@ -1016,7 +1040,9 @@ function App() {
       const payload = resData?.data || resData;
 
       if (!response.ok || !payload?.ok) {
-        throw new Error(resData?.message || resData?.error || "Payment not active yet.");
+        throw new Error(
+          resData?.message || resData?.error || "Payment not active yet.",
+        );
       }
 
       const activeSession = ensureSession();
@@ -1074,7 +1100,9 @@ function App() {
     try {
       if (!isLoginMode) {
         // Register flow
-        const username = fullName.toLowerCase().replace(/[^a-z0-9]/g, "") || email.split("@")[0].replace(/[^a-z0-9]/g, "");
+        const username =
+          fullName.toLowerCase().replace(/[^a-z0-9]/g, "") ||
+          email.split("@")[0].replace(/[^a-z0-9]/g, "");
         const nameParts = fullName.split(" ");
         const first_name = nameParts[0] || "User";
         const last_name = nameParts.slice(1).join(" ") || first_name;
@@ -1082,7 +1110,13 @@ function App() {
         const regRes = await fetch(`${BACKEND_URL}/api/v1/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, username, password, first_name, last_name })
+          body: JSON.stringify({
+            email,
+            username,
+            password,
+            first_name,
+            last_name,
+          }),
         });
 
         const regData = await regRes.json();
@@ -1096,7 +1130,7 @@ function App() {
       const loginRes = await fetch(`${BACKEND_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       const loginData = await loginRes.json();
@@ -1116,7 +1150,9 @@ function App() {
       const sessionData: UserSession = {
         id: user.id,
         email: user.email,
-        name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username,
+        name:
+          `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+          user.username,
         picture: "/logoCYAN.png",
         provider: "email",
         plan: user.plan || "free",
@@ -1138,7 +1174,9 @@ function App() {
       });
     } catch (err) {
       console.error("Auth error:", err);
-      setAuthError(err instanceof Error ? err.message : "Authentication failed");
+      setAuthError(
+        err instanceof Error ? err.message : "Authentication failed",
+      );
     }
   };
 
@@ -1152,7 +1190,9 @@ function App() {
           const sessionData: UserSession = {
             id: user.id,
             email: user.email,
-            name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username,
+            name:
+              `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+              user.username,
             picture: "/logoCYAN.png",
             provider: "google",
             plan: user.plan || "free",
@@ -1191,7 +1231,7 @@ function App() {
     window.open(
       `${BACKEND_URL}/api/v1/auth/google`,
       "CyanGoogleAuth",
-      `width=${width},height=${height},left=${left},top=${top},popup=1`
+      `width=${width},height=${height},left=${left},top=${top},popup=1`,
     );
   };
 
@@ -1335,12 +1375,39 @@ function App() {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const handleThemeEvent = (e: Event) => {
+      if (e instanceof CustomEvent && typeof e.detail === "boolean") {
+        setIsDarkMode(e.detail);
+      } else {
+        const stored = localStorage.getItem("theme");
+        if (stored) setIsDarkMode(stored === "dark");
+      }
+    };
+    const handleAuthEvent = () => {
+      const stored = getStoredSession();
+      setUserInfo(stored);
+      setIsLoggedIn(Boolean(stored));
+    };
+    window.addEventListener("theme-change", handleThemeEvent);
+    window.addEventListener("auth-change", handleAuthEvent);
+    window.addEventListener("storage", handleThemeEvent);
+    window.addEventListener("storage", handleAuthEvent);
+    return () => {
+      window.removeEventListener("theme-change", handleThemeEvent);
+      window.removeEventListener("auth-change", handleAuthEvent);
+      window.removeEventListener("storage", handleThemeEvent);
+      window.removeEventListener("storage", handleAuthEvent);
+    };
+  }, []);
 
   const setRef = useCallback(
     (id: string) => (el: HTMLElement | null) => {
@@ -1362,7 +1429,7 @@ function App() {
             navigateTo={navigateTo as (view: string) => void}
             isLoggedIn={isLoggedIn}
             userInfo={userInfo}
-          saveSession={saveSession}
+            saveSession={saveSession}
             setShowLoginModal={setShowLoginModal}
             openPricingSection={openPricingSection}
             setShowApiSection={setShowApiSection}
@@ -1375,7 +1442,7 @@ function App() {
         {scrolled && (
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-10 left-4 sm:left-8 z-[110] p-3.5 sm:p-4 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-gray-200 dark:border-slate-700 text-cyan-600 dark:text-cyan-400 shadow-2xl hover:shadow-cyan-500/20 hover:scale-110 transition-all duration-300 group"
+            className="fixed bottom-10 left-4 sm:left-8 z-[110] p-3.5 sm:p-4 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-gray-200/80 dark:border-slate-800/80 text-cyan-600 dark:text-cyan-400 shadow-xs shadow-cyan-500/10 hover:shadow-cyan-500/20 hover:scale-110 transition-all duration-300 group"
             aria-label="Scroll to top"
           >
             <ArrowUp className="w-5 h-5 sm:w-6 h-6 group-hover:-translate-y-1 transition-transform" />
@@ -1414,7 +1481,13 @@ function App() {
           ) : view === "download" ? (
             <DownloadView
               isDarkMode={isDarkMode}
+              setIsDarkMode={setIsDarkMode}
               goToMainView={goToMainView}
+              setView={setView}
+              isLoggedIn={isLoggedIn}
+              userInfo={userInfo}
+              saveSession={saveSession}
+              setShowLoginModal={setShowLoginModal}
               openPricingSection={openPricingSection}
               setShowApiSection={setShowApiSection}
               copyToClipboard={copyToClipboard}
@@ -1438,6 +1511,9 @@ function App() {
               setShowTeamContactForm={setShowTeamContactForm}
               setTeamFormSubmitted={setTeamFormSubmitted}
               handleTeamContactSubmit={handleTeamContactSubmit}
+              isDarkMode={isDarkMode}
+              setIsDarkMode={setIsDarkMode}
+              saveSession={saveSession}
             />
           ) : (
             <div
@@ -1468,7 +1544,7 @@ function App() {
                                   });
                                   openPricingSection();
                                 }}
-                                className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xl ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
+                                className="bg-gradient-to-r from-cyan-600 to-cyan-700 dark:from-cyan-600 dark:to-cyan-700 text-yellow-300 px-7 py-3.5 rounded-full font-bold shadow-xs ring-2 ring-cyan-300/60 hover:from-cyan-700 hover:to-cyan-800 dark:hover:from-cyan-700 dark:hover:to-cyan-800 hover:shadow-cyan-500/60 transition-all duration-300 flex items-center gap-2 hover:scale-110 pointer-events-auto"
                                 style={{ pointerEvents: 'auto' }}
                               >
                                 Get Started Free <ArrowRight className="w-4 h-4" />
@@ -1493,7 +1569,7 @@ function App() {
                             </div> */}
 
               {(checkoutBusy || checkoutMessage) && (
-                <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-xl border border-cyan-500/40 bg-white/95 dark:bg-slate-900/95 px-4 py-3 shadow-2xl backdrop-blur">
+                <div className="fixed bottom-24 right-6 z-50 max-w-sm rounded-2xl border border-cyan-500/30 bg-white/90 dark:bg-slate-900/90 px-4 py-3.5 shadow-xs shadow-cyan-500/10 backdrop-blur-md">
                   {checkoutBusy ? (
                     <p className="text-sm font-medium text-cyan-700 dark:text-cyan-300">
                       Creating checkout session...
@@ -1516,10 +1592,10 @@ function App() {
 
               {cryptoCheckout && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
-                  <div className="w-full max-w-lg rounded-2xl border border-cyan-500/30 bg-white dark:bg-slate-900 shadow-2xl">
-                    <div className="flex items-start justify-between gap-4 border-b border-cyan-500/20 px-5 py-4">
+                  <div className="w-full max-w-lg rounded-2xl border border-gray-200/80 dark:border-slate-800/80 bg-white/95 dark:bg-slate-900/95 shadow-2xl shadow-cyan-500/10 backdrop-blur-md">
+                    <div className="flex items-start justify-between gap-4 border-b border-gray-200/80 dark:border-slate-800/80 px-5 py-4">
                       <div>
-                        <div className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">
+                        <div className="text-sm font-bold text-cyan-700 dark:text-cyan-300">
                           Thanh toán Crypto
                         </div>
                         <div className="mt-1 text-xs text-gray-600 dark:text-gray-300">
@@ -1536,7 +1612,7 @@ function App() {
                     </div>
 
                     <div className="px-5 py-4 space-y-4">
-                      <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
+                      <div className="rounded-xl border border-gray-200/80 dark:border-slate-800/80 bg-gray-50/80 dark:bg-slate-900/60 p-4 shadow-sm">
                         <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                           Số tiền cần gửi
                         </div>
@@ -1560,7 +1636,7 @@ function App() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-cyan-500/20 bg-cyan-50/50 dark:bg-cyan-900/10 p-4">
+                      <div className="rounded-xl border border-gray-200/80 dark:border-slate-800/80 bg-gray-50/80 dark:bg-slate-900/60 p-4 shadow-sm">
                         <div className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                           Địa chỉ nhận
                         </div>
@@ -1584,7 +1660,7 @@ function App() {
                         </div>
                       </div>
 
-                      <div className="rounded-xl border border-cyan-500/20 bg-white dark:bg-slate-900 p-4">
+                      <div className="rounded-xl border border-gray-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 p-4 shadow-sm">
                         <div className="text-xs text-gray-600 dark:text-gray-300">
                           Sau khi gửi xong, bấm nút bên dưới để hệ thống kiểm
                           tra và kích hoạt gói.
@@ -1592,7 +1668,7 @@ function App() {
                         <button
                           onClick={checkAndActivateCryptoPayment}
                           disabled={cryptoActivationBusy}
-                          className="mt-3 w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 py-3 rounded-lg font-semibold hover:from-cyan-700 hover:to-cyan-800 transition-all disabled:opacity-60"
+                          className="mt-3 w-full bg-gradient-to-r from-cyan-600 to-cyan-700 text-yellow-300 py-3 rounded-xl font-bold shadow-md hover:shadow-cyan-500/20 hover:from-cyan-700 hover:to-cyan-800 transition-all disabled:opacity-60"
                         >
                           {cryptoActivationBusy
                             ? "Đang kiểm tra thanh toán..."
@@ -1661,213 +1737,214 @@ function App() {
               />
 
               {/* Login/Register Modal */}
-              {showLoginModal && createPortal(
-                <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 overflow-y-auto">
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 relative max-h-[88vh] overflow-y-auto">
-                    {/* Close Button */}
-                    <button
-                      onClick={() => setShowLoginModal(false)}
-                      className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                    >
-                      ✕
-                    </button>
-
-                    {/* Logo */}
-                    <div className="text-center mb-6">
-                      <div className="w-12 h-12 bg-cyan-600 rounded-lg flex items-center justify-center mx-auto mb-3">
-                        <img
-                          src="/logoCYAN.png"
-                          alt="CYAN Logo"
-                          className="w-full h-full object-cover rounded"
-                        />
-                      </div>
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                        {isLoginMode ? "Welcome Back" : "Create Account"}
-                      </h2>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">
-                        {isLoginMode ? (
-                          <span>
-                            Sign in to your CYAN OS
-                            <span className="tm-symbol">™</span> account
-                          </span>
-                        ) : (
-                          <span>
-                            Join CYAN OS<span className="tm-symbol">™</span> for
-                            ultra-low latency translation
-                          </span>
-                        )}
-                      </p>
-                    </div>
-
-                    {/* Form */}
-                    <div className="space-y-4">
-                      {/* Google Sign-In Button */}
+              {showLoginModal &&
+                createPortal(
+                  <div className="fixed inset-0 z-[99999] bg-black/60 backdrop-blur-sm flex justify-center items-start p-4 pt-16 overflow-y-auto">
+                    <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl border border-gray-200/80 dark:border-slate-800/80 shadow-2xl shadow-cyan-500/10 max-w-md w-full p-6 sm:p-8 relative max-h-[88vh] overflow-y-auto">
+                      {/* Close Button */}
                       <button
-                        type="button"
-                        onClick={() => {
-                          trackEvent("oauth_click", {
-                            provider: "google",
-                            action: isLoginMode ? "login" : "register",
-                          });
-
-                          try {
-                            openGoogleAuthPopup();
-                            return;
-                          } catch (error) {
-                            const message =
-                              error instanceof Error
-                                ? error.message
-                                : "Google login failed. Please try again.";
-                            setCheckoutMessage(message);
-                            setShowLoginModal(true);
-                            trackEvent("oauth_error", {
-                              provider: "google",
-                              error: message,
-                            });
-                            return;
-                          }
-                        }}
-                        className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 py-3 rounded-lg font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                        onClick={() => setShowLoginModal(false)}
+                        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                       >
-                        <svg className="w-5 h-5" viewBox="0 0 24 24">
-                          <path
-                            fill="#4285F4"
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                          />
-                          <path
-                            fill="#34A853"
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                          />
-                          <path
-                            fill="#FBBC05"
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                          />
-                          <path
-                            fill="#EA4335"
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                          />
-                        </svg>
-                        Continue with Google
+                        ✕
                       </button>
 
-                      <div className="relative">
-                        <div className="absolute inset-0 flex items-center">
-                          <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                      {/* Logo */}
+                      <div className="text-center mb-6">
+                        <div className="w-12 h-12 bg-cyan-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                          <img
+                            src="/logoCYAN.png"
+                            alt="CYAN Logo"
+                            className="w-full h-full object-cover rounded-xl"
+                          />
                         </div>
-                        <div className="relative flex justify-center text-sm">
-                          <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-                            Or continue with email
-                          </span>
-                        </div>
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
+                          {isLoginMode ? "Welcome Back" : "Create Account"}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                          {isLoginMode ? (
+                            <span>
+                              Sign in to your CYAN OS
+                              <span className="tm-symbol">™</span> account
+                            </span>
+                          ) : (
+                            <span>
+                              Join CYAN OS<span className="tm-symbol">™</span>{" "}
+                              for ultra-low latency translation
+                            </span>
+                          )}
+                        </p>
                       </div>
 
-                      <form
-                        onSubmit={handleEmailAuthSubmit}
-                        className="space-y-4"
-                      >
-                        {!isLoginMode && (
+                      {/* Form */}
+                      <div className="space-y-4">
+                        {/* Google Sign-In Button */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            trackEvent("oauth_click", {
+                              provider: "google",
+                              action: isLoginMode ? "login" : "register",
+                            });
+
+                            try {
+                              openGoogleAuthPopup();
+                              return;
+                            } catch (error) {
+                              const message =
+                                error instanceof Error
+                                  ? error.message
+                                  : "Google login failed. Please try again.";
+                              setCheckoutMessage(message);
+                              setShowLoginModal(true);
+                              trackEvent("oauth_error", {
+                                provider: "google",
+                                error: message,
+                              });
+                              return;
+                            }
+                          }}
+                          className="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-900/60 border border-gray-200/80 dark:border-slate-800/80 py-3 rounded-xl font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800/40 shadow-sm transition-all duration-300"
+                        >
+                          <svg className="w-5 h-5" viewBox="0 0 24 24">
+                            <path
+                              fill="#4285F4"
+                              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                            />
+                            <path
+                              fill="#34A853"
+                              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                            />
+                            <path
+                              fill="#FBBC05"
+                              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                            />
+                            <path
+                              fill="#EA4335"
+                              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                            />
+                          </svg>
+                          Continue with Google
+                        </button>
+
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-200/80 dark:border-slate-800/80"></div>
+                          </div>
+                          <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white dark:bg-slate-900 text-gray-500 dark:text-gray-400">
+                              Or continue with email
+                            </span>
+                          </div>
+                        </div>
+
+                        <form
+                          onSubmit={handleEmailAuthSubmit}
+                          className="space-y-4"
+                        >
+                          {!isLoginMode && (
+                            <input
+                              type="text"
+                              name="FIRSTNAME"
+                              placeholder="Full Name"
+                              required
+                              className="w-full px-4 py-3 border border-gray-200/80 dark:border-slate-800/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-gray-50/50 dark:bg-slate-950/60 dark:text-white shadow-sm"
+                            />
+                          )}
+
                           <input
-                            type="text"
-                            name="FIRSTNAME"
-                            placeholder="Full Name"
+                            type="email"
+                            name="EMAIL"
+                            placeholder="Email Address"
                             required
-                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-200/80 dark:border-slate-800/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-gray-50/50 dark:bg-slate-950/60 dark:text-white shadow-sm"
                           />
-                        )}
 
-                        <input
-                          type="email"
-                          name="EMAIL"
-                          placeholder="Email Address"
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
-                        />
-
-                        <input
-                          type="password"
-                          name="PASSWORD"
-                          placeholder="Password"
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
-                        />
-
-                        {!isLoginMode && (
                           <input
                             type="password"
-                            name="CONFIRM_PASSWORD"
-                            placeholder="Confirm Password"
+                            name="PASSWORD"
+                            placeholder="Password"
                             required
-                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-4 py-3 border border-gray-200/80 dark:border-slate-800/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-gray-50/50 dark:bg-slate-950/60 dark:text-white shadow-sm"
                           />
-                        )}
 
-                        <input
-                          type="hidden"
-                          name="FORM_TYPE"
-                          value={isLoginMode ? "login" : "register"}
-                        />
+                          {!isLoginMode && (
+                            <input
+                              type="password"
+                              name="CONFIRM_PASSWORD"
+                              placeholder="Confirm Password"
+                              required
+                              className="w-full px-4 py-3 border border-gray-200/80 dark:border-slate-800/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 bg-gray-50/50 dark:bg-slate-950/60 dark:text-white shadow-sm"
+                            />
+                          )}
 
-                        {authError && (
-                          <div className="text-red-500 text-sm font-semibold text-center mb-2 capitalize">
-                            {authError}
-                          </div>
-                        )}
+                          <input
+                            type="hidden"
+                            name="FORM_TYPE"
+                            value={isLoginMode ? "login" : "register"}
+                          />
 
-                        <button
-                          type="submit"
-                          className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-colors"
-                        >
-                          {isLoginMode ? "Sign In" : "Create Account"}
-                        </button>
-                      </form>
-                    </div>
+                          {authError && (
+                            <div className="text-red-500 text-sm font-semibold text-center mb-2 capitalize">
+                              {authError}
+                            </div>
+                          )}
 
-                    {/* Toggle Mode */}
-                    <div className="mt-6 text-center">
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">
-                        {isLoginMode
-                          ? "Don't have an account?"
-                          : "Already have an account?"}
-                        <button
-                          onClick={() => setIsLoginMode(!isLoginMode)}
-                          className="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 font-semibold ml-1"
-                        >
-                          {isLoginMode ? "Sign Up" : "Sign In"}
-                        </button>
-                      </p>
-                    </div>
+                          <button
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white py-3.5 rounded-xl font-bold shadow-md shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-all duration-300"
+                          >
+                            {isLoginMode ? "Sign In" : "Create Account"}
+                          </button>
+                        </form>
+                      </div>
 
-                    {/* Benefits */}
-                    <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                      <div className="text-center">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                          Get started with:
+                      {/* Toggle Mode */}
+                      <div className="mt-6 text-center">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
+                          {isLoginMode
+                            ? "Don't have an account?"
+                            : "Already have an account?"}
+                          <button
+                            onClick={() => setIsLoginMode(!isLoginMode)}
+                            className="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 font-semibold ml-1"
+                          >
+                            {isLoginMode ? "Sign Up" : "Sign In"}
+                          </button>
                         </p>
-                        <div className="flex justify-center space-x-4 text-xs text-gray-600 dark:text-gray-300">
-                          <span>✓ 20min Free Trial</span>
-                          <span>✓ No Credit Card</span>
-                          <span>✓ Cancel Anytime</span>
+                      </div>
+
+                      {/* Benefits */}
+                      <div className="mt-6 pt-6 border-t border-gray-200/80 dark:border-slate-800/80">
+                        <div className="text-center">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium">
+                            Get started with:
+                          </p>
+                          <div className="flex justify-center space-x-4 text-xs text-gray-600 dark:text-gray-300 font-medium">
+                            <span>✓ 20min Free Trial</span>
+                            <span>✓ No Credit Card</span>
+                            <span>✓ Cancel Anytime</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>,
-                document.body
-              )}
+                  </div>,
+                  document.body,
+                )}
 
               {showCookieBanner && (
                 <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-3">
-                  <div className="max-w-md w-full bg-slate-900/95 border border-slate-700 text-[11px] md:text-xs text-gray-200 rounded-full px-3 py-2 shadow-xl flex items-center gap-2 md:gap-3">
+                  <div className="max-w-md w-full bg-slate-900/95 backdrop-blur-md border border-slate-800 text-[11px] md:text-xs text-gray-200 rounded-2xl px-4 py-3 shadow-xs shadow-cyan-500/10 flex items-center gap-2 md:gap-3">
                     <div className="flex-1 leading-tight">
-                      <div className="font-semibold text-gray-100 text-[11px] md:text-xs">
+                      <div className="font-bold text-gray-100 text-[11px] md:text-xs mb-0.5">
                         Cookies &amp; data
                       </div>
-                      <p className="text-[10px] md:text-[11px] text-gray-300">
+                      <p className="text-[10px] md:text-[11px] text-gray-400">
                         We use cookies to keep you signed in and measure usage.
                         Privacy Policy.
                       </p>
                     </div>
-                    <div className="flex items-center gap-1 md:gap-2">
+                    <div className="flex items-center gap-1.5 md:gap-2">
                       <button
                         type="button"
                         onClick={() => {
@@ -1879,7 +1956,7 @@ function App() {
                           }
                           setShowCookieBanner(false);
                         }}
-                        className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] border border-slate-600 text-gray-200 hover:bg-slate-800 transition-colors"
+                        className="px-3 py-1.5 rounded-xl text-[10px] md:text-[11px] border border-slate-700 text-gray-300 hover:bg-slate-800 font-semibold transition-colors"
                       >
                         Necessary
                       </button>
@@ -1895,7 +1972,7 @@ function App() {
                           setShowCookieBanner(false);
                           trackEvent("cookie_consent", { choice: "all" });
                         }}
-                        className="px-2 md:px-3 py-1 rounded-full text-[10px] md:text-[11px] bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition-colors"
+                        className="px-3 py-1.5 rounded-xl text-[10px] md:text-[11px] bg-cyan-500 hover:bg-cyan-400 text-black font-bold shadow-sm transition-colors"
                       >
                         Accept
                       </button>
@@ -1905,7 +1982,7 @@ function App() {
                           setView("privacy");
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
-                        className="px-2 py-1 rounded-full text-[10px] md:text-[11px] text-gray-300 hover:text-cyan-400 transition-colors"
+                        className="px-2.5 py-1.5 rounded-xl text-[10px] md:text-[11px] text-gray-400 hover:text-cyan-400 font-semibold transition-colors"
                       >
                         Policy
                       </button>

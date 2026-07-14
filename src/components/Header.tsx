@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sun,
   Moon,
@@ -70,6 +70,55 @@ export function Header({
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileAccountOpen, setMobileAccountOpen] = useState(false);
+
+  const handleToggleTheme = () => {
+    const nextTheme = !isDarkMode;
+    if (setIsDarkMode) {
+      setIsDarkMode(nextTheme);
+    }
+    localStorage.setItem("theme", nextTheme ? "dark" : "light");
+    if (nextTheme) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    window.dispatchEvent(new CustomEvent("theme-change", { detail: nextTheme }));
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("user_session");
+    if (saveSession) {
+      saveSession(null);
+    }
+    setMobileAccountOpen(false);
+    setMobileMenuOpen(false);
+    window.dispatchEvent(new Event("auth-change"));
+
+    if (window.location.pathname.includes("dashboard") || window.location.search.includes("dashboard")) {
+      if (goToMainView) {
+        goToMainView();
+      } else {
+        window.location.href = "/";
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleThemeEvent = (e: Event) => {
+      if (e instanceof CustomEvent && typeof e.detail === "boolean") {
+        if (setIsDarkMode) setIsDarkMode(e.detail);
+      } else {
+        const stored = localStorage.getItem("theme");
+        if (setIsDarkMode && stored) setIsDarkMode(stored === "dark");
+      }
+    };
+    window.addEventListener("theme-change", handleThemeEvent);
+    window.addEventListener("storage", handleThemeEvent);
+    return () => {
+      window.removeEventListener("theme-change", handleThemeEvent);
+      window.removeEventListener("storage", handleThemeEvent);
+    };
+  }, [setIsDarkMode]);
 
   const handleLogoClick = () => {
     if (goToMainView) goToMainView();
@@ -154,7 +203,7 @@ export function Header({
       } ${
         scrolled || alwaysSolid
           ? "bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-slate-700/50 shadow-sm py-2.5 sm:py-2.5"
-          : "bg-white py-4 sm:py-2.5 border-b-2 border-gray-200/60 dark:border-slate-700/50"
+          : "bg-white dark:bg-slate-900 py-4 sm:py-2.5 border-b-2 border-gray-200/60 dark:border-slate-700/50"
       }`}
     >
       <div className={`${fullWidth ? "w-full px-4 sm:px-6 lg:px-8" : "max-w-7xl mx-auto px-4 sm:px-6"} flex items-center justify-between`}>
@@ -395,7 +444,7 @@ export function Header({
         <div className="hidden lg:flex items-center gap-3">
           {/* Dark Mode Toggle */}
           <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
+            onClick={handleToggleTheme}
             className="p-2.5 rounded-full bg-gray-100/80 dark:bg-slate-800/80 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-300 transition-all shadow-sm border border-gray-200/50 dark:border-slate-700/50"
             aria-label="Toggle dark mode"
           >
@@ -472,10 +521,7 @@ export function Header({
                         </a>
                         <button
                           type="button"
-                          onClick={() => {
-                            if (saveSession) saveSession(null);
-                            setMobileAccountOpen(false);
-                          }}
+                          onClick={handleSignOut}
                           className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-full text-xs text-red-500 font-bold hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
                         >
                           <LogOut className="w-3.5 h-3.5" />
@@ -575,7 +621,7 @@ export function Header({
 
           {/* Dark Mode Toggle on Mobile Navbar */}
           <button
-            onClick={() => setIsDarkMode(!isDarkMode)}
+            onClick={handleToggleTheme}
             className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
             aria-label="Toggle dark mode"
           >
@@ -893,10 +939,7 @@ export function Header({
                     Dashboard
                   </button>
                   <button
-                    onClick={() => {
-                      if (saveSession) saveSession(null);
-                      setMobileMenuOpen(false);
-                    }}
+                    onClick={handleSignOut}
                     className="w-full bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 py-2.5 rounded-xl font-bold text-xs text-center border border-red-200 dark:border-red-900/50"
                   >
                     Sign Out

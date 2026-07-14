@@ -62,8 +62,8 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
             <Code className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
             <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">Developer API</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">Built for Developers</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">Built for Developers</h2>
+          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Simple, powerful API that scales from prototype to production
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-4">
@@ -89,7 +89,7 @@ export const DevelopersSection = memo(({ isVisible, trackEvent, setRef }: Props)
         </div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="bg-[#0D1117] rounded-3xl overflow-hidden border border-gray-800 shadow-2xl shadow-cyan-500/10">
+          <div className="bg-[#0D1117] rounded-2xl overflow-hidden border border-gray-800 shadow-2xl shadow-cyan-500/10">
             {/* Terminal Header */}
             <div className="bg-[#161B22] px-4 sm:px-6 h-12 border-b border-gray-800 flex items-center justify-between">
               <div className="flex items-center gap-4 sm:gap-8 h-full">

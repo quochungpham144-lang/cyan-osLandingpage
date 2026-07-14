@@ -28,8 +28,8 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
         >
           ✕
         </button>
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight text-gray-900 dark:text-gray-100">CYAN OS<span className="tm-symbol">™</span> Lite API</h2>
-        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-gray-900 dark:text-white">CYAN OS<span className="tm-symbol">™</span> Lite API</h2>
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
           Text-to-Speech API with voice cloning and real-time streaming
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-4">
@@ -64,13 +64,13 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
               { icon: Clock, title: 'Real-time Streaming', desc: 'Fast playback with <400ms latency' },
               { icon: Layers, title: 'Chunked Processing', desc: 'Intelligent text segmentation for natural pauses and optimal voice quality' }
             ].map((feature, idx) => (
-              <div key={idx} className="flex gap-4 items-start bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
-                <div className="w-10 h-10 bg-cyan-600/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div key={idx} className="flex gap-4 items-start bg-white/90 dark:bg-slate-900/80 p-4 rounded-2xl border border-gray-200/80 dark:border-slate-800/80 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="w-10 h-10 bg-cyan-500/10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
                   <feature.icon className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">{feature.title}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{feature.desc}</p>
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-1">{feature.title}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -99,13 +99,13 @@ export const ApiSection = memo(({ showApiSection, setShowApiSection, setRef }: P
 
           <div className="mt-6">
             <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2"><Zap className="w-4 h-4" /> Pricing</h4>
-            <div className="space-y-2">
-              <div className="bg-gray-50 dark:bg-gray-800/60 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                <span className="font-bold text-gray-900 dark:text-gray-100">Pay-as-you-go:</span>
+            <div className="space-y-2.5">
+              <div className="bg-white/90 dark:bg-slate-900/80 p-3.5 rounded-xl border border-gray-200/80 dark:border-slate-800/80 shadow-sm">
+                <span className="font-bold text-gray-900 dark:text-white">Pay-as-you-go:</span>
                 <span className="text-gray-600 dark:text-gray-400 ml-2">$0.00010/request (TTS only)</span>
               </div>
-              <div className="bg-gray-50 dark:bg-gray-800/60 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                <span className="font-bold text-gray-900 dark:text-gray-100">Pro Plan:</span>
+              <div className="bg-white/90 dark:bg-slate-900/80 p-3.5 rounded-xl border border-gray-200/80 dark:border-slate-800/80 shadow-sm">
+                <span className="font-bold text-gray-900 dark:text-white">Pro Plan:</span>
                 <span className="text-gray-600 dark:text-gray-400 ml-2">$79/month (all features, 500K requests)</span>
               </div>
             </div>

@@ -8,7 +8,7 @@ interface SectionBlockProps {
 
 export function SectionBlock({ section }: SectionBlockProps) {
   return (
-    <section id={section.id} className="scroll-mt-28 pt-14 pb-8 border-t border-gray-200 dark:border-slate-800/80">
+    <div id={section.id} className="scroll-mt-28 pt-14 pb-8 border-t border-gray-200 dark:border-slate-800/80">
       <div className="mb-3">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">{section.label}</h2>
       </div>
@@ -16,6 +16,6 @@ export function SectionBlock({ section }: SectionBlockProps) {
 
       {section.content && <ContentRenderer blocks={section.content} />}
       {section.endpoints && section.endpoints.map(ep => <EndpointBlock key={ep.id} ep={ep} />)}
-    </section>
+    </div>
   );
 }
